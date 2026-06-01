@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7,6 +7,27 @@
 <meta name="description" content="Desarrollos eco-luxury en el Pacífico mexicano. Azimut, Nabani y Aldea Tao.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="assets/images/azimut/drone-mazunte.webp">
+<link rel="preload" as="image" href="assets/images/nabani/alberca.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/tololote9.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/tololote13.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/tololote5.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/tololote7.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/egret.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/boquilla2.webp">
+<link rel="preload" as="image" href="assets/images/aldea-tao/cliff.webp">
+<link rel="preload" as="image" href="assets/images/nabani/alberca2.webp">
+<link rel="preload" as="image" href="assets/images/nabani/lounge2.webp">
+<link rel="preload" as="image" href="assets/images/nabani/entrada.webp">
+<link rel="preload" as="image" href="assets/images/nabani/drone2.webp">
+<link rel="preload" as="image" href="assets/images/azimut/casa-aerea.webp">
+<link rel="preload" as="image" href="assets/images/azimut/casa-fachada.webp">
+<link rel="preload" as="image" href="assets/images/azimut/casa-cubo.webp">
+<link rel="preload" as="image" href="assets/images/azimut/renders/r1.webp">
+<link rel="preload" as="image" href="assets/images/azimut/renders/r2.webp">
+<link rel="preload" as="image" href="assets/images/azimut/renders/r4.webp">
+<link rel="preload" as="image" href="assets/images/azimut/renders/r7.webp">
+<link rel="preload" as="image" href="assets/images/azimut/renders/r11.webp">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -93,7 +114,7 @@ body.menu-open{overflow:hidden}
 #hero{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .hvw{position:absolute;inset:0}
 #hvid{width:100%;height:100%;object-fit:cover;transform-origin:center;will-change:transform;transform:scale(1.0)}
-.hfall{position:absolute;inset:0;display:none;background:url('assets/images/aldea-tao/panoramic.jpg') center/cover no-repeat}
+.hfall{position:absolute;inset:0;display:none;background:url('assets/images/aldea-tao/panoramic.webp') center/cover no-repeat}
 .hgrad{
   position:absolute;inset:0;
   background:linear-gradient(160deg,rgba(8,7,6,.55),rgba(8,7,6,.1) 55%,rgba(8,7,6,.45));
@@ -280,7 +301,7 @@ body.menu-open{overflow:hidden}
   position:absolute;inset:0;overflow:hidden;
   border:1px solid rgba(201,169,110,0);
   will-change:transform,filter;
-  transition:border-color .4s;
+  transition:transform .7s cubic-bezier(.16,1,.3,1), filter .5s ease, border-color .35s, opacity .4s;
 }
 .gcard img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.04) saturate(1.08)}
 .gcard-lbl{
@@ -511,6 +532,13 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- SCROLL PROGRESS -->
 <div id="spb"></div>
 
+<!-- ENTRANCE CURTAIN -->
+<div id="curtain" style="
+  position:fixed;inset:0;z-index:8999;
+  background:var(--black);pointer-events:none;
+  clip-path:inset(0 0 0 0);
+"></div>
+
 <!-- FLOATING AI HELP -->
 <div id="ai-fab" aria-label="Asistente IA">
   <div class="fab-ring"></div>?
@@ -687,7 +715,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <div class="pcard pc1" id="pc-az">
     <div class="pbgn">01</div>
     <div class="piw" id="piw-az">
-      <img src="assets/images/azimut/mazunte.jpg" alt="Azimut Mazunte" loading="lazy">
+      <img src="assets/images/azimut/drone-mazunte.webp" alt="Azimut Mazunte" loading="eager">
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-az">
@@ -704,12 +732,12 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
         <div class="pfeat"><span class="pfi">◆</span> Respaldo legal completo</div>
       </div>
       <div class="pthumbs">
-        <div class="ptb" data-set="az" data-i="0"><img src="assets/images/azimut/renders/r1.jpg" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="az" data-i="1"><img src="assets/images/azimut/renders/r2.jpg" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="az" data-i="2"><img src="assets/images/azimut/renders/r3.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="az" data-i="3"><img src="assets/images/azimut/renders/r4.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="az" data-i="4"><img src="assets/images/azimut/renders/r5.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="az" data-i="5"><img src="assets/images/azimut/renders/r6.png" alt="" loading="lazy"></div>
+        <div class="ptb" data-set="az" data-i="0"><img src="assets/images/azimut/renders/r1.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="az" data-i="1"><img src="assets/images/azimut/renders/r2.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="az" data-i="2"><img src="assets/images/azimut/renders/r3.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="az" data-i="3"><img src="assets/images/azimut/renders/r4.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="az" data-i="4"><img src="assets/images/azimut/renders/r5.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="az" data-i="5"><img src="assets/images/azimut/renders/r6.webp" alt="" loading="eager"></div>
       </div>
       <span class="pcta" style="cursor:default">Descubrir Azimut →</span>
     </div>
@@ -726,7 +754,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <div class="pcard pc2" id="pc-nb">
     <div class="pbgn">02</div>
     <div class="piw" id="piw-nb">
-      <img src="assets/images/nabani/hero.jpg" alt="Nabani" loading="lazy">
+      <img src="assets/images/nabani/alberca.webp" alt="Nabani" loading="eager">
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-nb">
@@ -743,11 +771,11 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
         <div class="pfeat"><span class="pfi">◆</span> Entrega llave en mano</div>
       </div>
       <div class="pthumbs">
-        <div class="ptb" data-set="nb" data-i="0"><img src="assets/images/nabani/renders/r1.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="nb" data-i="1"><img src="assets/images/nabani/renders/r2.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="nb" data-i="2"><img src="assets/images/nabani/renders/r3.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="nb" data-i="3"><img src="assets/images/nabani/renders/r6.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="nb" data-i="4"><img src="assets/images/nabani/renders/r7.png" alt="" loading="lazy"></div>
+        <div class="ptb" data-set="nb" data-i="0"><img src="assets/images/nabani/renders/r1.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="nb" data-i="1"><img src="assets/images/nabani/renders/r2.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="nb" data-i="2"><img src="assets/images/nabani/renders/r3.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="nb" data-i="3"><img src="assets/images/nabani/renders/r6.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="nb" data-i="4"><img src="assets/images/nabani/renders/r7.webp" alt="" loading="eager"></div>
       </div>
       <span class="pcta" style="cursor:default">Descubrir Nabani →</span>
     </div>
@@ -764,7 +792,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <div class="pcard pc3" id="pc-at">
     <div class="pbgn">03</div>
     <div class="piw">
-      <img src="assets/images/aldea-tao/panoramic.jpg" alt="Aldea Tao" loading="lazy">
+      <img src="assets/images/aldea-tao/tololote9.webp" alt="Aldea Tao" loading="eager">
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-at">
@@ -781,11 +809,11 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
         <div class="pfeat"><span class="pfi">◆</span> Escrituración garantizada</div>
       </div>
       <div class="pthumbs">
-        <div class="ptb" data-set="at" data-i="0"><img src="assets/images/aldea-tao/egret.jpg"    alt="" loading="lazy"></div>
-        <div class="ptb" data-set="at" data-i="1"><img src="assets/images/aldea-tao/cliff.jpg"    alt="" loading="lazy"></div>
-        <div class="ptb" data-set="at" data-i="2"><img src="assets/images/aldea-tao/tololote5.png" alt="" loading="lazy"></div>
-        <div class="ptb" data-set="at" data-i="3"><img src="assets/images/aldea-tao/photo1.jpg"   alt="" loading="lazy"></div>
-        <div class="ptb" data-set="at" data-i="4"><img src="assets/images/aldea-tao/boquilla.jpg" alt="" loading="lazy"></div>
+        <div class="ptb" data-set="at" data-i="0"><img src="assets/images/aldea-tao/egret.webp"    alt="" loading="lazy"></div>
+        <div class="ptb" data-set="at" data-i="1"><img src="assets/images/aldea-tao/cliff.webp"    alt="" loading="lazy"></div>
+        <div class="ptb" data-set="at" data-i="2"><img src="assets/images/aldea-tao/tololote5.webp" alt="" loading="eager"></div>
+        <div class="ptb" data-set="at" data-i="3"><img src="assets/images/aldea-tao/photo1.webp"   alt="" loading="lazy"></div>
+        <div class="ptb" data-set="at" data-i="4"><img src="assets/images/aldea-tao/boquilla.webp" alt="" loading="eager"></div>
       </div>
       <span class="pcta" style="cursor:default">Descubrir Aldea Tao →</span>
     </div>
@@ -808,7 +836,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   </div>
   <div class="cs-grid">
     <div class="cs-card" data-cs>
-      <img src="assets/images/aldea-tao/tololote6.png" alt="Serena" loading="lazy">
+      <img src="assets/images/aldea-tao/tololote6.webp" alt="Serena" loading="eager">
       <div class="cs-card-body">
         <div class="cs-badge">Lanzamiento 2025</div>
         <div class="cs-name">Serena</div>
@@ -817,7 +845,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       </div>
     </div>
     <div class="cs-card" data-cs>
-      <img src="assets/images/aldea-tao/tololote7.png" alt="Depas Kora" loading="lazy">
+      <img src="assets/images/aldea-tao/tololote7.webp" alt="Depas Kora" loading="eager">
       <div class="cs-card-body">
         <div class="cs-badge">Preventa</div>
         <div class="cs-name">Depas Kora</div>
@@ -825,6 +853,18 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
         <p class="cs-desc">Diseño minimalista con acceso a playa y vistas al océano. El nuevo referente de vida contemporánea en el Pacífico.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 3D PACIFIC OCEAN -->
+<section id="ocean3d" style="position:relative;height:100vh;background:#080706;overflow:hidden;display:flex;align-items:center;justify-content:center">
+  <canvas id="ocean-canvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+  <div style="position:relative;z-index:2;text-align:center;padding:0 24px;pointer-events:none">
+    <div id="oc-label" style="font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;opacity:0;transition:opacity .8s ease,transform .8s ease;transform:translateY(12px)">El Pacífico Mexicano</div>
+    <h2 id="oc-title" style="font-family:var(--fh);font-weight:300;font-size:clamp(44px,7vw,88px);color:var(--cream);line-height:1.1;opacity:0;transition:opacity 1s ease .2s,transform 1s ease .2s;transform:translateY(20px)">
+      Donde el océano<br><em style="color:var(--gold)">define el horizonte.</em>
+    </h2>
+    <p id="oc-sub" style="font-family:var(--fb);font-weight:300;font-size:15px;color:rgba(240,234,224,.45);margin-top:20px;opacity:0;transition:opacity .9s ease .5s,transform .9s ease .5s;transform:translateY(14px);max-width:480px;margin-left:auto;margin-right:auto;line-height:1.8">La Costa de Oaxaca es una de las últimas zonas del Pacífico mexicano con acceso a tierra frente al mar — virgen, legal y con plusvalía creciente.</p>
   </div>
 </section>
 
@@ -838,7 +878,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- 3D GALLERY -->
 <section id="g3d">
   <div class="g3d-hd">
-    <div class="g3d-lbl">Galería · <span id="g3d-count">36</span> imágenes</div>
+    <div class="g3d-lbl">Galería · <span id="g3d-count">27</span> imágenes</div>
     <h2 class="g3d-ttl">Un viaje por <em>la costa</em></h2>
     <div class="g3d-filters" id="g3d-filters">
       <button class="gfbtn active" data-f="all">Todos</button>
@@ -1014,18 +1054,94 @@ const loader = document.getElementById('loader');
 const ldN    = document.getElementById('ld-n');
 const cobj   = {n:0};
 
+// Pre-start video silently so it's ready
+const vid = document.getElementById('hvid');
+if (vid) { vid.load(); vid.play().catch(()=>{}); }
+
+// ── PRELOAD ALL IMAGES DURING LOADER ────────────
+// Browser fetches everything while user watches the intro
+// By scroll time, images are already in cache — no blank flashes
+(function preloadAll() {
+  const imgs = [
+    // Project heroes
+    'assets/images/azimut/drone-mazunte.webp',
+    'assets/images/nabani/alberca.webp',
+    'assets/images/aldea-tao/tololote9.webp',
+    // Aldea Tao gallery
+    'assets/images/aldea-tao/panoramic.webp',
+    'assets/images/aldea-tao/tololote13.webp',
+    'assets/images/aldea-tao/tololote5.webp',
+    'assets/images/aldea-tao/tololote6.webp',
+    'assets/images/aldea-tao/tololote7.webp',
+    'assets/images/aldea-tao/egret.webp',
+    'assets/images/aldea-tao/boquilla.webp',
+    'assets/images/aldea-tao/boquilla2.webp',
+    'assets/images/aldea-tao/panoramic2.webp',
+    'assets/images/aldea-tao/cliff.webp',
+    'assets/images/aldea-tao/photo1.webp',
+    // Nabani gallery
+    'assets/images/nabani/alberca2.webp',
+    'assets/images/nabani/lounge2.webp',
+    'assets/images/nabani/entrada.webp',
+    'assets/images/nabani/drone2.webp',
+    // Azimut gallery
+    'assets/images/azimut/casa-aerea.webp',
+    'assets/images/azimut/casa-fachada.webp',
+    'assets/images/azimut/casa-cubo.webp',
+    'assets/images/azimut/renders/r1.webp',
+    'assets/images/azimut/renders/r2.webp',
+    'assets/images/azimut/renders/r4.webp',
+    'assets/images/azimut/renders/r7.webp',
+    'assets/images/azimut/renders/r11.webp',
+    // Azimut project thumbnails
+    'assets/images/azimut/renders/r3.webp',
+    'assets/images/azimut/renders/r5.webp',
+    // Coming soon
+    'assets/images/aldea-tao/tololote6.webp',
+    'assets/images/aldea-tao/tololote7.webp',
+    // Fallback hero
+    'assets/images/aldea-tao/panoramic.webp',
+  ];
+
+  // Stagger loads so we don't block the main thread
+  // Load in batches of 4 every 200ms
+  let i = 0;
+  function loadBatch() {
+    for (let b = 0; b < 4 && i < imgs.length; b++, i++) {
+      const im = new Image();
+      im.src = imgs[i];
+    }
+    if (i < imgs.length) setTimeout(loadBatch, 150);
+  }
+  // Start after a tiny delay so loader animation renders first
+  setTimeout(loadBatch, 100);
+})();
+
 const ldTl = gsap.timeline({
   onComplete(){
-    gsap.to(loader,{
-      y:'-100vh', duration:.72, ease:'power2.inOut',
-      onComplete(){ loader.style.display='none'; startHero(); }
+    // Slide loader UP
+    gsap.to(loader, {
+      y: '-100vh', duration: .65, ease: 'power2.inOut',
+      onComplete() {
+        loader.style.display = 'none';
+        // Curtain opens: clip-path reveals from top → bottom
+        const curtain = document.getElementById('curtain');
+        if (curtain) {
+          gsap.to(curtain, {
+            clipPath: 'inset(0 0 100% 0)',
+            duration: .9, ease: 'power3.inOut',
+            onComplete() { curtain.style.display = 'none'; }
+          });
+        }
+        startHero();
+      }
     });
   }
 });
 ldTl
-  .to('#ld-logo',{scale:1,opacity:1,duration:.65,ease:'power3.out'},.15)
-  .to('#ld-logo',{scale:1.04,duration:.22,ease:'power1.out',yoyo:true,repeat:1},.82)
-  .to('#ld-line',{scaleX:1,duration:.72,ease:'power2.inOut'},.96);
+  .to('#ld-logo', {scale:1, opacity:1, duration:.65, ease:'power3.out'}, .15)
+  .to('#ld-logo', {scale:1.04, duration:.22, ease:'power1.out', yoyo:true, repeat:1}, .82)
+  .to('#ld-line', {scaleX:1, duration:.72, ease:'power2.inOut'}, .96);
 
 gsap.to(cobj,{n:100,duration:1.55,ease:'power1.inOut',delay:.15,
   onUpdate(){ ldN.textContent = Math.round(cobj.n); }
@@ -1076,10 +1192,13 @@ document.getElementById('hvid').addEventListener('error',()=>{
   document.getElementById('hfall').style.display='block';
 });
 
-gsap.set(['#hpre','#hl1','#hl2','#hsub','#hctas','#sind'],{
-  opacity:0, y:(el)=> el.id==='sind' ? 0 : 20
-});
-gsap.set(['#hl1','#hl2'],{y:'110%'});
+// Set hero elements hidden BEFORE loader exits — no flash
+gsap.set('#hpre',  {opacity:0, y:14});
+gsap.set('#hl1',   {opacity:0, y:'110%'});
+gsap.set('#hl2',   {opacity:0, y:'110%'});
+gsap.set('#hsub',  {opacity:0, y:18});
+gsap.set('#hctas', {opacity:0, y:18});
+gsap.set('#sind',  {opacity:0});
 
 function startHero(){
   const tl = gsap.timeline();
@@ -1190,15 +1309,15 @@ if(window.matchMedia('(min-width:769px)').matches){
    LIGHTBOX
 ═══════════════════════════════════════ */
 const lbSets = {
-  az:['assets/images/azimut/renders/r1.jpg','assets/images/azimut/renders/r2.jpg',
-      'assets/images/azimut/renders/r3.png','assets/images/azimut/renders/r4.png',
-      'assets/images/azimut/renders/r5.png','assets/images/azimut/renders/r6.png'],
-  nb:['assets/images/nabani/renders/r1.png','assets/images/nabani/renders/r2.png',
-      'assets/images/nabani/renders/r3.png','assets/images/nabani/renders/r6.png',
-      'assets/images/nabani/renders/r7.png'],
-  at:['assets/images/aldea-tao/egret.jpg','assets/images/aldea-tao/cliff.jpg',
-      'assets/images/aldea-tao/tololote5.png','assets/images/aldea-tao/photo1.jpg',
-      'assets/images/aldea-tao/boquilla.jpg'],
+  az:['assets/images/azimut/renders/r1.webp','assets/images/azimut/renders/r2.webp',
+      'assets/images/azimut/renders/r3.webp','assets/images/azimut/renders/r4.webp',
+      'assets/images/azimut/renders/r5.webp','assets/images/azimut/renders/r6.webp'],
+  nb:['assets/images/nabani/renders/r1.webp','assets/images/nabani/renders/r2.webp',
+      'assets/images/nabani/renders/r3.webp','assets/images/nabani/renders/r6.webp',
+      'assets/images/nabani/renders/r7.webp'],
+  at:['assets/images/aldea-tao/egret.webp','assets/images/aldea-tao/cliff.webp',
+      'assets/images/aldea-tao/tololote5.webp','assets/images/aldea-tao/photo1.webp',
+      'assets/images/aldea-tao/boquilla.webp'],
 };
 let lbSet=[], lbIdx=0;
 const lbEl   = document.getElementById('lb');
@@ -1246,45 +1365,35 @@ document.querySelectorAll('.ptb').forEach(tb=>{
    3D ROTARY GALLERY
 ═══════════════════════════════════════ */
 const gdata = [
-  // Aldea Tao — real coast photos
-  {src:'assets/images/aldea-tao/panoramic.jpg',   lbl:'Aldea Tao · Vista panorámica',    tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote7.png',   lbl:'Aldea Tao · Playa Tololote',      tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote1.png',   lbl:'Aldea Tao · Cala secreta',        tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote3.png',   lbl:'Aldea Tao · Roca volcánica',      tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote4.png',   lbl:'Aldea Tao · Playa Tololote',      tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote6.png',   lbl:'Aldea Tao · Costa oaxaqueña',     tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote9.png',   lbl:'Aldea Tao · Horizonte Pacífico',  tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote10.png',  lbl:'Aldea Tao · Playa virgen',        tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/tololote11.png',  lbl:'Aldea Tao · Acantilados',         tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/egret.jpg',       lbl:'Aldea Tao · Playa La Boquilla',   tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/boquilla2.png',   lbl:'Aldea Tao · La Boquilla',         tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/cliff.jpg',       lbl:'Aldea Tao · Selva y mar',         tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/photo1.jpg',      lbl:'Aldea Tao · Pacífico profundo',   tag:'Aldea Tao'},
-  {src:'assets/images/aldea-tao/photo2.jpg',      lbl:'Aldea Tao · Costa salvaje',       tag:'Aldea Tao'},
-  // Nabani — drone + renders
-  {src:'assets/images/nabani/hero.jpg',           lbl:'Nabani · Vista aérea',            tag:'Nabani'},
-  {src:'assets/images/nabani/drone2.jpg',         lbl:'Nabani · Costa oaxaqueña',        tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r1.png',     lbl:'Nabani · Acceso principal',       tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r2.png',     lbl:'Nabani · Terraza privada',        tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r3.png',     lbl:'Nabani · Alberca y jardín',       tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r4.png',     lbl:'Nabani · Terraza al amanecer',    tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r5.png',     lbl:'Nabani · Vista lateral',          tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r6.png',     lbl:'Nabani · Hamaca y palmas',        tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r9.png',     lbl:'Nabani · Deck tropical',          tag:'Nabani'},
-  {src:'assets/images/nabani/renders/r10.png',    lbl:'Nabani · Luz de mañana',          tag:'Nabani'},
-  // Azimut — aerial + renders
-  {src:'assets/images/azimut/mazunte.jpg',        lbl:'Azimut · Vista a Mazunte',        tag:'Azimut'},
-  {src:'assets/images/azimut/lote11.jpg',         lbl:'Azimut · Lote 11',               tag:'Azimut'},
-  {src:'assets/images/azimut/yoga-shala.jpg',     lbl:'Azimut · Yoga Shala real',        tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r1.jpg',     lbl:'Azimut · Áreas comunes',          tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r2.jpg',     lbl:'Azimut · Estacionamiento solar',  tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r4.png',     lbl:'Azimut · Alberca natural',        tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r5.png',     lbl:'Azimut · Temazcal',              tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r6.png',     lbl:'Azimut · Yoga Shala',            tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r7.jpg',     lbl:'Azimut · Senderos',              tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r10.png',    lbl:'Azimut · Temazcal detalle',      tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r12.png',    lbl:'Azimut · Yoga Shala vista',      tag:'Azimut'},
-  {src:'assets/images/azimut/renders/r14.png',    lbl:'Azimut · Entrada peatonal',      tag:'Azimut'},
+  // ── ALDEA TAO ──
+  {src:'assets/images/aldea-tao/panoramic.webp',  lbl:'Aldea Tao · Vista panorámica',   tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/tololote13.webp', lbl:'Aldea Tao · Playa Tololote',     tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/tololote5.webp',  lbl:'Aldea Tao · Cala turquesa',      tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/tololote6.webp',  lbl:'Aldea Tao · Entrada secreta',    tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/tololote7.webp',  lbl:'Aldea Tao · Luz del Pacífico',   tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/tololote9.webp',  lbl:'Aldea Tao · Rocas volcánicas',   tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/egret.webp',      lbl:'Aldea Tao · Playa La Boquilla',  tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/boquilla.webp',   lbl:'Aldea Tao · La Boquilla',        tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/boquilla2.webp',  lbl:'Aldea Tao · Cala privada',       tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/panoramic2.webp', lbl:'Aldea Tao · Vista desde el mar', tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/cliff.webp',      lbl:'Aldea Tao · Selva y Pacífico',   tag:'Aldea Tao'},
+  {src:'assets/images/aldea-tao/photo1.webp',     lbl:'Aldea Tao · Costa salvaje',      tag:'Aldea Tao'},
+  // ── NABANI — fotos reales selección oficial ──
+  {src:'assets/images/nabani/alberca2.webp',      lbl:'Nabani · Alberca privada',        tag:'Nabani'},
+  {src:'assets/images/nabani/alberca.webp',       lbl:'Nabani · Deck y jardín',          tag:'Nabani'},
+  {src:'assets/images/nabani/lounge2.webp',       lbl:'Nabani · Terraza al atardecer',   tag:'Nabani'},
+  {src:'assets/images/nabani/entrada.webp',       lbl:'Nabani · Entrada principal',      tag:'Nabani'},
+  {src:'assets/images/nabani/drone2.webp',        lbl:'Nabani · Pacífico desde el aire', tag:'Nabani'},
+  // ── AZIMUT — drone Mazunte + renders de casas ──
+  {src:'assets/images/azimut/drone-mazunte.webp', lbl:'Azimut · Bahía de Mazunte',       tag:'Azimut'},
+  {src:'assets/images/azimut/casa-aerea.webp',    lbl:'Azimut · Casa en ladera',         tag:'Azimut'},
+  {src:'assets/images/azimut/casa-fachada.webp',  lbl:'Azimut · Fachada con jardín',     tag:'Azimut'},
+  {src:'assets/images/azimut/casa-cubo.webp',     lbl:'Azimut · Casa cubo',              tag:'Azimut'},
+  {src:'assets/images/azimut/renders/r1.webp',    lbl:'Azimut · Áreas comunes',          tag:'Azimut'},
+  {src:'assets/images/azimut/renders/r2.webp',    lbl:'Azimut · Techo solar bambú',      tag:'Azimut'},
+  {src:'assets/images/azimut/renders/r4.webp',    lbl:'Azimut · Alberca natural',        tag:'Azimut'},
+  {src:'assets/images/azimut/renders/r7.webp',    lbl:'Azimut · Senderos del bosque',    tag:'Azimut'},
+  {src:'assets/images/azimut/renders/r11.webp',   lbl:'Azimut · Temazcal aéreo',         tag:'Azimut'},
 ];
 let N = gdata.length;
 
@@ -1354,16 +1463,13 @@ let gAutoTimer = null;
 function goToCard(idx, animate = true) {
   const n = cards.length;
   gActive = ((idx % n) + n) % n;
+  // Flash active card label before transition
   if (animate) {
-    gsap.to({val: parseFloat(gcards.dataset.pos||0)}, {
-      val: gActive, duration: .65, ease: 'power3.inOut',
-      onUpdate() { renderGallery(this.targets()[0].val); },
-      onComplete() { gcards.dataset.pos = gActive; }
-    });
-  } else {
-    renderGallery(gActive);
-    gcards.dataset.pos = gActive;
+    cards.forEach(c => c.style.opacity = '0.85');
+    cards[gActive].style.opacity = '1';
   }
+  renderGallery(gActive);
+  gcards.dataset.pos = gActive;
 }
 
 function startAuto() {
@@ -1588,6 +1694,154 @@ ScrollTrigger.create({
   trigger:'#chat',start:'top 68%',once:true,
   onEnter:()=> setTimeout(()=>runStep(0),500)
 });
+
+/* ════════════════════════════════════════
+   THREE.JS — 3D PACIFIC OCEAN MESH
+═══════════════════════════════════════ */
+(function(){
+  const sec = document.getElementById('ocean3d');
+  const cv  = document.getElementById('ocean-canvas');
+  if (!sec || !cv || typeof THREE === 'undefined') return;
+
+  const W = () => sec.clientWidth;
+  const H = () => sec.clientHeight;
+
+  const renderer = new THREE.WebGLRenderer({ canvas: cv, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(W(), H());
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+  const scene  = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x080706, 0.035);
+
+  const camera = new THREE.PerspectiveCamera(55, W()/H(), 0.1, 200);
+  camera.position.set(0, 6, 18);
+  camera.lookAt(0, 0, 0);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x1a120a, 1.2));
+  const dLight = new THREE.DirectionalLight(0xC9A96E, 2.5);
+  dLight.position.set(5, 12, 8);
+  scene.add(dLight);
+  const pLight = new THREE.PointLight(0xC9A96E, 3, 40);
+  pLight.position.set(0, 4, 0);
+  scene.add(pLight);
+  const bLight = new THREE.PointLight(0x1a4060, 1.5, 60);
+  bLight.position.set(-10, -2, -10);
+  scene.add(bLight);
+
+  // Ocean grid geometry
+  const SEG = 120, SIZE = 40;
+  const geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG);
+  geo.rotateX(-Math.PI / 2);
+
+  // Store original Y positions
+  const origY = new Float32Array(geo.attributes.position.count);
+  const posArr = geo.attributes.position.array;
+  for (let i = 0; i < geo.attributes.position.count; i++) {
+    origY[i] = posArr[i * 3 + 1];
+  }
+
+  // Two materials — wireframe + solid
+  const solidMat = new THREE.MeshStandardMaterial({
+    color: 0x0a1628,
+    metalness: 0.1,
+    roughness: 0.8,
+    transparent: true,
+    opacity: 0.85,
+    side: THREE.DoubleSide,
+  });
+  const wireMat = new THREE.MeshBasicMaterial({
+    color: 0xC9A96E,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.18,
+  });
+
+  const solidMesh = new THREE.Mesh(geo, solidMat);
+  const wireMesh  = new THREE.Mesh(geo, wireMat);
+  scene.add(solidMesh);
+  scene.add(wireMesh);
+
+  // Gold particle spray above surface
+  const pCount = 600;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(pCount * 3);
+  for (let i = 0; i < pCount; i++) {
+    pPos[i*3]   = (Math.random() - 0.5) * SIZE;
+    pPos[i*3+1] = Math.random() * 3;
+    pPos[i*3+2] = (Math.random() - 0.5) * SIZE;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  const pMat = new THREE.PointsMaterial({ color: 0xC9A96E, size: 0.06, transparent: true, opacity: 0.55 });
+  scene.add(new THREE.Points(pGeo, pMat));
+
+  // Resize
+  window.addEventListener('resize', () => {
+    renderer.setSize(W(), H());
+    camera.aspect = W() / H();
+    camera.updateProjectionMatrix();
+  });
+
+  // Mouse parallax
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth  - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  // Text reveal on scroll
+  const ioOcean = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      ['oc-label','oc-title','oc-sub'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }
+      });
+    }
+  }, { threshold: 0.3 });
+  ioOcean.observe(sec);
+
+  let isVis = false;
+  const ioVis = new IntersectionObserver(e => { isVis = e[0].isIntersecting; }, { threshold: 0.05 });
+  ioVis.observe(sec);
+
+  let t0 = null;
+  function animOcean(ts) {
+    requestAnimationFrame(animOcean);
+    if (!isVis) return;
+    if (!t0) t0 = ts;
+    const t = (ts - t0) / 1000;
+
+    // Animate vertices — multiple sine waves
+    const pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      const wave =
+        Math.sin(x * 0.5 + t * 1.2) * 0.55 +
+        Math.sin(z * 0.4 + t * 0.9) * 0.45 +
+        Math.sin((x + z) * 0.3 + t * 1.5) * 0.3 +
+        Math.sin(x * 0.8 - t * 0.7) * 0.2;
+      pos.setY(i, wave);
+    }
+    pos.needsUpdate = true;
+    geo.computeVertexNormals();
+
+    // Pulse wireframe opacity
+    wireMat.opacity = 0.12 + Math.sin(t * 0.8) * 0.06;
+
+    // Point light pulse
+    pLight.intensity = 2.5 + Math.sin(t * 1.4) * 1;
+
+    // Camera gentle sway
+    camera.position.x = mx * 3 + Math.sin(t * 0.25) * 1.5;
+    camera.position.y = 5 - my * 2 + Math.sin(t * 0.18) * 0.5;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animOcean);
+})();
 
 /* ════════════════════════════════════════
    THREE.JS — 3D FLOATING PARTICLES LOGO
@@ -2028,3 +2282,5 @@ aipClose.addEventListener('click', () => aiPanel.classList.remove('open'));
 </script>
 </body>
 </html>
+
+
