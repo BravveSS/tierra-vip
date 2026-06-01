@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.log
+ss-*.png
+v2-*.png
+ss-new-*.png
+verify.cjs
