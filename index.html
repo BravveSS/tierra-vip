@@ -112,7 +112,7 @@ body.menu-open{overflow:hidden}
 #hero{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .hvw{position:absolute;inset:0}
 #hvid{width:100%;height:100%;object-fit:cover;transform-origin:center;will-change:transform;transform:scale(1.0)}
-.hfall{position:absolute;inset:0;display:none;background:url('assets/images/aldea-tao/panoramic.webp') center/cover no-repeat}
+.hfall{position:absolute;inset:0;display:none;background:url('assets/img/aldea-tao/dronaldeatao.webp') center/cover no-repeat}
 .hgrad{
   position:absolute;inset:0;
   background:linear-gradient(160deg,rgba(8,7,6,.55),rgba(8,7,6,.1) 55%,rgba(8,7,6,.45));
@@ -721,7 +721,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-az">
-      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/blob-c651792.png" alt="Azimut" style="filter:brightness(10) saturate(0);height:140px;width:auto;object-fit:contain"></div>
+      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/blob-c651792.png" alt="Azimut" style="filter:brightness(10) saturate(0);height:170px;width:auto;object-fit:contain"></div>
       <div class="ploc">Mazunte · Oaxaca</div>
       <div class="ptitle">Azimut</div>
       <p class="pdesc">Construye tu hogar dentro de un centro de bienestar holístico, a pocos pasos del centro de Mazunte. Lotes privados en ladera de selva nativa, con yoga shala, temazcal y alberca natural en el corazón de la comunidad. Algunos terrenos cuentan con vista al Pacífico; todos, con servicios y respaldo legal completos desde el primer día.</p>
@@ -760,7 +760,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-nb">
-      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/logo_n.png" alt="Nabani" style="filter:brightness(10) saturate(0);height:96px;width:auto;object-fit:contain"></div>
+      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/logo_n.png" alt="Nabani" style="filter:brightness(10) saturate(0);height:140px;width:auto;object-fit:contain"></div>
       <div class="ploc">Costa Oaxaqueña</div>
       <p class="pdesc">Nabani — "hogar" en zapoteco — son terrenos frente al mar con acceso a playas caminando, a pasos de Zipolite y Mazunte. El lugar para levantar tu residencia de autor en madera, palma y piedra, donde cada amanecer se vive frente al Pacífico.</p>
       <div class="pfeats">
@@ -1105,44 +1105,12 @@ if (vid) { vid.load(); vid.play().catch(()=>{}); }
 // By scroll time, images are already in cache — no blank flashes
 (function preloadAll() {
   const imgs = [
-    // Project heroes
-    'assets/images/azimut/drone-mazunte.webp',
-    'assets/images/nabani/alberca.webp',
-    'assets/images/aldea-tao/tololote9.webp',
-    // Aldea Tao gallery
-    'assets/images/aldea-tao/panoramic.webp',
-    'assets/images/aldea-tao/tololote13.webp',
-    'assets/images/aldea-tao/tololote5.webp',
-    'assets/images/aldea-tao/tololote6.webp',
-    'assets/images/aldea-tao/tololote7.webp',
-    'assets/images/aldea-tao/egret.webp',
-    'assets/images/aldea-tao/boquilla.webp',
-    'assets/images/aldea-tao/boquilla2.webp',
-    'assets/images/aldea-tao/panoramic2.webp',
-    'assets/images/aldea-tao/cliff.webp',
-    'assets/images/aldea-tao/photo1.webp',
-    // Nabani gallery
-    'assets/images/nabani/alberca2.webp',
-    'assets/images/nabani/lounge2.webp',
-    'assets/images/nabani/entrada.webp',
-    'assets/images/nabani/drone2.webp',
-    // Azimut gallery
-    'assets/images/azimut/casa-aerea.webp',
-    'assets/images/azimut/casa-fachada.webp',
-    'assets/images/azimut/casa-cubo.webp',
-    'assets/images/azimut/renders/r1.webp',
-    'assets/images/azimut/renders/r2.webp',
-    'assets/images/azimut/renders/r4.webp',
-    'assets/images/azimut/renders/r7.webp',
-    'assets/images/azimut/renders/r11.webp',
-    // Azimut project thumbnails
-    'assets/images/azimut/renders/r3.webp',
-    'assets/images/azimut/renders/r5.webp',
-    // Coming soon
-    'assets/images/aldea-tao/tololote6.webp',
-    'assets/images/aldea-tao/tololote7.webp',
-    // Fallback hero
-    'assets/images/aldea-tao/panoramic.webp',
+    // Imágenes principales de cada proyecto (lo que se ve al hacer scroll)
+    'assets/img/azimut/renderazimutyogashala.webp',
+    'assets/img/nabani/dronnabani.webp',
+    'assets/img/aldea-tao/dronaldeatao.webp',
+    'assets/img/serena/renderserena-2.webp',
+    'assets/img/kora/rs-w-719-h-1079-1.webp',
   ];
 
   // Stagger loads so we don't block the main thread
