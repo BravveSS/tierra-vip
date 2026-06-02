@@ -27,8 +27,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black:#080706; --dark:#0F0E0D; --earth:#1C1A17; --cream:#F0EAE0;
-  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#1E2B1F; --muted:#6B6560;
+  --black:#E9E0CE; --dark:#F3ECDE; --earth:#E0D4BD; --cream:#2C2823; --beige:#F0EAE0;
+  --gold:#8A6D42;  --gold-dim:#6E5836; --green:#3E5538; --muted:#8a8074;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
 }
@@ -47,7 +47,7 @@ button{border:none;background:none;cursor:pointer;color:inherit;font-family:inhe
   position:fixed;inset:0;z-index:9000;background:var(--black);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
-.ld-logo{height:52px;width:auto;opacity:0;transform:scale(.9)}
+.ld-logo{height:86px;width:auto;opacity:0;transform:scale(.9)}
 .ld-line{
   width:200px;height:1px;background:var(--gold);margin-top:18px;
   transform-origin:left center;transform:scaleX(0);
@@ -55,7 +55,7 @@ button{border:none;background:none;cursor:pointer;color:inherit;font-family:inhe
 .ld-n{
   position:absolute;bottom:40px;right:52px;
   font-family:var(--fb);font-size:11px;font-weight:300;
-  letter-spacing:.14em;color:rgba(240,234,224,.65);
+  letter-spacing:.14em;color:rgba(44,40,35,.65);
 }
 
 /* ── NAV ─────────────────────────────────────── */
@@ -77,7 +77,7 @@ button{border:none;background:none;cursor:pointer;color:inherit;font-family:inhe
 .nav-links a{
   font-family:var(--fb);font-size:11px;font-weight:400;
   letter-spacing:.15em;text-transform:uppercase;
-  color:rgba(240,234,224,.85);
+  color:rgba(44,40,35,.85);
   text-shadow:0 1px 10px rgba(0,0,0,.6);
   position:relative;transition:color .25s;padding-bottom:3px;
 }
@@ -138,7 +138,7 @@ body.menu-open{overflow:hidden}
 .hhl.it{font-style:italic}
 .hsub{
   font-family:var(--fb);font-size:16px;font-weight:300;
-  color:rgba(240,234,224,.82);margin-top:24px;letter-spacing:.04em;
+  color:rgba(44,40,35,.82);margin-top:24px;letter-spacing:.04em;
   text-shadow:0 1px 14px rgba(0,0,0,.62);
   opacity:0;transform:translateY(18px);
 }
@@ -156,7 +156,7 @@ body.menu-open{overflow:hidden}
 .btn-arrow{
   font-family:var(--fb);font-size:11px;font-weight:400;
   letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(240,234,224,.85);
+  color:rgba(44,40,35,.85);
   text-shadow:0 1px 10px rgba(0,0,0,.55);
   display:flex;align-items:center;gap:8px;
   transition:color .25s,gap .25s;
@@ -167,7 +167,7 @@ body.menu-open{overflow:hidden}
   display:flex;flex-direction:column;align-items:center;gap:8px;
   z-index:2;pointer-events:none;opacity:0;
 }
-.sind span{font-family:var(--fb);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(240,234,224,.38)}
+.sind span{font-family:var(--fb);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(44,40,35,.38)}
 .sbar{width:1px;height:54px;position:relative;overflow:hidden}
 .sbar::after{
   content:'';position:absolute;width:100%;height:100%;
@@ -245,7 +245,7 @@ body.menu-open{overflow:hidden}
 .plogo img{height:92px;width:auto;object-fit:contain;object-position:left center}
 .ploc{font-family:var(--fb);font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
 .ptitle{font-family:var(--fh);font-size:clamp(48px,7vw,84px);font-weight:300;line-height:.92;letter-spacing:-.02em;color:var(--cream)}
-.pdesc{font-family:var(--fb);font-size:14px;font-weight:300;color:rgba(240,234,224,.56);line-height:1.8;margin-top:16px;max-width:340px}
+.pdesc{font-family:var(--fb);font-size:14px;font-weight:300;color:rgba(44,40,35,.56);line-height:1.8;margin-top:16px;max-width:340px}
 .pthumbs{display:flex;gap:5px;margin-top:18px;flex-wrap:wrap}
 .ptb{
   width:52px;height:40px;overflow:hidden;cursor:pointer;flex-shrink:0;
@@ -277,8 +277,8 @@ body.menu-open{overflow:hidden}
 .cs-card-body{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:36px;background:linear-gradient(to top,rgba(8,7,6,.85) 0%,transparent 55%)}
 .cs-badge{font-family:var(--fb);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,169,110,.5);padding:5px 12px;border-radius:20px;width:fit-content;margin-bottom:14px}
 .cs-name{font-family:var(--fh);font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--cream);line-height:1}
-.cs-loc{font-family:var(--fb);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,234,224,.55);margin-top:8px}
-.cs-desc{font-family:var(--fb);font-weight:300;font-size:13px;color:rgba(240,234,224,.55);margin-top:10px;line-height:1.7;max-width:340px}
+.cs-loc{font-family:var(--fb);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(44,40,35,.55);margin-top:8px}
+.cs-desc{font-family:var(--fb);font-weight:300;font-size:13px;color:rgba(44,40,35,.55);margin-top:10px;line-height:1.7;max-width:340px}
 @media(max-width:768px){.cs-grid{grid-template-columns:1fr}#coming{padding:60px 24px}}
 
 /* ── 3D GALLERY ──────────────────────────────── */
@@ -286,9 +286,9 @@ body.menu-open{overflow:hidden}
 .g3d-hd{padding:80px 56px 48px;text-align:center;position:relative;z-index:2}
 .g3d-lbl{font-family:var(--fb);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
 .g3d-ttl{font-family:var(--fh);font-size:clamp(36px,5vw,58px);font-weight:300;color:var(--cream);letter-spacing:-.01em}
-.g3d-ttl em{font-style:italic;color:rgba(240,234,224,.42)}
+.g3d-ttl em{font-style:italic;color:rgba(44,40,35,.42)}
 .g3d-filters{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.gfbtn{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 20px;border:1px solid rgba(201,169,110,.28);background:transparent;color:rgba(240,234,224,.5);cursor:pointer;border-radius:20px;transition:all .25s}
+.gfbtn{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 20px;border:1px solid rgba(201,169,110,.28);background:transparent;color:rgba(44,40,35,.5);cursor:pointer;border-radius:20px;transition:all .25s}
 .gfbtn:hover{border-color:rgba(201,169,110,.7);color:var(--cream)}
 .gfbtn.active{background:var(--gold);border-color:var(--gold);color:var(--black)}
 #g3d-stage{
@@ -326,7 +326,7 @@ body.menu-open{overflow:hidden}
 #chat{background:var(--dark);padding:120px 56px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden}
 .cht-hd{text-align:center;max-width:600px;margin-bottom:52px}
 .cht-hd h2{font-family:var(--fh);font-size:clamp(44px,6.5vw,72px);font-weight:300;color:var(--cream);letter-spacing:-.01em}
-.cht-hd p{font-family:var(--fb);font-size:15px;font-weight:300;color:rgba(240,234,224,.58);margin-top:14px;line-height:1.7}
+.cht-hd p{font-family:var(--fb);font-size:15px;font-weight:300;color:rgba(44,40,35,.58);margin-top:14px;line-height:1.7}
 .cwin{
   width:100%;max-width:560px;
   background:rgba(15,14,13,.97);
@@ -381,9 +381,9 @@ body.menu-open{overflow:hidden}
 #lb{position:fixed;inset:0;z-index:2000;background:rgba(8,7,6,.96);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .32s}
 #lb.open{opacity:1;pointer-events:all}
 .lbi img{max-width:88vw;max-height:86vh;object-fit:contain;display:block;filter:contrast(1.04) saturate(1.05)}
-.lbx{position:fixed;top:24px;right:32px;font-size:28px;color:rgba(240,234,224,.55);cursor:pointer;padding:8px;transition:color .2s;z-index:2001}
+.lbx{position:fixed;top:24px;right:32px;font-size:28px;color:rgba(44,40,35,.55);cursor:pointer;padding:8px;transition:color .2s;z-index:2001}
 .lbx:hover{color:var(--cream)}
-.lbn{position:fixed;top:50%;transform:translateY(-50%);font-size:22px;color:rgba(240,234,224,.45);cursor:pointer;padding:16px;background:rgba(15,14,13,.55);transition:color .2s;z-index:2001}
+.lbn{position:fixed;top:50%;transform:translateY(-50%);font-size:22px;color:rgba(44,40,35,.45);cursor:pointer;padding:16px;background:rgba(15,14,13,.55);transition:color .2s;z-index:2001}
 .lbn:hover{color:var(--gold)}
 #lb-prev{left:20px}
 #lb-next{right:20px}
@@ -408,7 +408,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 
 /* ── PROJECT FEATURES ────────────────────────── */
 .pfeats{display:flex;flex-direction:column;gap:8px;margin-top:16px;margin-bottom:6px}
-.pfeat{font-family:var(--fb);font-size:12px;font-weight:300;color:rgba(240,234,224,.55);display:flex;align-items:center;gap:8px;letter-spacing:.04em}
+.pfeat{font-family:var(--fb);font-size:12px;font-weight:300;color:rgba(44,40,35,.55);display:flex;align-items:center;gap:8px;letter-spacing:.04em}
 .pfi{color:var(--gold);font-size:7px;flex-shrink:0}
 
 /* ── SCROLL PROGRESS ─────────────────────────── */
@@ -526,6 +526,25 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   .cwin{height:480px}
   .ld-n{right:24px;bottom:28px}
 }
+/* ===== OVERRIDES: zonas sobre imagen/video se mantienen claras ===== */
+#hero .hhl{color:#F0EAE0}
+#hero .hsub{color:rgba(240,234,224,.85)}
+#hero .btn-go{color:#F0EAE0;border-color:rgba(240,234,224,.55)}
+#hero .btn-arrow{color:rgba(240,234,224,.9)}
+.nav-links a{color:rgba(240,234,224,.82)}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.pc1 .pov{background:linear-gradient(to right,rgba(8,7,6,.92) 0%,rgba(8,7,6,.5) 30%,transparent 62%)}
+.pc2 .pov{background:linear-gradient(to left,rgba(8,7,6,.92) 0%,rgba(8,7,6,.5) 30%,transparent 62%)}
+.pc3 .pov{background:linear-gradient(to top,rgba(8,7,6,.94) 0%,rgba(8,7,6,.6) 40%,rgba(8,7,6,.12) 82%)}
+.pcard .pdesc{color:rgba(240,234,224,.82)}
+.pcard .ploc{color:#C9A96E}
+.pcard .pfeat{color:rgba(240,234,224,.88)}
+.pcard .pfi{color:#C9A96E}
+.pcard .pcta{color:#F0EAE0}
+.cs-name{color:#F0EAE0}
+.cs-loc{color:#C9A96E}
+.cs-desc{color:rgba(240,234,224,.82)}
+.cs-badge{color:#F0EAE0;border-color:rgba(240,234,224,.4)}
 </style>
 </head>
 <body>
@@ -579,7 +598,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- LOADER -->
 <div id="loader">
   <img class="ld-logo" id="ld-logo"
-       src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/tierra-white2%20copy.png"
+       src="assets/img/tierra-verde.png"
        alt="Tierra Desarrollos">
   <div class="ld-line" id="ld-line"></div>
   <div class="ld-n"  id="ld-n">0</div>
@@ -637,7 +656,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- WAVE 1 -->
 <div class="wd" style="background:var(--dark)">
   <svg viewBox="0 0 1440 110" preserveAspectRatio="none" height="110">
-    <path id="w1a" fill="#080706" d="M0,55 C200,92 400,18 600,55 C800,92 1000,18 1200,55 C1320,76 1400,30 1440,52 L1440,110 L0,110 Z"/>
+    <path id="w1a" fill="#E9E0CE" d="M0,55 C200,92 400,18 600,55 C800,92 1000,18 1200,55 C1320,76 1400,30 1440,52 L1440,110 L0,110 Z"/>
     <path id="w1b" fill="rgba(8,7,6,.38)" d="M0,72 C220,32 440,84 660,50 C880,18 1100,74 1320,46 C1395,28 1428,65 1440,58 L1440,110 L0,110 Z"/>
   </svg>
 </div>
@@ -650,7 +669,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
     <span class="mfl" id="mfl2">no se posee.</span>
     <span class="mfl it" id="mfl3">Se cuida.</span>
   </div>
-  <p style="font-family:var(--fb);font-weight:300;font-size:16px;line-height:1.95;color:rgba(240,234,224,.45);max-width:600px;text-align:center;margin-top:48px;margin-bottom:0">
+  <p style="font-family:var(--fb);font-weight:300;font-size:16px;line-height:1.95;color:rgba(44,40,35,.45);max-width:600px;text-align:center;margin-top:48px;margin-bottom:0">
     En Tierra Desarrollos no vendemos metros cuadrados. Vendemos acceso a un lugar que todavía existe — donde el océano sigue siendo salvaje, la selva no ha cedido y el silencio todavía tiene valor. Cada proyecto que desarrollamos es una promesa de que ese lugar seguirá existiendo.
   </p>
   <div class="mf-rule exit" id="mf-ro"></div>
@@ -671,7 +690,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 
 <!-- 3D LOGO SECTION -->
 <section id="logo3d" style="
-  background:var(--cream);min-height:100vh;
+  background:var(--beige);min-height:100vh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   position:relative;overflow:hidden;text-align:center;
 ">
@@ -704,9 +723,9 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 </section>
 
 <!-- WAVE 2B -->
-<div class="wd" style="background:var(--cream)">
+<div class="wd" style="background:var(--beige)">
   <svg viewBox="0 0 1440 90" preserveAspectRatio="none" height="90">
-    <path id="w2c" fill="#0F0E0D" d="M0,45 C300,80 600,10 900,48 C1100,72 1300,20 1440,45 L1440,90 L0,90 Z"/>
+    <path id="w2c" fill="#E9E0CE" d="M0,45 C300,80 600,10 900,48 C1100,72 1300,20 1440,45 L1440,90 L0,90 Z"/>
   </svg>
 </div>
 
@@ -723,7 +742,6 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
     <div class="pcw" id="pco-az">
       <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/blob-c651792.png" alt="Azimut" style="filter:brightness(10) saturate(0);height:170px;width:auto;object-fit:contain"></div>
       <div class="ploc">Mazunte · Oaxaca</div>
-      <div class="ptitle">Azimut</div>
       <p class="pdesc">Construye tu hogar dentro de un centro de bienestar holístico, a pocos pasos del centro de Mazunte. Lotes privados en ladera de selva nativa, con yoga shala, temazcal y alberca natural en el corazón de la comunidad. Algunos terrenos cuentan con vista al Pacífico; todos, con servicios y respaldo legal completos desde el primer día.</p>
       <div class="pfeats">
         <div class="pfeat"><span class="pfi">◆</span> Yoga Shala al aire libre</div>
@@ -747,7 +765,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 
   <div class="wd" style="background:var(--dark)">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" height="80">
-      <path id="w3a" fill="#1C1A17" d="M0,40 C320,74 640,6 960,40 C1120,58 1300,20 1440,38 L1440,80 L0,80 Z"/>
+      <path id="w3a" fill="#E0D4BD" d="M0,40 C320,74 640,6 960,40 C1120,58 1300,20 1440,38 L1440,80 L0,80 Z"/>
       <path id="w3b" fill="rgba(28,26,23,.45)" d="M0,55 C200,18 480,70 720,40 C960,10 1185,65 1440,30 L1440,80 L0,80 Z"/>
     </svg>
   </div>
@@ -785,7 +803,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 
   <div class="wd" style="background:var(--earth)">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" height="80">
-      <path id="w4a" fill="#080706" d="M0,38 C260,74 520,4 780,42 C1040,80 1245,14 1440,40 L1440,80 L0,80 Z"/>
+      <path id="w4a" fill="#E9E0CE" d="M0,38 C260,74 520,4 780,42 C1040,80 1245,14 1440,40 L1440,80 L0,80 Z"/>
       <path id="w4b" fill="rgba(8,7,6,.45)" d="M0,56 C180,22 360,68 540,46 C720,24 900,66 1080,42 C1255,18 1385,55 1440,44 L1440,80 L0,80 Z"/>
     </svg>
   </div>
@@ -800,7 +818,6 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
     <div class="pcw" id="pco-at">
       <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/ALDEA%20TAO%20LOGO%20CURVAS_BLANCO.png" alt="Aldea Tao" style="height:132px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 14px rgba(0,0,0,.85))"></div>
       <div class="ploc">Costa Oaxaqueña</div>
-      <div class="ptitle">Aldea Tao</div>
       <p class="pdesc">Sobre los acantilados del Pacífico, donde el océano golpea las rocas volcánicas y el horizonte no termina, nace una comunidad única. Construye tu casa frente al mar, con acceso a Playa Tololote y Playa La Boquilla — calas salvajes que no aparecen en los mapas.</p>
       <div class="pfeats">
         <div class="pfeat"><span class="pfi">◆</span> Acceso a Playa Tololote</div>
@@ -826,7 +843,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- WAVE 5 -->
 <div class="wd" style="background:var(--earth)">
   <svg viewBox="0 0 1440 110" preserveAspectRatio="none" height="110">
-    <path id="w5a" fill="#080706" d="M0,55 C260,10 520,90 780,45 C1040,5 1240,80 1440,42 L1440,110 L0,110 Z"/>
+    <path id="w5a" fill="#E9E0CE" d="M0,55 C260,10 520,90 780,45 C1040,5 1240,80 1440,42 L1440,110 L0,110 Z"/>
     <path id="w5b" fill="rgba(8,7,6,.45)" d="M0,38 C200,75 400,15 600,55 C800,95 1000,20 1200,58 C1325,80 1405,32 1440,55 L1440,110 L0,110 Z"/>
   </svg>
 </div>
@@ -864,13 +881,13 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <div style="max-width:1080px;margin:0 auto">
     <div style="font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px">Construcción</div>
     <h2 style="font-family:var(--fh);font-weight:300;font-size:clamp(40px,6vw,76px);line-height:1.05;color:var(--cream);max-width:760px;margin:0">No solo desarrollamos la tierra.<br><em style="color:var(--gold)">La construimos contigo.</em></h2>
-    <p style="font-family:var(--fb);font-weight:300;font-size:16px;line-height:1.9;color:rgba(240,234,224,.6);max-width:640px;margin-top:24px">Acompañamos cada proyecto de principio a fin: del diseño a la entrega llave en mano. <a href="construccion.html" style="color:var(--gold);border-bottom:1px solid rgba(201,169,110,.5)">Ver todo lo que hemos construido →</a></p>
+    <p style="font-family:var(--fb);font-weight:300;font-size:16px;line-height:1.9;color:rgba(44,40,35,.6);max-width:640px;margin-top:24px">Acompañamos cada proyecto de principio a fin: del diseño a la entrega llave en mano. <a href="construccion.html" style="color:var(--gold);border-bottom:1px solid rgba(201,169,110,.5)">Ver todo lo que hemos construido →</a></p>
 
     <!-- ENGANCHE / FINANCIAMIENTO  (pendiente: completar % y condiciones de enganche) -->
     <div style="margin-top:72px;padding:44px;border:1px solid rgba(201,169,110,.22);border-radius:6px;background:rgba(201,169,110,.045)">
       <div style="font-family:var(--fb);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Enganche y financiamiento</div>
       <h3 style="font-family:var(--fh);font-weight:300;font-size:clamp(28px,4vw,46px);color:var(--cream);line-height:1.1;margin:0">Planes de pago a tu medida</h3>
-      <p style="font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.85;color:rgba(240,234,224,.55);max-width:560px;margin-top:18px">Ofrecemos esquemas de enganche y mensualidades flexibles, adaptados a tu perfil de inversión. No necesitas pagar todo de contado para asegurar tu lugar.</p>
+      <p style="font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.85;color:rgba(44,40,35,.55);max-width:560px;margin-top:18px">Ofrecemos esquemas de enganche y mensualidades flexibles, adaptados a tu perfil de inversión. No necesitas pagar todo de contado para asegurar tu lugar.</p>
       <a href="#chat" class="btn-arrow" style="margin-top:24px;display:inline-block">Consultar condiciones <span>→</span></a>
     </div>
   </div>
@@ -879,7 +896,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- WAVE 5B -->
 <div class="wd" style="background:var(--black)">
   <svg viewBox="0 0 1440 90" preserveAspectRatio="none" height="90">
-    <path id="w5c" fill="#1C1A17" d="M0,45 C360,80 720,10 1080,48 C1260,68 1380,24 1440,45 L1440,90 L0,90 Z"/>
+    <path id="w5c" fill="#E0D4BD" d="M0,45 C360,80 720,10 1080,48 C1260,68 1380,24 1440,45 L1440,90 L0,90 Z"/>
   </svg>
 </div>
 
@@ -912,7 +929,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <div style="max-width:920px;margin:0 auto;text-align:center">
     <div style="font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:28px">Confianza</div>
     <p style="font-family:var(--fh);font-weight:300;font-size:clamp(22px,3vw,34px);line-height:1.5;color:var(--cream);margin:0">Tierra nace para crear hábitats contemporáneos que conectan <em style="color:var(--gold)">arquitectura, cultura y naturaleza</em>, dejando un legado positivo en cada desarrollo.</p>
-    <p style="font-family:var(--fb);font-weight:300;font-size:16px;line-height:1.9;color:rgba(240,234,224,.55);max-width:640px;margin:28px auto 0">Cada proyecto es un ecosistema con identidad propia: impulsa la economía local, respeta el entorno natural y construye comunidad. Somos una empresa confiable que acompaña al cliente en todo el proceso — invertir con nosotros también significa transformar el futuro.</p>
+    <p style="font-family:var(--fb);font-weight:300;font-size:16px;line-height:1.9;color:rgba(44,40,35,.55);max-width:640px;margin:28px auto 0">Cada proyecto es un ecosistema con identidad propia: impulsa la economía local, respeta el entorno natural y construye comunidad. Somos una empresa confiable que acompaña al cliente en todo el proceso — invertir con nosotros también significa transformar el futuro.</p>
 
     <div style="margin-top:64px;padding-top:52px;border-top:1px solid rgba(201,169,110,.22);display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;text-align:left">
       <div>
@@ -940,7 +957,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- WAVE 6 -->
 <div class="wd" style="background:var(--black)">
   <svg viewBox="0 0 1440 90" preserveAspectRatio="none" height="90">
-    <path id="w6a" fill="#0F0E0D" d="M0,45 C240,12 480,74 720,40 C960,8 1200,68 1440,35 L1440,90 L0,90 Z"/>
+    <path id="w6a" fill="#E9E0CE" d="M0,45 C240,12 480,74 720,40 C960,8 1200,68 1440,35 L1440,90 L0,90 Z"/>
     <path id="w6b" fill="rgba(15,14,13,.44)" d="M0,62 C200,30 400,70 600,48 C800,26 1000,68 1200,42 C1340,22 1405,58 1440,52 L1440,90 L0,90 Z"/>
   </svg>
 </div>
@@ -966,7 +983,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- WAVE 7 -->
 <div class="wd" style="background:var(--dark)">
   <svg viewBox="0 0 1440 70" preserveAspectRatio="none" height="70">
-    <path id="w7a" fill="#080706" d="M0,35 C360,62 720,8 1080,36 C1250,50 1385,14 1440,35 L1440,70 L0,70 Z"/>
+    <path id="w7a" fill="#E9E0CE" d="M0,35 C360,62 720,8 1080,36 C1250,50 1385,14 1440,35 L1440,70 L0,70 Z"/>
   </svg>
 </div>
 
@@ -975,7 +992,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <div class="fgrid">
     <div class="flc">
       <div style="font-family:var(--fb);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Desarrollo y Construcción</div>
-      <img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/tierra-white2%20copy.png" alt="Tierra Desarrollos" class="flogo">
+      <img src="assets/img/tierra-verde.png" alt="Tierra Desarrollos" class="flogo">
       <p class="ftag">Pacífico mexicano · Costa de Oaxaca</p>
     </div>
     <div>
