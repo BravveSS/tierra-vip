@@ -125,11 +125,13 @@
   const SCOPE = document.querySelectorAll('.pnav-links a, .backlink, .btn, .eyebrow, .ftag, .stats .l, .vis-tab, .lead, .h2, .phero-sub, .phero-eyebrow, .feats li, .step h3, .step p, figcaption');
   const captured = [...SCOPE].map(el => ({ el, es: el.textContent.trim(), html: el.innerHTML }));
   const heroTitle = document.querySelector('.phero-title');
-  const heroTitleES = heroTitle ? heroTitle.textContent.trim().replace(/\s+/g,' ') : '';
+  // OJO: <br> no aporta espacio al textContent — convertirlo antes de extraer el texto
+  const titleText = el => el.innerHTML.replace(/<br\s*\/?>/gi,' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+  const heroTitleES = heroTitle ? titleText(heroTitle) : '';
 
   function splitTitle(el){
     if (reduced || !el || el.querySelector('img')) return;
-    const words = el.textContent.trim().split(/\s+/);
+    const words = titleText(el).split(/\s+/);
     el.innerHTML = words.map((w,i) => '<span class="lx-w"><span class="lx-wi" style="transition-delay:' + (.15 + i*.08).toFixed(2) + 's">' + w + '</span></span>').join(' ');
     requestAnimationFrame(() => requestAnimationFrame(() => el.querySelectorAll('.lx-wi').forEach(s => s.style.transform = 'translateY(0)')));
   }
@@ -156,8 +158,9 @@
       }
     });
     // título del hero (re-split para conservar el reveal)
-    if (heroTitle && !heroTitle.querySelector('img') && TITLE_PAIRS.has(heroTitleES)){
-      heroTitle.textContent = lang === 'en' ? TITLE_PAIRS.get(heroTitleES) : heroTitleES;
+    if (heroTitle && !heroTitle.querySelector('img')){
+      const target = lang === 'en' ? (TITLE_PAIRS.get(heroTitleES) || heroTitleES) : heroTitleES;
+      heroTitle.textContent = target;
       splitTitle(heroTitle);
     }
     // propagar el idioma en los enlaces internos
