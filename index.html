@@ -536,15 +536,12 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 .fog.f1{top:-12%;left:-8%;animation:fogDrift 22s ease-in-out infinite alternate}
 .fog.f2{bottom:-15%;right:-10%;animation:fogDrift 26s ease-in-out infinite alternate-reverse}
 @keyframes fogDrift{from{transform:translate(0,0) scale(1)}to{transform:translate(9vw,5vh) scale(1.18)}}
-/* linterna: la sección se enciende al entrar */
-.lantern{clip-path:circle(10% at 50% 42%);transition:clip-path 1.7s cubic-bezier(.16,1,.3,1)}
-.lantern.lit{clip-path:circle(135% at 50% 42%)}
 /* glow breve en itálicas doradas al revelarse */
 .sw-on em{animation:emGlow 1.3s ease .45s}
 @keyframes emGlow{0%,100%{text-shadow:0 0 0 rgba(201,169,110,0)}45%{text-shadow:0 0 24px rgba(201,169,110,.85)}}
 /* frase del loader */
 #ld-phrase{font-family:var(--fh);font-style:italic;font-size:clamp(16px,2.4vw,24px);color:rgba(201,169,110,.85);letter-spacing:.04em;margin-bottom:30px;min-height:1.4em}
-@media (prefers-reduced-motion: reduce){#vignette,.fog{display:none!important}.lantern{clip-path:none!important}}
+@media (prefers-reduced-motion: reduce){#vignette,.fog{display:none!important}}
 
 /* ── GRAIN DE PELÍCULA (hero) ────────────────── */
 .grain{position:absolute;inset:-50%;z-index:1;pointer-events:none;opacity:.05;
@@ -1666,14 +1663,17 @@ gsap.to('#mf-ro',{scaleX:1,duration:.85,ease:'power2.inOut',
 
 document.querySelectorAll('.mfn').forEach(el=>{
   const t=+el.dataset.t, s=el.dataset.s||'';
-  ScrollTrigger.create({trigger:el,start:'top 86%',once:true,
-    onEnter(){
-      const o={n:0};
-      gsap.to(o,{n:t,duration:1.9,ease:'power2.out',
-        onUpdate(){ el.textContent=Math.round(o.n)+s; }
-      });
-    }
-  });
+  let ran=false;
+  function run(){
+    if(ran) return; ran=true;
+    const o={n:0};
+    gsap.to(o,{n:t,duration:1.9,ease:'power2.out',
+      onUpdate(){ el.textContent=Math.round(o.n)+s; }
+    });
+  }
+  ScrollTrigger.create({trigger:el,start:'top 86%',once:true,onEnter:run});
+  // red de seguridad: si por cualquier motivo el trigger no corre, mostrar el valor real
+  new IntersectionObserver((es,o)=>{ if(es[0].isIntersecting){ run(); o.disconnect(); } },{threshold:.4}).observe(el);
 });
 
 gsap.to('.mfs',{opacity:1,y:0,duration:.75,ease:'power3.out',stagger:.12,
@@ -1704,15 +1704,6 @@ if (!window.__REDUCED){
     gsap.fromTo(img, {filter:'brightness(0) contrast(1.04) saturate(1.08)'},
       {filter:'brightness(1) contrast(1.04) saturate(1.08)', duration:1.6, ease:'power2.out',
        scrollTrigger:{trigger:card, start:'top 72%'}});
-  });
-}
-
-// Linterna: secciones que se encienden al entrar al viewport
-if (!window.__REDUCED && !window.__PERF_LOW){
-  ['#manifesto','#invertir','#confianza'].forEach(sel => {
-    const el = document.querySelector(sel); if (!el) return;
-    el.classList.add('lantern');
-    new IntersectionObserver((es,o)=>{ if(es[0].isIntersecting){ el.classList.add('lit'); o.disconnect(); } },{threshold:.18}).observe(el);
   });
 }
 
