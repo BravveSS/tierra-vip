@@ -530,16 +530,6 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   .fgrid{grid-template-columns:1fr 1fr}
   .flc{grid-column:span 2}
 }
-/* ── CURSOR PERSONALIZADO ────────────────────── */
-@media(hover:hover) and (pointer:fine){
-  #cur-dot{position:fixed;top:0;left:0;width:6px;height:6px;border-radius:50%;background:var(--gold);z-index:9998;pointer-events:none;transform:translate(-50%,-50%)}
-  #cur-ring{position:fixed;top:0;left:0;width:34px;height:34px;border-radius:50%;border:1px solid rgba(201,169,110,.55);z-index:9997;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;display:flex;align-items:center;justify-content:center}
-  #cur-ring span{font-family:var(--fb);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--black);opacity:0;transition:opacity .2s}
-  #cur-ring.grow{width:64px;height:64px;background:rgba(201,169,110,.92)}
-  #cur-ring.grow span{opacity:1}
-}
-@media(hover:none),(pointer:coarse){#cur-dot,#cur-ring{display:none!important}}
-
 /* ── GRAIN DE PELÍCULA (hero) ────────────────── */
 .grain{position:absolute;inset:-50%;z-index:1;pointer-events:none;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -562,7 +552,8 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 .mp-pin circle.dot{fill:var(--gold);transition:r .25s}
 .mp-pin circle.pulse{fill:none;stroke:var(--gold);stroke-width:1;opacity:0;transform-origin:center;animation:mpPulse 2.6s ease infinite}
 .mp-pin:hover circle.dot{r:7}
-.mp-pin text{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;fill:rgba(240,234,224,.75)}
+.mp-pin text{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;fill:rgba(240,234,224,.78)}
+@media(max-width:768px){#masterplan{padding:90px 16px}.mp-pin text{font-size:16px;letter-spacing:.08em}.mp-card{width:190px}.mp-card img{height:96px}}
 @keyframes mpPulse{0%{opacity:.7;r:6}100%{opacity:0;r:22}}
 .mp-card{position:absolute;width:230px;background:rgba(15,14,13,.97);border:1px solid rgba(201,169,110,.3);border-radius:8px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6);opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .28s,transform .28s;z-index:20}
 .mp-card.show{opacity:1;transform:translateY(0)}
@@ -603,6 +594,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 .cmp tr{transition:background .25s;cursor:pointer}
 .cmp tbody tr:hover{background:rgba(201,169,110,.06)}
 .cmp .tag{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(201,169,110,.4);color:var(--gold);border-radius:14px;padding:3px 10px}
+.cmp .tag-sold{background:var(--gold);color:var(--black);font-weight:500}
 
 /* ── TOURS / VISITAS ─────────────────────────── */
 #visitas{background:var(--dark);padding:130px 56px}
@@ -615,6 +607,9 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 .vis-form input,.vis-form select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.2);color:var(--cream);padding:13px 15px;border-radius:8px;font-family:var(--fb);font-size:13.5px;font-weight:300;outline:none;transition:border-color .2s}
 .vis-form input:focus,.vis-form select:focus{border-color:rgba(201,169,110,.5)}
 .vis-form input::placeholder{color:var(--muted)}
+/* dropdown nativo legible + date picker oscuro (fix: texto invisible en options) */
+.vis-form select,.vis-form input[type=date]{color-scheme:dark}
+.vis-form select option{background:#0F0E0D;color:#F0EAE0}
 .vis-send{grid-column:1/-1;font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:var(--black);padding:15px;border-radius:8px;transition:background .25s}
 .vis-send:hover{background:var(--cream)}
 @media(max-width:600px){.vis-form{grid-template-columns:1fr}.vis-box{padding:26px}}
@@ -683,10 +678,6 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 #oax-clock{font-family:var(--fb);font-size:12px;letter-spacing:.06em;color:var(--muted);text-align:center;padding-bottom:18px}
 #oax-clock b{color:var(--gold);font-weight:400}
 
-/* ── REVEAL CORTINA PARA IMÁGENES ────────────── */
-.img-curtain{clip-path:inset(0 0 100% 0);transition:clip-path 1.1s cubic-bezier(.16,1,.3,1)}
-.img-curtain.in{clip-path:inset(0 0 0% 0)}
-
 /* ── SPLITWORDS ──────────────────────────────── */
 .sw-w{display:inline-block;overflow:hidden;vertical-align:bottom}
 .sw-i{display:inline-block;transform:translateY(108%);transition:transform .85s cubic-bezier(.16,1,.3,1)}
@@ -695,10 +686,9 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 /* ── ACCESIBILIDAD: REDUCED MOTION ───────────── */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-  #ptx,#c3d,.grain,#cur-dot,#cur-ring{display:none!important}
+  #ptx,.grain{display:none!important}
   .hhl,.hpre,.hsub,.hctas,.mfs,.tl-step{opacity:1!important;transform:none!important}
   .sw-i{transform:none!important}
-  .img-curtain{clip-path:none!important}
 }
 
 @media(max-width:768px){
@@ -718,6 +708,11 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   .flc{grid-column:span 1}
   .cwin{height:480px}
   .ld-n{right:24px;bottom:28px}
+  /* FAB compacto en móvil para no tapar el input del chat */
+  #ai-fab{width:48px;height:48px;bottom:16px;right:16px;font-size:18px}
+  #ai-fab::before{display:none}
+  /* panel del asistente a pantalla completa en móvil */
+  #ai-panel{width:100%;right:-100%}
 }
 </style>
 </head>
@@ -726,10 +721,6 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 <!-- SCROLL PROGRESS -->
 <div id="spb"></div>
 <div id="sec-label" aria-hidden="true"></div>
-
-<!-- CURSOR PERSONALIZADO -->
-<div id="cur-dot" aria-hidden="true"></div>
-<div id="cur-ring" aria-hidden="true"><span></span></div>
 
 <!-- TRANSICIÓN DE PÁGINA -->
 <div id="page-sweep" aria-hidden="true"></div>
@@ -801,19 +792,20 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
     <li><a href="#g3d" data-i18n="nav_galeria">Galería</a></li>
     <li><a href="#confianza" data-i18n="nav_confianza">Confianza</a></li>
     <li><a href="#chat" data-i18n="nav_contacto">Contacto</a></li>
-    <li><div class="lang-sw" role="group" aria-label="Idioma"><button id="lang-es" class="on" aria-label="Español">ES</button><button id="lang-en" aria-label="English">EN</button></div></li>
+    <li><div class="lang-sw" role="group" aria-label="Idioma"><button data-lang-btn="es" class="on" aria-label="Español">ES</button><button data-lang-btn="en" aria-label="English">EN</button></div></li>
   </ul>
   <button class="nav-ham" id="ham" aria-label="Menú"><span></span><span></span><span></span></button>
 </nav>
 
 <div id="mob-menu">
   <ul>
-    <li><a href="#sec-projects">Proyectos</a></li>
-    <li><a href="construccion.html">Construcción</a></li>
-    <li><a href="nosotros.html">Nosotros</a></li>
-    <li><a href="#g3d">Galería</a></li>
-    <li><a href="#confianza">Confianza</a></li>
-    <li><a href="#chat">Contacto</a></li>
+    <li><a href="#sec-projects" data-i18n="nav_proyectos">Proyectos</a></li>
+    <li><a href="construccion.html" data-i18n="nav_construccion">Construcción</a></li>
+    <li><a href="nosotros.html" data-i18n="nav_nosotros">Nosotros</a></li>
+    <li><a href="#g3d" data-i18n="nav_galeria">Galería</a></li>
+    <li><a href="#confianza" data-i18n="nav_confianza">Confianza</a></li>
+    <li><a href="#chat" data-i18n="nav_contacto">Contacto</a></li>
+    <li><div class="lang-sw" role="group" aria-label="Idioma" style="margin-top:10px"><button data-lang-btn="es" class="on" aria-label="Español">ES</button><button data-lang-btn="en" aria-label="English">EN</button></div></li>
   </ul>
 </div>
 
@@ -877,10 +869,10 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 
 <!-- MASTERPLAN INTERACTIVO -->
 <section id="masterplan">
-  <div class="mp-wrap">
-    <div style="font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px">Masterplan</div>
-    <h2 class="sw" style="font-family:var(--fh);font-weight:300;font-size:clamp(36px,5.5vw,64px);line-height:1.06;color:var(--cream);max-width:740px">La Costa de Oaxaca, <em style="color:var(--gold)">proyecto por proyecto.</em></h2>
-    <p style="font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.85;color:rgba(240,234,224,.55);max-width:560px;margin-top:18px">Recorre el mapa: cada punto es un desarrollo de Tierra. Toca un pin para descubrirlo.</p>
+  <div class="mp-wrap" style="text-align:center">
+    <div style="font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px" data-i18n="mp_tag">Masterplan</div>
+    <h2 class="sw" style="font-family:var(--fh);font-weight:300;font-size:clamp(36px,5.5vw,64px);line-height:1.06;color:var(--cream);max-width:740px;margin:0 auto">La Costa de Oaxaca, <em style="color:var(--gold)">proyecto por proyecto.</em></h2>
+    <p style="font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.85;color:rgba(240,234,224,.55);max-width:560px;margin:18px auto 0" data-i18n="mp_sub">Recorre el mapa: cada punto es un desarrollo de Tierra. Toca un pin para descubrirlo.</p>
 
     <div class="mp-stage">
       <svg class="mp-svg" viewBox="0 0 1100 400" role="img" aria-label="Mapa estilizado de la Costa de Oaxaca con los proyectos de Tierra">
@@ -893,23 +885,23 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
         <path d="M0,238 C160,206 300,266 470,240 C650,212 800,268 960,236 C1020,224 1070,238 1100,230 L1100,400 L0,400 Z" fill="url(#mpSea)"/>
         <path id="mp-shore" d="M0,238 C160,206 300,266 470,240 C650,212 800,268 960,236 C1020,224 1070,238 1100,230" fill="none" stroke="rgba(201,169,110,.55)" stroke-width="1.5"/>
         <!-- etiquetas de zona -->
-        <text x="58"  y="330" style="font-family:var(--fb);font-size:11px;letter-spacing:.3em;fill:rgba(201,169,110,.35)">OCÉANO PACÍFICO</text>
-        <text x="900" y="60"  style="font-family:var(--fb);font-size:11px;letter-spacing:.3em;fill:rgba(240,234,224,.28)">COSTA DE OAXACA</text>
-        <!-- pins: data-proj enlaza con tarjeta y scroll -->
-        <g class="mp-pin" data-proj="azimut" data-target="#pc-az" transform="translate(170,212)" tabindex="0" role="button" aria-label="Azimut, Mazunte">
-          <circle class="pulse" r="6"/><circle class="dot" r="5"/><text x="-26" y="-18">Azimut · Mazunte</text>
+        <text x="80"  y="330" style="font-family:var(--fb);font-size:11px;letter-spacing:.3em;fill:rgba(201,169,110,.35)">OCÉANO PACÍFICO</text>
+        <text x="690" y="60"  style="font-family:var(--fb);font-size:11px;letter-spacing:.3em;fill:rgba(240,234,224,.28)">COSTA DE OAXACA</text>
+        <!-- pins: labels centrados (text-anchor) y área táctil amplia (circle.hit) -->
+        <g class="mp-pin" data-proj="azimut" data-target="#pc-az" transform="translate(195,212)" tabindex="0" role="button" aria-label="Azimut, Mazunte">
+          <circle class="hit" r="22" fill="transparent"/><circle class="pulse" r="6"/><circle class="dot" r="5"/><text text-anchor="middle" y="-20">Azimut · Mazunte</text>
         </g>
-        <g class="mp-pin" data-proj="serena" data-target="#coming" transform="translate(330,242)" tabindex="0" role="button" aria-label="Serena, San Antonio">
-          <circle class="pulse" r="6"/><circle class="dot" r="5"/><text x="-22" y="30">Serena · San Antonio</text>
+        <g class="mp-pin" data-proj="serena" data-target="#coming" transform="translate(345,242)" tabindex="0" role="button" aria-label="Serena, San Antonio">
+          <circle class="hit" r="22" fill="transparent"/><circle class="pulse" r="6"/><circle class="dot" r="5"/><text text-anchor="middle" y="34">Serena · San Antonio</text>
         </g>
         <g class="mp-pin" data-proj="nabani" data-target="#pc-nb" transform="translate(540,226)" tabindex="0" role="button" aria-label="Nabani, Costa Oaxaqueña">
-          <circle class="pulse" r="6"/><circle class="dot" r="5"/><text x="-24" y="-18">Nabani</text>
+          <circle class="hit" r="22" fill="transparent"/><circle class="pulse" r="6"/><circle class="dot" r="5"/><text text-anchor="middle" y="-20">Nabani</text>
         </g>
-        <g class="mp-pin" data-proj="kora" data-target="#coming" transform="translate(690,246)" tabindex="0" role="button" aria-label="Depas Kora, Zipolite">
-          <circle class="pulse" r="6"/><circle class="dot" r="5"/><text x="-32" y="32">Depas Kora · Zipolite</text>
+        <g class="mp-pin" data-proj="kora" data-target="#coming" transform="translate(700,246)" tabindex="0" role="button" aria-label="Depas Kora, Zipolite">
+          <circle class="hit" r="22" fill="transparent"/><circle class="pulse" r="6"/><circle class="dot" r="5"/><text text-anchor="middle" y="34">Depas Kora · Zipolite</text>
         </g>
-        <g class="mp-pin" data-proj="aldea" data-target="#pc-at" transform="translate(905,228)" tabindex="0" role="button" aria-label="Aldea Tao, La Boquilla">
-          <circle class="pulse" r="6"/><circle class="dot" r="5"/><text x="-38" y="-18">Aldea Tao · La Boquilla</text>
+        <g class="mp-pin" data-proj="aldea" data-target="#pc-at" transform="translate(870,212)" tabindex="0" role="button" aria-label="Aldea Tao, La Boquilla">
+          <circle class="hit" r="22" fill="transparent"/><circle class="pulse" r="6"/><circle class="dot" r="5"/><text text-anchor="middle" y="-20">Aldea Tao · La Boquilla</text>
         </g>
       </svg>
       <!-- tarjeta hover del masterplan (la mueve JS) -->
@@ -934,8 +926,9 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   position:relative;overflow:hidden;
 ">
-  <canvas id="c3d" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.5"></canvas>
-  <div style="position:relative;z-index:2;text-align:center;padding:0 24px;max-width:800px">
+  <!-- Halo dorado sutil tras el logo (composición CSS, sin Three.js) -->
+  <div aria-hidden="true" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,82vw);height:min(620px,82vw);border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.14) 0%,rgba(201,169,110,.05) 42%,transparent 70%);pointer-events:none"></div>
+  <div style="position:relative;z-index:2;text-align:center;padding:0 24px;max-width:800px;margin:0 auto">
     <div id="logo3d-label" style="
       font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
       color:var(--gold);margin-bottom:40px;opacity:0;transform:translateY(16px);
@@ -980,7 +973,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-az">
-      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/blob-c651792.png" alt="Azimut" style="filter:brightness(10) saturate(0);height:170px;width:auto;object-fit:contain"></div>
+      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/blob-c651792.png" alt="Azimut" style="filter:brightness(10) saturate(0) drop-shadow(0 2px 12px rgba(0,0,0,.6));height:200px;width:auto;object-fit:contain"></div>
       <div class="ploc">Mazunte · Oaxaca</div>
       <p class="pdesc">Construye tu hogar dentro de un centro de bienestar holístico, a pocos pasos del centro de Mazunte. Lotes privados en ladera de selva nativa, con yoga shala, temazcal y alberca natural en el corazón de la comunidad. Algunos terrenos cuentan con vista al Pacífico; todos, con servicios y respaldo legal completos desde el primer día.</p>
       <div class="pfeats">
@@ -1056,7 +1049,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       <div class="pov"></div>
     </div>
     <div class="pcw" id="pco-at">
-      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/ALDEA%20TAO%20LOGO%20CURVAS_BLANCO.png" alt="Aldea Tao" style="height:132px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 14px rgba(0,0,0,.85))"></div>
+      <div class="plogo"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/ALDEA%20TAO%20LOGO%20CURVAS_BLANCO.png" alt="Aldea Tao" style="height:170px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 16px rgba(0,0,0,.9))"></div>
       <div class="ploc">Costa Oaxaqueña</div>
       <p class="pdesc">Sobre los acantilados del Pacífico, donde el océano golpea las rocas volcánicas y el horizonte no termina, nace una comunidad única. Construye tu casa frente al mar, con acceso a Playa Tololote y Playa La Boquilla — calas salvajes que no aparecen en los mapas.</p>
       <div class="pfeats">
@@ -1096,7 +1089,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   </div>
   <div class="cs-grid">
     <a class="cs-card" data-cs href="serena.html" style="text-decoration:none;color:inherit;display:block">
-      <img src="assets/img/serena/renderserena-2.webp" alt="Serena" loading="eager">
+      <img src="assets/img/serena/renderserena-2.webp" alt="Serena" loading="eager" onerror="this.onerror=null;this.src='assets/img/serena/renderserena.webp'">
       <div class="cs-card-body">
         <div class="cs-badge">Próximamente</div>
         <div class="cs-name">Serena</div>
@@ -1105,7 +1098,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       </div>
     </a>
     <a class="cs-card" data-cs href="depas-kora.html" style="text-decoration:none;color:inherit;display:block">
-      <img src="assets/img/kora/rs-w-719-h-1079-1.webp" alt="Depas Kora" loading="eager">
+      <img src="assets/img/kora/rs-w-719-h-1079-1.webp" alt="Depas Kora" loading="eager" onerror="this.onerror=null;this.src='assets/img/kora/rs-w-719-h-836.webp'">
       <div class="cs-card-body">
         <div class="cs-badge">Preventa</div>
         <div class="cs-name">Depas Kora</div>
@@ -1204,6 +1197,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
           <tr data-target="#pc-at"><td>Aldea Tao</td><td>Lotes en acantilado</td><td>La Boquilla</td><td>Calas privadas</td><td><span class="tag">Limitado</span></td></tr>
           <tr data-target="#coming"><td>Depas Kora</td><td>Departamentos</td><td>Zipolite</td><td>Diseño minimalista</td><td><span class="tag">Preventa</span></td></tr>
           <tr data-target="#coming"><td>Serena</td><td>Comunidad eco</td><td>San Antonio</td><td>Huerto y jardín comunitario</td><td><span class="tag">Próximamente</span></td></tr>
+          <tr data-target="#entregados"><td>Bela'Daxhen</td><td>Lotes residenciales</td><td>Costa de Oaxaca</td><td>Primer desarrollo de Tierra</td><td><span class="tag tag-sold">Agotado</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1268,6 +1262,23 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
       <div><div style="font-family:var(--fh);font-size:clamp(34px,5vw,52px);color:var(--cream);line-height:1">+40</div><div style="font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:6px">Clientes felices</div></div>
       <div><div style="font-family:var(--fh);font-size:clamp(34px,5vw,52px);color:var(--cream);line-height:1">6+</div><div style="font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:6px">Años de trayectoria</div></div>
       <div><div style="font-family:var(--fh);font-size:clamp(34px,5vw,52px);color:var(--cream);line-height:1">5</div><div style="font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:6px">Proyectos activos</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROYECTOS ENTREGADOS / AGOTADOS — prueba social -->
+<section id="entregados" style="background:var(--black);padding:120px 56px">
+  <div style="max-width:1080px;margin:0 auto;text-align:center">
+    <div style="font-family:var(--fb);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px" data-i18n="sold_tag">Historial</div>
+    <h2 class="sw" style="font-family:var(--fh);font-weight:300;font-size:clamp(36px,5.5vw,64px);line-height:1.06;color:var(--cream)">Proyectos <em style="color:var(--gold)">entregados.</em></h2>
+    <p style="font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.85;color:rgba(240,234,224,.55);max-width:560px;margin:18px auto 0" data-i18n="sold_sub">Cuando un proyecto de Tierra se agota, se convierte en comunidad. Este es nuestro historial — y la mejor prueba de lo que viene.</p>
+    <div style="max-width:680px;margin:52px auto 0;position:relative;border:1px solid rgba(201,169,110,.28);border-radius:8px;overflow:hidden">
+      <img src="assets/img/construccion/chololo-pasado/captura-de-pantalla-2024-10-23-a-la-s-6-11-07-p-m.webp" alt="Bela'Daxhen — desarrollo entregado en la Costa de Oaxaca" loading="lazy" style="width:100%;height:340px;object-fit:cover;filter:brightness(.55) saturate(.85)">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(to top,rgba(8,7,6,.78),rgba(8,7,6,.25))">
+        <div style="font-family:var(--fb);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:7px 20px;border-radius:20px;font-weight:500" data-i18n="sold_badge">Agotado</div>
+        <div style="font-family:var(--fh);font-size:clamp(34px,5vw,54px);font-weight:300;color:var(--cream);margin-top:18px">Bela'Daxhen</div>
+        <div style="font-family:var(--fb);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,234,224,.7);margin-top:8px">Costa de Oaxaca · 100% vendido</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1373,7 +1384,6 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   <p class="fcopy">© <span id="fyear">2026</span> Tierra Desarrollos · tierra.vip</p>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -1381,6 +1391,10 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 (function(){
 'use strict';
 gsap.registerPlugin(ScrollTrigger);
+
+/* Flags globales — definidos PRIMERO porque varios bloques los leen */
+window.__REDUCED  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+window.__PERF_LOW = (navigator.hardwareConcurrency || 8) < 4 || window.matchMedia('(max-width:768px)').matches;
 
 /* ════════════════════════════════════════
    PARTICLES
@@ -1659,7 +1673,7 @@ document.querySelectorAll('.mfn').forEach(el=>{
 });
 
 gsap.to('.mfs',{opacity:1,y:0,duration:.75,ease:'power3.out',stagger:.12,
-  scrollTrigger:{trigger:'#mf-stats',start:'top 82%'}});
+  scrollTrigger:{trigger:'.mf-stats',start:'top 88%'}});
 
 /* ════════════════════════════════════════
    PROJECTS
@@ -1772,7 +1786,6 @@ const gdata = [
   {src:'assets/img/serena/renderserena-3.webp', lbl:'Serena · Comunidad eco',       tag:'Serena'},
   {src:'assets/img/serena/renderserena.webp',   lbl:'Serena · Vida en comunidad',   tag:'Serena'},
 ];
-let N = gdata.length;
 
 const gstage  = document.getElementById('g3d-stage');
 const gcards  = document.getElementById('g3d-cards');
@@ -1781,7 +1794,7 @@ const gmob    = document.getElementById('g3d-mob');
 const cards   = [];
 let   gActive = 0;
 
-gdata.forEach((d,i)=>{
+gdata.forEach((d)=>{
   // 3D card
   const c = document.createElement('div');
   c.className='gcard';
@@ -1790,13 +1803,7 @@ gdata.forEach((d,i)=>{
   gcards.appendChild(c);
   cards.push(c);
 
-  // dot
-  const dot = document.createElement('div');
-  dot.className='gdot';
-  dot.addEventListener('click',()=>scrollToCard(i));
-  gdots.appendChild(dot);
-
-  // mobile item
+  // mobile item (los dots los crea rebuildDots)
   const mi = document.createElement('div');
   mi.className='g3d-mob-item';
   mi.innerHTML=`<img src="${d.src}" alt="${d.lbl}" loading="lazy">`;
@@ -2000,6 +2007,8 @@ function rec(){
 function scrollC(){ cmsgs.scrollTop=cmsgs.scrollHeight; }
 
 function addMsg(text,role){
+  // chat bilingüe: si el idioma activo es EN, traducir mensajes conocidos
+  if (window.__LANG === 'en' && typeof CHAT_EN !== 'undefined' && CHAT_EN.has(text)) text = CHAT_EN.get(text);
   const w=document.createElement('div');
   const b=document.createElement('div');
   w.className=`cmsg ${role}`; b.className='cbub';
@@ -2025,7 +2034,8 @@ function addPills(msgEl,pills,onPick){
   wrap.className='cpills';
   pills.forEach(p=>{
     const btn=document.createElement('button');
-    btn.className='cpill'; btn.textContent=p.label;
+    btn.className='cpill';
+    btn.textContent = (window.__LANG === 'en' && typeof CHAT_EN !== 'undefined' && CHAT_EN.has(p.label)) ? CHAT_EN.get(p.label) : p.label;
     btn.addEventListener('click',()=>{
       wrap.querySelectorAll('.cpill').forEach(b=> b.classList.add(b===btn?'chosen':'faded'));
       wrap.querySelectorAll('.cpill').forEach(b=> b.disabled=true);
@@ -2036,7 +2046,6 @@ function addPills(msgEl,pills,onPick){
   msgEl.appendChild(wrap); scrollC();
 }
 
-let stepIdx=0;
 function runStep(idx){
   if(idx>=steps.length){ showRec(); return; }
   const s=steps[idx];
@@ -2094,171 +2103,23 @@ ScrollTrigger.create({
 });
 
 /* ════════════════════════════════════════
-   THREE.JS — 3D FLOATING PARTICLES LOGO
+   LOGO TIERRA — composición CSS limpia
+   (reveals al entrar; sin Three.js)
 ═══════════════════════════════════════ */
 (function(){
   const section = document.getElementById('logo3d');
-  const canvas  = document.getElementById('c3d');
-  if (!section || !canvas || typeof THREE === 'undefined') return;
-
-  const W = () => section.clientWidth;
-  const H = () => section.clientHeight;
-
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(W(), H());
-
-  const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, W()/H(), 0.1, 1000);
-  camera.position.set(0, 0, 28);
-
-  // Lights
-  const amb  = new THREE.AmbientLight(0xF0EAE0, 0.4);
-  const dir  = new THREE.DirectionalLight(0xC9A96E, 1.4);
-  const pt   = new THREE.PointLight(0xffffff, 0.7, 80);
-  dir.position.set(5, 8, 10);
-  pt.position.set(-10, 6, 12);
-  scene.add(amb, dir, pt);
-
-  // Gold particles forming T-I-E-R-R-A shape
-  const count = 1800;
-  const geo = new THREE.BufferGeometry();
-  const pos = new Float32Array(count * 3);
-  const speeds = new Float32Array(count);
-  const offsets = new Float32Array(count);
-
-  // Letter grid positions for "TIERRA"
-  const letters = [
-    // T
-    ...Array.from({length:80},(_,i)=>[i<40?-8+i*.35:-6.3+(i-40)*.0,i<40?3:-3+(i-40)*.15,0]),
-    // I
-    ...Array.from({length:40},(_,i)=>[-4.5,-3+i*.15,0]),
-    // E
-    ...Array.from({length:80},(_,i)=>{
-      if(i<25) return [-3,-3+i*.24,0];
-      if(i<45) return [-3+(i-25)*.2,3,0];
-      if(i<62) return [-3+(i-45)*.22,0,0];
-      return [-3+(i-62)*.2,-3,0];
-    }),
-    // R
-    ...Array.from({length:80},(_,i)=>{
-      if(i<40) return [-1,-3+i*.15,0];
-      if(i<60) return [-1+(i-40)*.2,3-(i-40)*.08,0];
-      return [-1+(i-60)*.15,0-(i-60)*.15,0];
-    }),
-    // R2
-    ...Array.from({length:80},(_,i)=>{
-      if(i<40) return [1.5,-3+i*.15,0];
-      if(i<60) return [1.5+(i-40)*.2,3-(i-40)*.08,0];
-      return [1.5+(i-60)*.15,0-(i-60)*.15,0];
-    }),
-    // A
-    ...Array.from({length:80},(_,i)=>{
-      if(i<40) return [3.5+(i*.06),-3+(i*.15),0];
-      if(i<80) return [7.5-(i-40)*.06,-3+(i-40)*.15,0];
-      return [4.5+(i-70)*.06,0,0];
-    }),
-  ];
-
-  // Cada partícula tiene una posición DISPERSA (nube) y un TARGET (forma "TIERRA").
-  // El morph viaja: nube → TIERRA (2 s en pantalla) → nube. (Corrige el array "letters" muerto.)
-  const targets = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    pos[i*3]   = (Math.random()-.5)*26;
-    pos[i*3+1] = (Math.random()-.5)*14;
-    pos[i*3+2] = (Math.random()-.5)*7;
-    const L = letters[i % letters.length];
-    targets[i*3]   = L[0] + (Math.random()-.5)*.5;
-    targets[i*3+1] = L[1] + (Math.random()-.5)*.5;
-    targets[i*3+2] = (Math.random()-.5)*1.2;
-    speeds[i]  = .4 + Math.random()*.6;
-    offsets[i] = Math.random()*Math.PI*2;
-  }
-  const morph = { m: 0 };   // 0 = nube · 1 = TIERRA
-  let morphPlayed = false;
-
-  geo.setAttribute('position', new THREE.BufferAttribute(pos.slice(), 3));
-  geo.setAttribute('aSpeed',   new THREE.BufferAttribute(speeds, 1));
-
-  const mat = new THREE.PointsMaterial({
-    color: 0xC9A96E,
-    size: 0.09,
-    transparent: true,
-    opacity: 0.82,
-    sizeAttenuation: true,
-  });
-
-  const points = new THREE.Points(geo, mat);
-  scene.add(points);
-
-  // Mouse tracking
-  let mx = 0, my = 0;
-  document.addEventListener('mousemove', e => {
-    mx = (e.clientX / window.innerWidth  - .5) * 2;
-    my = (e.clientY / window.innerHeight - .5) * 2;
-  });
-
-  window.addEventListener('resize', () => {
-    renderer.setSize(W(), H());
-    camera.aspect = W() / H();
-    camera.updateProjectionMatrix();
-  });
-
-  let t0 = null;
-  let isVisible = false;
-
-  const io3d = new IntersectionObserver(entries => {
-    isVisible = entries[0].isIntersecting;
-    if (isVisible) {
-      // Animate in logo text elements
-      const lbl   = document.getElementById('logo3d-label');
-      const title = document.getElementById('logo3d-title');
-      const sub   = document.getElementById('logo3d-sub');
-      const line  = document.getElementById('logo3d-line');
-      const body  = document.getElementById('logo3d-body');
-      if (lbl)   { lbl.style.opacity='1';   lbl.style.transform='translateY(0)'; }
-      if (title) { title.style.opacity='1'; title.style.transform='translateY(0)'; }
-      if (sub)   { sub.style.opacity='1';   sub.style.transform='translateY(0)'; }
-      if (line)  { line.style.width='200px'; }
-      if (body)  { body.style.opacity='1';  body.style.transform='translateY(0)'; }
-      // Morph una sola vez: converge a "TIERRA", se sostiene 2 s y se dispersa en nube
-      if (!morphPlayed && typeof gsap !== 'undefined' && !window.__PERF_LOW && !window.__REDUCED){
-        morphPlayed = true;
-        gsap.timeline()
-          .to(morph, { m: 1, duration: 1.7, ease: 'power3.inOut', delay: .35 })
-          .to(morph, { m: 0, duration: 1.5, ease: 'power3.inOut' }, '+=2');
-      }
-    }
-  }, { threshold: 0.3 });
-  io3d.observe(section);
-
-  function animate(ts) {
-    requestAnimationFrame(animate);
-    if (!isVisible) return;
-    if (!t0) t0 = ts;
-    const t = (ts - t0) / 1000;
-
-    const positions = geo.attributes.position.array;
-    const m = morph.m, im = 1 - m;
-    for (let i = 0; i < count; i++) {
-      // Mezcla nube↔TIERRA según morph.m, con oscilación orgánica encima
-      const ox = Math.sin(t * .3 + offsets[i]) * .14 * im + Math.sin(t*1.6+offsets[i]) * .04 * m;
-      const oy = Math.cos(t * .25 + offsets[i]) * .14 * im + Math.cos(t*1.4+offsets[i]) * .04 * m;
-      const oz = Math.sin(t * speeds[i] + offsets[i]) * (1.0 * im + .15 * m);
-      positions[i*3]   = pos[i*3]   * im + targets[i*3]   * m + ox;
-      positions[i*3+1] = pos[i*3+1] * im + targets[i*3+1] * m + oy;
-      positions[i*3+2] = pos[i*3+2] * im + targets[i*3+2] * m + oz;
-    }
-    geo.attributes.position.needsUpdate = true;
-
-    points.rotation.y = mx * .08 + Math.sin(t * .18) * .04;
-    points.rotation.x = -my * .05 + Math.sin(t * .12) * .02;
-
-    mat.opacity = .7 + Math.sin(t * .5) * .1;
-
-    renderer.render(scene, camera);
-  }
-  requestAnimationFrame(animate);
+  if (!section) return;
+  const io = new IntersectionObserver((es, o) => {
+    if (!es[0].isIntersecting) return;
+    ['logo3d-label','logo3d-title','logo3d-sub','logo3d-body'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el){ el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }
+    });
+    const line = document.getElementById('logo3d-line');
+    if (line) line.style.width = '200px';
+    o.disconnect();
+  }, { threshold: 0.35 });
+  io.observe(section);
 })();
 
 /* ════════════════════════════════════════
@@ -2548,35 +2409,12 @@ aiFab.addEventListener('click', () => { openAiPanel(); gsap.to(aiFab, {rotate: 9
 aipClose.addEventListener('click', () => { aiPanel.classList.remove('open'); gsap.to(aiFab, {rotate: 0, duration: .4}); });
 
 /* ════════════════════════════════════════
-   MODO PERFORMANCE + REDUCED MOTION
+   MODO PERFORMANCE (flags ya definidos arriba)
 ═══════════════════════════════════════ */
-window.__REDUCED  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-window.__PERF_LOW = (navigator.hardwareConcurrency || 8) < 4 || window.matchMedia('(max-width:768px)').matches;
 if (window.__PERF_LOW) {
   ptArr.length = 36;                                   // menos partículas de fondo
   const gr = document.querySelector('.grain'); if (gr) gr.style.display = 'none';
 }
-
-/* ════════════════════════════════════════
-   CURSOR PERSONALIZADO (desktop)
-═══════════════════════════════════════ */
-(function(){
-  if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches || window.__REDUCED) return;
-  const dot = document.getElementById('cur-dot'), ring = document.getElementById('cur-ring');
-  if (!dot || !ring) return;
-  const rTxt = ring.querySelector('span');
-  const dx = gsap.quickTo(dot,'x',{duration:.08}), dy = gsap.quickTo(dot,'y',{duration:.08});
-  const rx = gsap.quickTo(ring,'x',{duration:.32,ease:'power3.out'}), ry2 = gsap.quickTo(ring,'y',{duration:.32,ease:'power3.out'});
-  window.addEventListener('mousemove', e => { dx(e.clientX); dy(e.clientY); rx(e.clientX); ry2(e.clientY); }, {passive:true});
-  // estados contextuales: "Ver" sobre imágenes, "Arrastrar" sobre la galería
-  document.addEventListener('mouseover', e => {
-    const t = e.target;
-    if (t.closest('#g3d-stage'))                { ring.classList.add('grow'); rTxt.textContent='Arrastrar'; }
-    else if (t.closest('.ptb,.cs-card,.gcard')) { ring.classList.add('grow'); rTxt.textContent='Ver'; }
-    else if (t.closest('a,button,.mp-pin,.cmp tbody tr')) { ring.classList.add('grow'); rTxt.textContent=''; }
-    else ring.classList.remove('grow');
-  }, {passive:true});
-})();
 
 /* ════════════════════════════════════════
    SPLITWORDS — reveal palabra por palabra
@@ -2713,6 +2551,9 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
 ═══════════════════════════════════════ */
 (function(){
   const form = document.getElementById('vis-form'); if (!form) return;
+  // fecha mínima = hoy (no permitir fechas pasadas)
+  const fEl = document.getElementById('vis-fecha');
+  if (fEl) fEl.min = new Date().toISOString().split('T')[0];
   let tipo = 'presencial';
   const tabs = [document.getElementById('vis-pres'), document.getElementById('vis-virt')];
   tabs.forEach((t,i) => t.addEventListener('click', e => {
@@ -2768,7 +2609,7 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
   function tick(){
     try{
       const t = new Date().toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit', timeZone:'America/Mexico_City'});
-      c.innerHTML = 'En Mazunte son las <b>' + t + '</b> · ☀ 31°C';
+      c.innerHTML = (window.__LANG === 'en' ? "In Mazunte it's <b>" : 'En Mazunte son las <b>') + t + '</b>';
     }catch(_){ c.textContent = ''; }
   }
   if (c){ tick(); setInterval(tick, 30000); }
@@ -2783,15 +2624,15 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
 (function(){
   const lbl = document.getElementById('sec-label'); if (!lbl) return;
   const secs = [
-    ['#hero','01 — Inicio'],['#manifesto','02 — Manifiesto'],['#masterplan','03 — Masterplan'],
-    ['#sec-projects','04 — Proyectos'],['#coming','05 — Próximamente'],['#invertir','06 — Inversión'],
-    ['#construccion','07 — Construcción'],['#proceso','08 — Proceso'],['#comparador','09 — Comparador'],
-    ['#g3d','10 — Galería'],['#confianza','11 — Confianza'],['#visitas','12 — Visitas'],['#chat','13 — Contacto'],
+    ['#hero','01 — Inicio','01 — Home'],['#manifesto','02 — Manifiesto','02 — Manifesto'],['#masterplan','03 — Masterplan','03 — Masterplan'],
+    ['#sec-projects','04 — Proyectos','04 — Projects'],['#coming','05 — Próximamente','05 — Coming soon'],['#invertir','06 — Inversión','06 — Investment'],
+    ['#construccion','07 — Construcción','07 — Construction'],['#proceso','08 — Proceso','08 — Process'],['#comparador','09 — Comparador','09 — Compare'],
+    ['#g3d','10 — Galería','10 — Gallery'],['#confianza','11 — Confianza','11 — Trust'],['#entregados','12 — Entregados','12 — Delivered'],['#visitas','13 — Visitas','13 — Visits'],['#chat','14 — Contacto','14 — Contact'],
   ];
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting){
       const m = secs.find(s => document.querySelector(s[0]) === e.target);
-      if (m){ lbl.textContent = m[1]; lbl.classList.add('show'); }
+      if (m){ lbl.textContent = window.__LANG === 'en' ? m[2] : m[1]; lbl.classList.add('show'); }
     }
   }), {rootMargin:'-45% 0px -45% 0px'});
   secs.forEach(s => { const el = document.querySelector(s[0]); if (el) io.observe(el); });
@@ -2805,19 +2646,6 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
   const run = () => rest.forEach(src => { const im = new Image(); im.src = src; });
   if ('requestIdleCallback' in window) requestIdleCallback(run, {timeout:6000});
   else setTimeout(run, 3500);
-})();
-
-/* ════════════════════════════════════════
-   CORTINA EN IMÁGENES "PRÓXIMAMENTE"
-═══════════════════════════════════════ */
-(function(){
-  if (window.__REDUCED) return;
-  const imgs = document.querySelectorAll('#coming .cs-card img');
-  imgs.forEach(im => im.classList.add('img-curtain'));
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-  }), {threshold:.25});
-  imgs.forEach(im => io.observe(im));
 })();
 
 /* ════════════════════════════════════════
@@ -2887,40 +2715,148 @@ aipGetReply = function(text){
 })();
 
 /* ════════════════════════════════════════
-   IDIOMA ES / EN (toggle en memoria)
+   IDIOMA ES / EN — sitio COMPLETO
+   ES se captura del DOM; aquí solo vive el EN.
 ═══════════════════════════════════════ */
+const CHAT_EN = new Map([
+  ['Hola, soy la asesora virtual de Tierra Desarrollos.\nEstoy aquí para ayudarte a encontrar el espacio perfecto. ¿Qué tipo de propiedad te interesa?', "Hi, I'm the virtual advisor at Tierra Desarrollos.\nI'm here to help you find the perfect place. What kind of property are you looking for?"],
+  ['Terreno para construir','Land to build'],['Residencia de autor','Signature residence'],['Inversión patrimonial','Investment'],
+  ['¿Tienes alguna zona del Pacífico en mente?','Do you have a Pacific area in mind?'],
+  ['Costa de Oaxaca','Oaxaca coast'],['Pacífico Mexicano','Mexican Pacific'],['Abierto a opciones','Open to options'],
+  ['¿En qué etapa de tu proceso estás?','Where are you in your process?'],
+  ['Listo para invertir','Ready to invest'],['Evaluando (6–18 meses)','Evaluating (6–18 months)'],['Explorando opciones','Just exploring'],
+  ['¿Cómo prefieres que te contactemos?','How would you like us to contact you?'],
+  ['Perfecto. Nuestro equipo se pondrá en contacto contigo a la brevedad.\n\nEn Tierra Desarrollos, cada historia comienza con encontrar el lugar correcto. Gracias por tu confianza. 🌿','Perfect. Our team will reach out shortly.\n\nAt Tierra Desarrollos, every story begins with finding the right place. Thank you for your trust. 🌿'],
+  ['Nabani es nuestro proyecto de residencias de autor más especial — diseñado para quienes buscan vivir con lujo y en conexión total con la naturaleza tropical. Nuestro equipo puede enviarte el dossier completo con planos, disponibilidad y condiciones. ¿Te lo hacemos llegar?','Nabani is our most special signature-residence project — designed for those who want luxury in total connection with tropical nature. Our team can send you the full dossier with plans, availability and terms. Shall we?'],
+  ['Contamos con tres proyectos en distintas etapas de desarrollo en el Pacífico mexicano, cada uno con retornos y condiciones diferenciadas. Un asesor especializado puede presentarte las opciones con proyecciones y estructura de inversión. ¿Cuándo sería un buen momento para hablar?','We have three projects at different stages on the Mexican Pacific, each with its own returns and terms. A specialist advisor can walk you through the options. When would be a good time to talk?'],
+  ['Basándonos en tus preferencias, Azimut Mazunte y Aldea Tao son los proyectos que mejor se adaptan a tu perfil. Ambos ofrecen terrenos exclusivos en la Costa de Oaxaca con vistas al Pacífico, pleno respaldo legal y arquitectura en armonía con el entorno. ¿Te gustaría que un asesor te comparta información detallada y disponibilidad?','Based on your preferences, Azimut Mazunte and Aldea Tao fit your profile best. Both offer exclusive lots on the Oaxaca coast with Pacific views, full legal backing and architecture in harmony with the land. Would you like an advisor to share details and availability?'],
+]);
+
 (function(){
-  const DICT = {
-    es: { nav_proyectos:'Proyectos', nav_construccion:'Construcción', nav_nosotros:'Nosotros', nav_galeria:'Galería', nav_confianza:'Confianza', nav_contacto:'Contacto',
-          hl1:'Creamos espacios', hl2:'donde la tierra habla.', hsub:'Arquitectura en armonía con la naturaleza',
-          cta1:'Explorar proyectos', cta2:'Hablar con un asesor ' },
-    en: { nav_proyectos:'Projects', nav_construccion:'Construction', nav_nosotros:'About us', nav_galeria:'Gallery', nav_confianza:'Trust', nav_contacto:'Contact',
-          hl1:'We create spaces', hl2:'where the land speaks.', hsub:'Architecture in harmony with nature',
-          cta1:'Explore projects', cta2:'Talk to an advisor ' },
-  };
-  let lang = 'es';
-  const bES = document.getElementById('lang-es'), bEN = document.getElementById('lang-en');
+  window.__LANG = 'es';
+  // [selector, EN, modo] — modo: 't'=textContent (def) · 'h'=innerHTML · 'p'=placeholder · 'f'=primer nodo de texto
+  const TRX = [
+    // hero
+    ['#hl1','We create spaces'],['#hl2','where the land speaks.'],['#hsub','Architecture in harmony with nature'],
+    ['#hctas a:nth-child(1)','Explore projects'],['#hctas a:nth-child(2)','Talk to an advisor <span>→</span>','h'],
+    // manifesto
+    ['#mfl1','We believe land'],['#mfl2','is not owned.'],['#mfl3','It is cared for.'],
+    ['#manifesto > p',"At Tierra Desarrollos we don't sell square meters. We sell access to a place that still exists — where the ocean is still wild, the jungle hasn't given way and silence still has value. Every project we build is a promise that this place will go on existing."],
+    ['.mflb:nth-of-type(1)','Active projects'],
+    // masterplan
+    ['#masterplan h2','The Oaxaca Coast, <em style="color:var(--gold)">project by project.</em>','h'],
+    // proyectos
+    ['#pco-az .pdesc','Build your home inside a holistic wellness center, steps from the heart of Mazunte. Private jungle hillside lots with a yoga shala, temazcal and natural pool at the center of the community. Some lots have Pacific views; all come with full utilities and legal backing from day one.'],
+    ['#pco-nb .pdesc','Nabani — "home" in Zapotec — is oceanfront land with beaches within walking distance, steps from Zipolite and Mazunte. The place to build your signature residence in wood, palm and stone, where every sunrise happens in front of the Pacific.'],
+    ['#pco-at .pdesc','On the Pacific cliffs, where the ocean strikes volcanic rock and the horizon never ends, a unique community is born. Build your house facing the sea, with access to Tololote and La Boquilla — wild coves that appear on no map.'],
+    ['#pco-az .pcta','Discover Azimut →'],['#pco-nb .pcta','Discover Nabani →'],['#pco-at .pcta','Discover Aldea Tao →'],
+    // coming soon + newsletter
+    ['.cs-tag','Coming soon'],['.cs-ttl','New projects on the way'],
+    ['.nlw > div','Be the first to know'],
+    ['.nlw > p','Leave your email and we will let you know when Serena and Depas Kora open availability.'],
+    ['#nlw-form button','Join the list'],['#nlw-email','your@email.com','p'],
+    // invertir
+    ['#invertir h2','Why invest in <em style="color:var(--gold)">the Oaxaca Coast?</em>','h'],
+    ['.inv-item:nth-child(1) h3','Rising value'],['.inv-item:nth-child(2) h3',"What Tulum no longer is"],['.inv-item:nth-child(3) h3','Legal certainty'],['.inv-item:nth-child(4) h3','Vacation rental'],
+    ['.inv-item:nth-child(1) p','One of the fastest-growing coasts of the Mexican Pacific. Mazunte and Zipolite are rising destinations — and there is still land available by the sea.'],
+    ['.inv-item:nth-child(2) p','No saturation, no inflated prices, no lost soul. The Oaxaca coast keeps what the Caribbean sold: wild nature, living towns and silence.'],
+    ['.inv-item:nth-child(3) p','Guaranteed deeds and full legal support from day one. Investing here is not a bet: it is patrimony.'],
+    ['.inv-item:nth-child(4) p','Build and rent: demand for boutique stays in Mazunte and Zipolite grows year after year. Your house can pay for itself.'],
+    // construccion
+    ['#construccion h2','We don\'t just develop the land.<br><em style="color:var(--gold)">We build it with you.</em>','h'],
+    ['#construccion > div > p','We accompany every project from design to turnkey delivery. <a href="construccion.html" style="color:var(--gold);border-bottom:1px solid rgba(201,169,110,.5)">See everything we have built →</a>','h'],
+    ['#construccion h3','Estimate your payment plan'],
+    ['.calc-r .lbl','Estimated monthly payment'],
+    ['.calc-r .row:nth-of-type(1) span:first-child','Down payment'],['.calc-r .row:nth-of-type(2) span:first-child','Amount financed'],
+    ['.calc-r .btn-arrow','Ask for real terms <span>→</span>','h'],
+    ['.calc-disc','* Reference figures only, without interest or fees, to size your plan. Real prices and terms are confirmed by an advisor per project and availability.'],
+    // proceso
+    ['#proceso h2','From the first call <em style="color:var(--gold)">to the keys.</em>','h'],
+    ['.tl-step:nth-child(1) h4','Initial consultation'],['.tl-step:nth-child(2) h4','Site visit'],['.tl-step:nth-child(3) h4','Purchase agreement'],['.tl-step:nth-child(4) h4','Payment plan'],['.tl-step:nth-child(5) h4','Notarized deed'],['.tl-step:nth-child(6) h4','Delivery'],
+    ['.tl-step:nth-child(1) p','We get to know your profile, your timing and what you are looking for.'],
+    ['.tl-step:nth-child(2) p','In person or virtual — walk the lot before deciding.'],
+    ['.tl-step:nth-child(3) p','You sign with legal support from the first document.'],
+    ['.tl-step:nth-child(4) p','Down payment and installments adapted to you.'],
+    ['.tl-step:nth-child(5) p','Notarized and guaranteed. Your patrimony is protected.'],
+    ['.tl-step:nth-child(6) p','The land is yours. And if you want, Tierra builds it for you.'],
+    // comparador
+    ['#comparador h2','Which one is <em style="color:var(--gold)">your project?</em>','h'],
+    ['.cmp th:nth-child(1)','Project'],['.cmp th:nth-child(2)','Type'],['.cmp th:nth-child(3)','Location'],['.cmp th:nth-child(4)','Highlight'],['.cmp th:nth-child(5)','Status'],
+    ['.cmp tbody tr:nth-child(1) td:nth-child(2)','Residential lots'],['.cmp tbody tr:nth-child(2) td:nth-child(2)','Oceanfront land'],['.cmp tbody tr:nth-child(3) td:nth-child(2)','Clifftop lots'],['.cmp tbody tr:nth-child(4) td:nth-child(2)','Apartments'],['.cmp tbody tr:nth-child(5) td:nth-child(2)','Eco community'],['.cmp tbody tr:nth-child(6) td:nth-child(2)','Residential lots'],
+    ['.cmp tbody tr:nth-child(1) td:nth-child(4)','Holistic wellness center'],['.cmp tbody tr:nth-child(2) td:nth-child(4)','Beaches within walking distance'],['.cmp tbody tr:nth-child(3) td:nth-child(4)','Private coves'],['.cmp tbody tr:nth-child(4) td:nth-child(4)','Minimalist design'],['.cmp tbody tr:nth-child(5) td:nth-child(4)','Community garden & orchard'],['.cmp tbody tr:nth-child(6) td:nth-child(4)',"Tierra's first development"],
+    ['.cmp tbody tr:nth-child(1) .tag','Available'],['.cmp tbody tr:nth-child(2) .tag','Available'],['.cmp tbody tr:nth-child(3) .tag','Limited'],['.cmp tbody tr:nth-child(4) .tag','Pre-sale'],['.cmp tbody tr:nth-child(5) .tag','Coming soon'],['.cmp tbody tr:nth-child(6) .tag','Sold out'],
+    // galería
+    ['.g3d-ttl','A journey along <em>the coast</em>','h'],
+    ['.gfbtn[data-f="all"]','All'],
+    ['#g3d > p','← Drag, tap the arrows or use your keyboard →'],
+    // confianza
+    ['#confianza > div > p:nth-of-type(1)','Tierra was born to create contemporary habitats that connect <em style="color:var(--gold)">architecture, culture and nature</em>, leaving a positive legacy in every development.','h'],
+    ['#confianza > div > p:nth-of-type(2)','Each project is an ecosystem with its own identity: it boosts the local economy, respects nature and builds community. We are a trusted company that walks with the client through the whole process — investing with us also means transforming the future.'],
+    // visitas
+    ['#visitas h2','Book your <em style="color:var(--gold)">visit.</em>','h'],
+    ['#visitas > div > p','Walking the land changes everything. Choose how you want to see the projects and an advisor confirms by WhatsApp.'],
+    ['#vis-pres','In-person visit'],['#vis-virt','Virtual visit'],
+    ['#vis-nombre','Your name','p'],['#vis-wa','Your WhatsApp','p'],
+    ['#vis-form .vis-send','Book via WhatsApp →'],
+    // chat header
+    ['.cht-hd h2','Find your land'],['.cht-hd p','Tell us what you are looking for and we connect you with the right project.'],
+    // footer
+    ['.flc > div','Development & Construction'],['.ftag','Mexican Pacific · Oaxaca Coast'],
+    ['.fnt','Projects'],
+    ['.finfo > div:nth-of-type(3)','Customer service · Oaxaca<br>Calle Rinconcito s/n, Mazunte, 70947','h'],
+    // trust badge
+    ['#trust-badge','<span class="d"></span>Guaranteed deeds · 100% legal backing','h'],
+    // panel asistente
+    ['.aip-name','Virtual Assistant · Tierra'],['.aip-sub','Projects, buying & investment'],
+    ['#aip-input','Type your question…','p'],
+    ['.aip-pwrd','Virtual Assistant · Tierra Desarrollos'],
+  ];
+  const DICT_EN = { nav_proyectos:'Projects', nav_construccion:'Construction', nav_nosotros:'About us', nav_galeria:'Gallery', nav_confianza:'Trust', nav_contacto:'Contact',
+    mp_tag:'Masterplan', mp_sub:'Explore the map: every dot is a Tierra development. Tap a pin to discover it.',
+    sold_tag:'Track record', sold_sub:'When a Tierra project sells out, it becomes a community. This is our history — and the best proof of what comes next.', sold_badge:'Sold out' };
+  const DICT_ES = {};   // se captura del DOM
+  document.querySelectorAll('[data-i18n]').forEach(el => { if (!(el.dataset.i18n in DICT_ES)) DICT_ES[el.dataset.i18n] = el.textContent; });
+
+  // capturar ES original de cada selector de TRX
+  const store = TRX.map(([sel, en, mode]) => {
+    const els = document.querySelectorAll(sel);
+    return { els, en, mode: mode || 't',
+      es: [...els].map(el => mode === 'p' ? el.placeholder : (mode === 'f' ? (el.firstChild ? el.firstChild.nodeValue : '') : el.innerHTML)) };
+  });
+  // labels de la calculadora (texto antes del <b>)
+  const calcLabels = [...document.querySelectorAll('.calc-l label')];
+  const calcES = calcLabels.map(l => l.firstChild ? l.firstChild.nodeValue : '');
+  const calcEN = ['Estimated lot price ', 'Down payment ', 'Term '];
+
   function apply(l){
-    lang = l;
+    window.__LANG = l;
     document.documentElement.setAttribute('lang', l);
     document.documentElement.setAttribute('data-lang', l);
     document.querySelectorAll('[data-i18n]').forEach(el => {
-      const k = el.dataset.i18n; if (DICT[l][k]) el.textContent = DICT[l][k];
+      const k = el.dataset.i18n;
+      el.textContent = l === 'en' ? (DICT_EN[k] || el.textContent) : (DICT_ES[k] || el.textContent);
     });
-    const hl1 = document.getElementById('hl1'), hl2 = document.getElementById('hl2'), hs = document.getElementById('hsub');
-    if (hl1) hl1.textContent = DICT[l].hl1;
-    if (hl2) hl2.textContent = DICT[l].hl2;
-    if (hs)  hs.textContent  = DICT[l].hsub;
-    const ctas = document.querySelectorAll('#hctas a');
-    if (ctas[0]) ctas[0].textContent = DICT[l].cta1;
-    if (ctas[1]) ctas[1].innerHTML = DICT[l].cta2 + '<span>→</span>';
-    bES.classList.toggle('on', l === 'es'); bEN.classList.toggle('on', l === 'en');
+    store.forEach(s => s.els.forEach((el, i) => {
+      const v = l === 'en' ? s.en : s.es[i];
+      if (s.mode === 'p') el.placeholder = v;
+      else if (s.mode === 'f') { if (el.firstChild) el.firstChild.nodeValue = v; }
+      else el.innerHTML = v;
+    }));
+    calcLabels.forEach((lab, i) => { if (lab.firstChild) lab.firstChild.nodeValue = l === 'en' ? calcEN[i] : calcES[i]; });
+    // stats de confianza y manifesto (labels bajo números)
+    const statPairs = [['Clientes felices','Happy clients'],['Años de trayectoria','Years of experience'],['Proyectos activos','Active projects'],['Años en el mercado','Years in the market'],['Respaldo legal','Legal backing']];
+    document.querySelectorAll('#confianza [style*="uppercase"], .mflb').forEach(el => {
+      statPairs.forEach(([es, en]) => { if (el.textContent.trim() === (l==='en'?es:en)) el.textContent = l==='en'?en:es; });
+    });
+    // propagar idioma a las landings vía ?lang=en
+    document.querySelectorAll('a[href$=".html"], a[href*=".html#"]').forEach(a => {
+      const base = a.getAttribute('href').split('?')[0];
+      a.setAttribute('href', l === 'en' ? base + '?lang=en' : base);
+    });
+    document.querySelectorAll('[data-lang-btn]').forEach(b => b.classList.toggle('on', b.dataset.langBtn === l));
   }
-  if (bES && bEN){
-    bES.addEventListener('click', () => apply('es'));
-    bEN.addEventListener('click', () => apply('en'));
-    if (new URLSearchParams(location.search).get('lang') === 'en') apply('en');
-  }
+  document.querySelectorAll('[data-lang-btn]').forEach(b => b.addEventListener('click', () => apply(b.dataset.langBtn)));
+  if (new URLSearchParams(location.search).get('lang') === 'en') apply('en');
 })();
 
 })();

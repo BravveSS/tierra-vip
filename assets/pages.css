@@ -140,6 +140,11 @@ section{position:relative}
 .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
 
+/* ── SELECTOR DE IDIOMA (landings) ── */
+.lang-sw{display:flex;gap:2px;border:1px solid rgba(201,169,110,.3);border-radius:16px;overflow:hidden}
+.lang-sw button{font-family:var(--fb);font-size:10px;letter-spacing:.1em;padding:5px 11px;color:rgba(240,234,224,.55);background:none;border:none;cursor:pointer;transition:all .25s}
+.lang-sw button.on{background:var(--gold);color:var(--black)}
+
 /* ── REDUCED MOTION ── */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
