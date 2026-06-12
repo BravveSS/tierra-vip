@@ -156,21 +156,25 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE });
 renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.35;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x080706);
-scene.fog = new THREE.FogExp2(0x0a0d10, 0.004);
+scene.background = new THREE.Color(0x0a0c10);
+scene.fog = new THREE.FogExp2(0x0b0e12, 0.0022);
 
-const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 1200);
+const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 1500);
 
-scene.add(new THREE.HemisphereLight(0x2a3340, 0x1a1410, .95));
-const sun = new THREE.DirectionalLight(0xE8B36A, 1.55);
-sun.position.set(-120, 90, -60);
+/* luz de atardecer dorado: cielo más vivo + sol cálido alto + relleno frío del mar */
+scene.add(new THREE.HemisphereLight(0x47566b, 0x2a2018, 1.25));
+const sun = new THREE.DirectionalLight(0xFFC987, 2.1);
+sun.position.set(-140, 150, -40);
 scene.add(sun);
-const fill = new THREE.PointLight(0xC9A96E, .6, 500);
-fill.position.set(80, 60, 120);
+const fill = new THREE.PointLight(0x6FA8C9, .55, 700);
+fill.position.set(120, 80, 180);
 scene.add(fill);
+const rim = new THREE.DirectionalLight(0xC9A96E, .5);
+rim.position.set(100, 40, 120);
+scene.add(rim);
 
 /* ══════ TERRENO desde el heightmap satelital ══════ */
 let sampleH = () => 0;        // metros reales en (lon,lat) — listo tras cargar
@@ -199,9 +203,9 @@ hImg.onload = () => {
   tGeo.rotateX(-Math.PI / 2);
   const p = tGeo.attributes.position;
   const colors = new Float32Array(p.count * 3);
-  const cDeep = new THREE.Color(0x0a1a26), cShelf = new THREE.Color(0x12303f),
-        cSand = new THREE.Color(0x9a7e52), cJun1 = new THREE.Color(0x22331f),
-        cJun2 = new THREE.Color(0x32482a), cRock = new THREE.Color(0x55483a);
+  const cDeep = new THREE.Color(0x0e2433), cShelf = new THREE.Color(0x1b4a5e),
+        cSand = new THREE.Color(0xc4a06a), cJun1 = new THREE.Color(0x2e4527),
+        cJun2 = new THREE.Color(0x4a6336), cRock = new THREE.Color(0x6e5c46);
   for (let i = 0; i < p.count; i++){
     const u = p.getX(i) / W + .5, v = p.getZ(i) / D + .5;
     const m = meters(u, v);
@@ -260,7 +264,7 @@ const oGeo = new THREE.PlaneGeometry(W * 1.04, D * 1.04, oSeg, Math.round(oSeg *
 oGeo.rotateX(-Math.PI / 2);
 const oBase = oGeo.attributes.position.array.slice();
 const ocean = new THREE.Mesh(oGeo, new THREE.MeshStandardMaterial({
-  color:0x0d2230, roughness:.3, metalness:.55, transparent:true, opacity:.92 }));
+  color:0x16384c, roughness:.22, metalness:.6, transparent:true, opacity:.88 }));
 scene.add(ocean);
 
 /* ══════ TARJETA ══════ */
@@ -286,7 +290,7 @@ document.getElementById('card-x').addEventListener('click', () => {
 
 /* ══════ CÁMARA CINEMATOGRÁFICA ══════ */
 let ready = false;
-let theta = -.62, phi = .46, radius = MOBILE ? 210 : 168, auto = true;
+let theta = -.62, phi = .58, radius = MOBILE ? 195 : 150, auto = true;
 const center = new THREE.Vector3(0, 3, -16);
 let intro = REDUCED ? 1 : 0, introT0 = null;
 const iFrom = { theta:-1.9, phi:1.05, radius: 520 };
@@ -334,8 +338,8 @@ function loop(ts){
     intro = Math.min(1, (ts - introT0) / 4200);
     const e = 1 - Math.pow(1 - intro, 3);
     theta  = iFrom.theta  + (-.62 - iFrom.theta) * e;
-    phi    = iFrom.phi    + (.46 - iFrom.phi) * e;
-    radius = iFrom.radius + ((MOBILE ? 210 : 168) - iFrom.radius) * e;
+    phi    = iFrom.phi    + (.58 - iFrom.phi) * e;
+    radius = iFrom.radius + ((MOBILE ? 195 : 150) - iFrom.radius) * e;
   }
   if (auto && intro >= 1 && !REDUCED) theta += .00055;
 
