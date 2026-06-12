@@ -11,7 +11,9 @@
 <style>
 :root{--black:#080706;--dark:#0F0E0D;--cream:#F0EAE0;--gold:#C9A96E;--muted:#6B6560;--fh:'Cormorant Garamond',serif;--fb:'DM Sans',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream);font-family:var(--fb)}
+/* cielo de atardecer real tras el canvas (renderer con alpha) */
+html,body{height:100%;overflow:hidden;color:var(--cream);font-family:var(--fb);
+  background:linear-gradient(to top,#3d1c08 0%,#54260a 8%,#7a3a10 14%,#4a2410 24%,#1d1410 42%,#0a0a10 70%,#050507 100%)}
 #scene{position:fixed;inset:0;display:block;touch-action:none}
 #topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:linear-gradient(to bottom,rgba(8,7,6,.72),transparent)}
 #topbar img{height:42px;width:auto}
@@ -142,39 +144,62 @@ const PROJECTS = [
     img:'assets/img/aldea-tao/dronaldeatao.webp', url:'aldea-tao.html',
     wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Aldea Tao.' },
 ];
-/* pueblos de referencia (solo etiqueta) */
+/* puntos turísticos y de referencia (etiquetas) */
 const TOWNS = [
+  { n:'La Ventanilla', lon:-96.575, lat:15.668 },
   { n:'Punta Cometa', lon:-96.561, lat:15.659 },
   { n:'Mazunte', lon:-96.5535, lat:15.6665 },
+  { n:'San Agustinillo', lon:-96.5455, lat:15.665 },
+  { n:'Playa del Amor', lon:-96.5085, lat:15.6595 },
   { n:'Zipolite', lon:-96.516, lat:15.6605 },
   { n:'Puerto Ángel', lon:-96.4908, lat:15.666 },
+  { n:'Playa Estacahuite', lon:-96.4805, lat:15.667 },
+  { n:'La Boquilla', lon:-96.473, lat:15.6715 },
+  { n:'↑ San Pedro Pochutla', lon:-96.4665, lat:15.724 },
 ];
 
 /* ══════ ESCENA ══════ */
 const canvas = document.getElementById('scene');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.35;
+renderer.toneMappingExposure = 1.3;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0c10);
-scene.fog = new THREE.FogExp2(0x0b0e12, 0.0022);
+scene.background = null;                       // deja ver el cielo de atardecer (CSS)
+scene.fog = new THREE.FogExp2(0x2a160a, 0.0016); // bruma cálida de atardecer
 
-const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 1500);
+const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 2000);
 
-/* luz de atardecer dorado: cielo más vivo + sol cálido alto + relleno frío del mar */
-scene.add(new THREE.HemisphereLight(0x47566b, 0x2a2018, 1.25));
-const sun = new THREE.DirectionalLight(0xFFC987, 2.1);
-sun.position.set(-140, 150, -40);
+/* ATARDECER: sol naranja bajo sobre el Pacífico + cielo cálido + rebote frío del mar */
+scene.add(new THREE.HemisphereLight(0xff9a55, 0x1f1a14, .85));
+const sun = new THREE.DirectionalLight(0xFF8A3D, 2.4);
+sun.position.set(60, 38, 320);                  // bajo, desde el mar (sur)
 scene.add(sun);
-const fill = new THREE.PointLight(0x6FA8C9, .55, 700);
-fill.position.set(120, 80, 180);
-scene.add(fill);
-const rim = new THREE.DirectionalLight(0xC9A96E, .5);
-rim.position.set(100, 40, 120);
-scene.add(rim);
+const warm = new THREE.DirectionalLight(0xFFB36B, .8);
+warm.position.set(-200, 120, 60);
+scene.add(warm);
+const cool = new THREE.PointLight(0x4a7a9b, .4, 900);
+cool.position.set(0, 60, 260);
+scene.add(cool);
+
+/* sol VISIBLE en el horizonte, con halo */
+const sunBall = new THREE.Mesh(new THREE.SphereGeometry(26, 24, 24),
+  new THREE.MeshBasicMaterial({ color:0xFF7A2D }));
+sunBall.position.set(80, 26, 760);
+scene.add(sunBall);
+{
+  const cv = document.createElement('canvas'); cv.width = cv.height = 256;
+  const g = cv.getContext('2d');
+  const grad = g.createRadialGradient(128,128,10,128,128,128);
+  grad.addColorStop(0,'rgba(255,150,60,.9)'); grad.addColorStop(.4,'rgba(255,110,40,.35)'); grad.addColorStop(1,'rgba(255,90,30,0)');
+  g.fillStyle = grad; g.fillRect(0,0,256,256);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), transparent:true, depthWrite:false }));
+  halo.scale.set(420, 420, 1);
+  halo.position.copy(sunBall.position);
+  scene.add(halo);
+}
 
 /* ══════ TERRENO desde el heightmap satelital ══════ */
 let sampleH = () => 0;        // metros reales en (lon,lat) — listo tras cargar
@@ -197,35 +222,20 @@ hImg.onload = () => {
   /* altura visual: tierra exagerada; fondo marino comprimido para que la costa luzca */
   const visY = m => m >= 0 ? m / 100 * VEXAG : Math.max(m, -500) / 100 * .5;
 
-  const SEG_X = MOBILE ? 200 : 420;
+  const SEG_X = MOBILE ? 220 : 460;
   const SEG_Z = Math.round(SEG_X * D / W);
   const tGeo = new THREE.PlaneGeometry(W, D, SEG_X, SEG_Z);
   tGeo.rotateX(-Math.PI / 2);
   const p = tGeo.attributes.position;
-  const colors = new Float32Array(p.count * 3);
-  const cDeep = new THREE.Color(0x0e2433), cShelf = new THREE.Color(0x1b4a5e),
-        cSand = new THREE.Color(0xc4a06a), cJun1 = new THREE.Color(0x2e4527),
-        cJun2 = new THREE.Color(0x4a6336), cRock = new THREE.Color(0x6e5c46);
   for (let i = 0; i < p.count; i++){
     const u = p.getX(i) / W + .5, v = p.getZ(i) / D + .5;
-    const m = meters(u, v);
-    p.setY(i, visY(m));
-    let c;
-    if (m < -120) c = cDeep;
-    else if (m < 0) c = cShelf.clone().lerp(cDeep, -m / 120);
-    else if (m < 12) c = cSand;
-    else if (m < 140) c = cJun1.clone().lerp(cJun2, m / 140);
-    else c = cJun2.clone().lerp(cRock, Math.min(1, (m - 140) / 260));
-    colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b;
+    p.setY(i, visY(meters(u, v)));
   }
-  tGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   tGeo.computeVertexNormals();
-  scene.add(new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ vertexColors:true, roughness:.95, metalness:0 })));
-
-  /* malla topográfica dorada sutil (lenguaje de plano) */
-  const wire = new THREE.Mesh(tGeo, new THREE.MeshBasicMaterial({ color:0xC9A96E, wireframe:true, transparent:true, opacity:.035 }));
-  wire.position.y = .1;
-  scene.add(wire);
+  /* FOTOGRAFÍA SATELITAL REAL como piel del terreno (misma zona, alineación exacta) */
+  const sat = new THREE.TextureLoader().load('assets/img/costa-satelite.jpg');
+  sat.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  scene.add(new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ map: sat, roughness:.93, metalness:0 })));
 
   /* hotspots anclados a su elevación real */
   const spotGeo = new THREE.SphereGeometry(1.5, 18, 18);
@@ -263,8 +273,10 @@ const oSeg = MOBILE ? 80 : 140;
 const oGeo = new THREE.PlaneGeometry(W * 1.04, D * 1.04, oSeg, Math.round(oSeg * D / W));
 oGeo.rotateX(-Math.PI / 2);
 const oBase = oGeo.attributes.position.array.slice();
+/* capa de oleaje translúcida SOBRE el mar fotográfico — refleja el atardecer */
 const ocean = new THREE.Mesh(oGeo, new THREE.MeshStandardMaterial({
-  color:0x16384c, roughness:.22, metalness:.6, transparent:true, opacity:.88 }));
+  color:0x2a5a72, roughness:.14, metalness:.65, transparent:true, opacity:.34 }));
+ocean.position.y = .25;
 scene.add(ocean);
 
 /* ══════ TARJETA ══════ */
@@ -290,28 +302,30 @@ document.getElementById('card-x').addEventListener('click', () => {
 
 /* ══════ CÁMARA CINEMATOGRÁFICA ══════ */
 let ready = false;
+/* cámara con INERCIA: el usuario mueve los targets; la cámara los persigue con suavidad */
 let theta = -.62, phi = .58, radius = MOBILE ? 195 : 150, auto = true;
+let tTheta = theta, tPhi = phi, tRadius = radius;
 const center = new THREE.Vector3(0, 3, -16);
 let intro = REDUCED ? 1 : 0, introT0 = null;
 const iFrom = { theta:-1.9, phi:1.05, radius: 520 };
 
 let drag = null;
-canvas.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY, t:theta, p:phi}; auto = false; });
+canvas.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY, t:tTheta, p:tPhi}; auto = false; });
 addEventListener('pointermove', e => {
   if (!drag) return;
-  theta = drag.t + (e.clientX - drag.x) * .0042;
-  phi   = Math.max(.16, Math.min(1.15, drag.p + (e.clientY - drag.y) * .003));
+  tTheta = drag.t + (e.clientX - drag.x) * .0042;
+  tPhi   = Math.max(.16, Math.min(1.15, drag.p + (e.clientY - drag.y) * .003));
 });
 addEventListener('pointerup', () => { drag = null; setTimeout(() => auto = true, 4200); });
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
-  radius = Math.max(55, Math.min(520, radius + e.deltaY * .16));
+  tRadius = Math.max(55, Math.min(560, tRadius + e.deltaY * .22));
 }, { passive:false });
 let pinch = 0;
 canvas.addEventListener('touchmove', e => {
   if (e.touches.length === 2){
     const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    if (pinch) radius = Math.max(55, Math.min(520, radius - (d - pinch) * .5));
+    if (pinch) tRadius = Math.max(55, Math.min(560, tRadius - (d - pinch) * .5));
     pinch = d;
   }
 }, { passive:true });
@@ -337,11 +351,15 @@ function loop(ts){
     if (introT0 === null){ introT0 = ts; document.getElementById('loading').classList.add('off'); }
     intro = Math.min(1, (ts - introT0) / 4200);
     const e = 1 - Math.pow(1 - intro, 3);
-    theta  = iFrom.theta  + (-.62 - iFrom.theta) * e;
-    phi    = iFrom.phi    + (.58 - iFrom.phi) * e;
-    radius = iFrom.radius + ((MOBILE ? 195 : 150) - iFrom.radius) * e;
+    theta = tTheta = iFrom.theta  + (-.62 - iFrom.theta) * e;
+    phi   = tPhi   = iFrom.phi    + (.58 - iFrom.phi) * e;
+    radius= tRadius= iFrom.radius + ((MOBILE ? 195 : 150) - iFrom.radius) * e;
   }
-  if (auto && intro >= 1 && !REDUCED) theta += .00055;
+  if (auto && intro >= 1 && !REDUCED) tTheta += .00055;
+  // inercia: persecución suave de los targets (movimiento de seda)
+  theta  += (tTheta  - theta)  * .075;
+  phi    += (tPhi    - phi)    * .075;
+  radius += (tRadius - radius) * .085;
 
   camera.position.set(
     center.x + radius * Math.sin(theta) * Math.cos(phi),
