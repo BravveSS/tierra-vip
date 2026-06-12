@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mapa 3D — Tierra Desarrollos</title>
-<meta name="description" content="Explora en 3D la Costa de Oaxaca y los desarrollos de Tierra: Azimut, Nabani, Aldea Tao, Serena y Depas Kora.">
+<meta name="description" content="Explora en 3D 24 km reales de la Costa de Oaxaca — Mazunte, Zipolite, Puerto Ángel — y los desarrollos de Tierra.">
 <meta name="theme-color" content="#080706">
 <link rel="icon" type="image/png" href="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/tierra-white2%20copy.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
@@ -12,18 +12,15 @@
 :root{--black:#080706;--dark:#0F0E0D;--cream:#F0EAE0;--gold:#C9A96E;--muted:#6B6560;--fh:'Cormorant Garamond',serif;--fb:'DM Sans',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream);font-family:var(--fb)}
-#scene{position:fixed;inset:0;display:block}
-/* ── UI superior ── */
+#scene{position:fixed;inset:0;display:block;touch-action:none}
 #topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:linear-gradient(to bottom,rgba(8,7,6,.72),transparent)}
 #topbar img{height:42px;width:auto}
 #back{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,234,224,.8);text-decoration:none;border:1px solid rgba(201,169,110,.4);padding:9px 18px;border-radius:22px;transition:all .25s;background:rgba(8,7,6,.5)}
 #back:hover{background:var(--gold);color:var(--black)}
-/* ── título de la experiencia ── */
-#hud{position:fixed;left:28px;bottom:28px;z-index:20;pointer-events:none;max-width:340px}
+#hud{position:fixed;left:28px;bottom:28px;z-index:20;pointer-events:none;max-width:360px}
 #hud .e{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 #hud h1{font-family:var(--fh);font-weight:300;font-size:clamp(26px,4vw,42px);line-height:1.05}
 #hud p{font-size:11.5px;color:rgba(240,234,224,.55);margin-top:8px;line-height:1.6}
-/* ── tarjeta de proyecto ── */
 #card{position:fixed;right:28px;top:50%;transform:translateY(-50%) translateX(24px);z-index:30;width:300px;background:rgba(13,12,10,.96);border:1px solid rgba(201,169,110,.32);border-radius:12px;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;box-shadow:0 30px 80px rgba(0,0,0,.7)}
 #card.show{opacity:1;transform:translateY(-50%) translateX(0);pointer-events:auto}
 #card img{width:100%;height:150px;object-fit:cover;display:block}
@@ -40,14 +37,14 @@ html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream)
 #card .more{border:1px solid rgba(201,169,110,.4);color:var(--gold)}
 #card .more:hover{background:rgba(201,169,110,.12)}
 #card .x{position:absolute;top:8px;right:10px;background:rgba(8,7,6,.65);border:none;color:var(--cream);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:13px}
-/* ── etiquetas de hotspot (DOM proyectado) ── */
 .tag3d{position:fixed;z-index:15;transform:translate(-50%,-130%);pointer-events:auto;cursor:pointer;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);background:rgba(8,7,6,.72);border:1px solid rgba(201,169,110,.45);padding:6px 12px;border-radius:16px;white-space:nowrap;transition:background .25s,color .25s}
 .tag3d:hover,.tag3d.on{background:var(--gold);color:var(--black)}
-/* ── hint + carga ── */
+.town{position:fixed;z-index:14;transform:translate(-50%,-50%);pointer-events:none;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(240,234,224,.4);white-space:nowrap}
 #hint{position:fixed;bottom:28px;right:28px;z-index:20;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,234,224,.45);pointer-events:none}
 #loading{position:fixed;inset:0;z-index:50;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .8s}
 #loading.off{opacity:0;pointer-events:none}
 #loading .t{font-family:var(--fh);font-style:italic;font-size:clamp(17px,2.4vw,24px);color:rgba(201,169,110,.85)}
+#loading .s{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
 #loading .bar{width:180px;height:1px;background:rgba(201,169,110,.2);overflow:hidden}
 #loading .bar i{display:block;height:100%;width:40%;background:var(--gold);animation:ld 1.1s ease-in-out infinite}
 @keyframes ld{0%{transform:translateX(-100%)}100%{transform:translateX(450%)}}
@@ -65,7 +62,7 @@ html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream)
 </head>
 <body>
 
-<canvas id="scene" aria-label="Mapa 3D de la Costa de Oaxaca con los proyectos de Tierra"></canvas>
+<canvas id="scene" aria-label="Mapa 3D real de la Costa de Oaxaca con los proyectos de Tierra"></canvas>
 <div id="vig" aria-hidden="true"></div>
 
 <div id="topbar">
@@ -74,9 +71,9 @@ html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream)
 </div>
 
 <div id="hud">
-  <div class="e">Experiencia 3D</div>
-  <h1>La Costa,<br>a vuelo de dron.</h1>
-  <p>Terreno modelado a partir del levantamiento topográfico real (cotas 25–95 m). Toca un punto dorado para explorar cada proyecto.</p>
+  <div class="e">Terreno satelital real</div>
+  <h1>24 km de costa,<br>tal como es.</h1>
+  <p>Elevación real de Mazunte a La Boquilla — Punta Cometa, Zipolite y Puerto Ángel incluidos. Toca un punto dorado para explorar cada proyecto.</p>
 </div>
 
 <div id="hint">Arrastra para orbitar · Rueda para acercar</div>
@@ -96,7 +93,7 @@ html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream)
   </div>
 </div>
 
-<div id="loading"><div class="t">Sobrevolando la Costa de Oaxaca…</div><div class="bar"><i></i></div></div>
+<div id="loading"><div class="t">Sobrevolando la Costa de Oaxaca…</div><div class="s">Cargando elevación satelital real</div><div class="bar"><i></i></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script>
@@ -105,33 +102,52 @@ html,body{height:100%;overflow:hidden;background:var(--black);color:var(--cream)
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MOBILE  = matchMedia('(max-width:760px)').matches || (navigator.hardwareConcurrency||8) < 4;
 
-/* ══════ DATOS DE PARCELAS (proyectos reales) ══════ */
+/* ══════ GEOGRAFÍA REAL ══════
+   Heightmap: assets/img/costa-heightmap.png — tiles satelitales (AWS Terrain, z13)
+   Bounds exactos del raster y rango de elevación decodificado: */
+const GEO = { minH:-2263, maxH:401, lonW:-96.6357421875, lonE:-96.416015625, latN:15.749962572748762, latS:15.580710739162129 };
+const KM_X = 111.32 * Math.cos(15.66 * Math.PI/180) * (GEO.lonE - GEO.lonW);  // ≈ 23.6 km
+const KM_Z = 111.32 * (GEO.latN - GEO.latS);                                   // ≈ 18.8 km
+const SCALE = 10;                       // 1 unidad = 100 m
+const W = KM_X * SCALE, D = KM_Z * SCALE;
+const VEXAG = 2.6;                      // exageración vertical de la tierra (visualización estándar)
+const lon2x = lon => ((lon - GEO.lonW) / (GEO.lonE - GEO.lonW) - .5) * W;
+const lat2z = lat => ((GEO.latN - lat) / (GEO.latN - GEO.latS) - .5) * D;
+
+/* ══════ PROYECTOS — coordenadas GPS reales ══════ */
 const PROJECTS = [
-  { id:'azimut', n:'Azimut', l:'Mazunte · Oaxaca', u:.10,
-    d:'Lotes residenciales dentro de un centro de bienestar holístico, en ladera de selva con cotas de 25 a 95 m sobre el mar.',
-    f:['Yoga shala y temazcal','Alberca natural','Algunos lotes con vista al Pacífico','Respaldo legal completo'],
-    img:'assets/img/azimut/renderazimutyogashala.webp', url:'azimut.html',
-    wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Azimut.' },
-  { id:'serena', n:'Serena', l:'San Antonio · Próximamente', u:.30,
+  { id:'serena', n:'Serena', l:'San Antonio · Próximamente', lon:-96.578, lat:15.678,
     d:'Comunidad sustentable junto a Mazunte: huerto orgánico, jardines y arquitectura ecológica.',
     f:['Jardín comunitario','Huerto orgánico','Arquitectura sustentable','Lista de espera abierta'],
     img:'assets/img/serena/renderserena-2.webp', url:'serena.html',
     wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Serena.' },
-  { id:'nabani', n:'Nabani', l:'Costa Oaxaqueña', u:.50,
-    d:'Terrenos frente al mar con playas a distancia caminable, a pasos de Zipolite y Mazunte.',
-    f:['Frente al mar','Playas caminando','Ideal para inversión','Escrituración garantizada'],
-    img:'assets/img/nabani/dronnabani.webp', url:'nabani.html',
-    wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Nabani.' },
-  { id:'kora', n:'Depas Kora', l:'Zipolite · Preventa', u:.70,
-    d:'Departamentos de diseño minimalista a minutos de Zipolite, con vistas al mar. En preventa.',
+  { id:'azimut', n:'Azimut', l:'Mazunte · Oaxaca', lon:-96.5545, lat:15.6695,
+    d:'Lotes residenciales en un centro de bienestar holístico, en ladera de selva (cotas reales 25–95 m).',
+    f:['Yoga shala y temazcal','Alberca natural','Algunos lotes con vista al Pacífico','Respaldo legal completo'],
+    img:'assets/img/azimut/renderazimutyogashala.webp', url:'azimut.html',
+    wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Azimut.' },
+  { id:'kora', n:'Depas Kora', l:'Zipolite · Preventa', lon:-96.5105, lat:15.663,
+    d:'Departamentos de diseño minimalista a minutos de la playa de Zipolite, con vistas al mar.',
     f:['Preventa activa','Vista al mar','Acceso a playa','Diseño contemporáneo'],
     img:'assets/img/kora/rs-w-719-h-836.webp', url:'depas-kora.html',
     wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesan los Depas Kora.' },
-  { id:'aldea', n:'Aldea Tao', l:'La Boquilla', u:.90,
+  { id:'nabani', n:'Nabani', l:'Puerto Ángel', lon:-96.4905, lat:15.668,
+    d:'Terrenos frente al mar con playas a distancia caminable, entre Zipolite y Puerto Ángel.',
+    f:['Frente al mar','Playas caminando','Ideal para inversión','Escrituración garantizada'],
+    img:'assets/img/nabani/dronnabani.webp', url:'nabani.html',
+    wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Nabani.' },
+  { id:'aldea', n:'Aldea Tao', l:'La Boquilla', lon:-96.4765, lat:15.6655,
     d:'Lotes exclusivos sobre acantilados del Pacífico, con acceso a Playa Tololote y La Boquilla.',
     f:['Acantilados al océano','Calas privadas','Proyecto limitado','Alta plusvalía'],
     img:'assets/img/aldea-tao/dronaldeatao.webp', url:'aldea-tao.html',
     wa:'Hola, estoy explorando el mapa 3D de tierra.vip y me interesa Aldea Tao.' },
+];
+/* pueblos de referencia (solo etiqueta) */
+const TOWNS = [
+  { n:'Punta Cometa', lon:-96.561, lat:15.659 },
+  { n:'Mazunte', lon:-96.5535, lat:15.6665 },
+  { n:'Zipolite', lon:-96.516, lat:15.6605 },
+  { n:'Puerto Ángel', lon:-96.4908, lat:15.666 },
 ];
 
 /* ══════ ESCENA ══════ */
@@ -144,116 +160,108 @@ renderer.toneMappingExposure = 1.05;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x080706);
-scene.fog = new THREE.FogExp2(0x0a0d10, 0.0065);
+scene.fog = new THREE.FogExp2(0x0a0d10, 0.004);
 
-const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 600);
+const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 1200);
 
-/* luces: atardecer dorado del Pacífico */
-scene.add(new THREE.HemisphereLight(0x2a3340, 0x1a1410, .9));
-const sun = new THREE.DirectionalLight(0xE8B36A, 1.6);
-sun.position.set(-60, 38, -40);
+scene.add(new THREE.HemisphereLight(0x2a3340, 0x1a1410, .95));
+const sun = new THREE.DirectionalLight(0xE8B36A, 1.55);
+sun.position.set(-120, 90, -60);
 scene.add(sun);
-const fill = new THREE.PointLight(0xC9A96E, .7, 220);
-fill.position.set(40, 30, 60);
+const fill = new THREE.PointLight(0xC9A96E, .6, 500);
+fill.position.set(80, 60, 120);
 scene.add(fill);
 
-/* ══════ COSTA — misma curva del masterplan, ahora en 3D ══════
-   x: -110..110 a lo largo de la costa · z: tierra (z<costa) / mar (z>costa) */
-function shoreZ(x){
-  const t = (x + 110) / 220;                       // 0..1
-  return Math.sin(t * Math.PI * 2.2 + .6) * 9 + Math.sin(t * 11) * 2.2;
-}
+/* ══════ TERRENO desde el heightmap satelital ══════ */
+let sampleH = () => 0;        // metros reales en (lon,lat) — listo tras cargar
+const spots = [], townEls = [];
+const hImg = new Image();
+hImg.src = 'assets/img/costa-heightmap.png';
+hImg.onload = () => {
+  const cv = document.createElement('canvas');
+  cv.width = hImg.width; cv.height = hImg.height;
+  const cx = cv.getContext('2d');
+  cx.drawImage(hImg, 0, 0);
+  const px = cx.getImageData(0, 0, cv.width, cv.height).data;
+  const meters = (u, v) => {
+    const ix = Math.max(0, Math.min(cv.width - 1, Math.round(u * (cv.width - 1))));
+    const iy = Math.max(0, Math.min(cv.height - 1, Math.round(v * (cv.height - 1))));
+    return GEO.minH + px[(iy * cv.width + ix) * 4] / 255 * (GEO.maxH - GEO.minH);
+  };
+  sampleH = (lon, lat) => meters((lon - GEO.lonW) / (GEO.lonE - GEO.lonW), (GEO.latN - lat) / (GEO.latN - GEO.latS));
 
-/* ══════ TERRENO — informado por la topografía real de Azimut:
-   ladera que sube de la cota 25 m (costa) a 95 m, con cañada central ══════ */
-function terrainH(x, z){
-  const s = shoreZ(x);
-  const inland = s - z;                            // distancia tierra adentro
-  if (inland <= 0) return -2.2;                    // bajo el mar
-  const rise = Math.min(1, inland / 70);
-  // perfil base: 2.5 m en costa → ~26 m al fondo (escala 1:3.6 de las cotas reales 25–95)
-  let h = 2.5 + Math.pow(rise, 1.35) * 24;
-  // cañada (vaguada del perfil 2 del levantamiento) que baja al mar
-  const canyon = Math.exp(-Math.pow((x + 18 - Math.sin(z * .08) * 6) / 13, 2));
-  h -= canyon * Math.min(h * .55, 11) * Math.min(1, inland / 25);
-  // ondulación orgánica de colinas
-  h += Math.sin(x * .11) * Math.cos(z * .09) * 2.4 + Math.sin(x * .31 + z * .21) * 1.1;
-  return h;
-}
+  /* altura visual: tierra exagerada; fondo marino comprimido para que la costa luzca */
+  const visY = m => m >= 0 ? m / 100 * VEXAG : Math.max(m, -600) / 100 * .55;
 
-const SEG = MOBILE ? 110 : 200;
-const W = 260, D = 170;
-const tGeo = new THREE.PlaneGeometry(W, D, SEG, SEG);
-tGeo.rotateX(-Math.PI / 2);
-{
+  const SEG_X = MOBILE ? 160 : 300;
+  const SEG_Z = Math.round(SEG_X * D / W);
+  const tGeo = new THREE.PlaneGeometry(W, D, SEG_X, SEG_Z);
+  tGeo.rotateX(-Math.PI / 2);
   const p = tGeo.attributes.position;
   const colors = new Float32Array(p.count * 3);
-  const cSand = new THREE.Color(0x9a7e52), cJun1 = new THREE.Color(0x1E2B1F),
-        cJun2 = new THREE.Color(0x2e4228), cRock = new THREE.Color(0x4a3f30);
+  const cDeep = new THREE.Color(0x0a1a26), cShelf = new THREE.Color(0x12303f),
+        cSand = new THREE.Color(0x9a7e52), cJun1 = new THREE.Color(0x22331f),
+        cJun2 = new THREE.Color(0x32482a), cRock = new THREE.Color(0x55483a);
   for (let i = 0; i < p.count; i++){
-    const x = p.getX(i), z = p.getZ(i);
-    const h = terrainH(x, z);
-    p.setY(i, h);
-    // color por altura: arena → selva → selva clara → roca en cumbres
+    const u = p.getX(i) / W + .5, v = p.getZ(i) / D + .5;
+    const m = meters(u, v);
+    p.setY(i, visY(m));
     let c;
-    if (h < .8) c = cSand;
-    else if (h < 9) c = cJun1.clone().lerp(cJun2, h / 9);
-    else c = cJun2.clone().lerp(cRock, Math.min(1, (h - 9) / 14));
+    if (m < -120) c = cDeep;
+    else if (m < 0) c = cShelf.clone().lerp(cDeep, -m / 120);
+    else if (m < 12) c = cSand;
+    else if (m < 140) c = cJun1.clone().lerp(cJun2, m / 140);
+    else c = cJun2.clone().lerp(cRock, Math.min(1, (m - 140) / 260));
     colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b;
   }
   tGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   tGeo.computeVertexNormals();
-}
-scene.add(new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ vertexColors:true, roughness:.95, metalness:0, flatShading:false })));
+  scene.add(new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ vertexColors:true, roughness:.95, metalness:0 })));
 
-/* malla dorada sutil sobre el terreno (lenguaje "plano topográfico" de la marca) */
-const wire = new THREE.Mesh(tGeo, new THREE.MeshBasicMaterial({ color:0xC9A96E, wireframe:true, transparent:true, opacity:.045 }));
-wire.position.y = .12;
-scene.add(wire);
+  /* malla topográfica dorada sutil (lenguaje de plano) */
+  const wire = new THREE.Mesh(tGeo, new THREE.MeshBasicMaterial({ color:0xC9A96E, wireframe:true, transparent:true, opacity:.035 }));
+  wire.position.y = .1;
+  scene.add(wire);
 
-/* ══════ OCÉANO animado ══════ */
-const oSeg = MOBILE ? 70 : 130;
-const oGeo = new THREE.PlaneGeometry(W, D, oSeg, oSeg);
+  /* hotspots anclados a su elevación real */
+  const spotGeo = new THREE.SphereGeometry(1.5, 18, 18);
+  const ringGeo = new THREE.RingGeometry(2.2, 2.55, 40);
+  PROJECTS.forEach(pr => {
+    const x = lon2x(pr.lon), z = lat2z(pr.lat);
+    const y = Math.max(visY(sampleH(pr.lon, pr.lat)), .5) + 3.4;
+    const g = new THREE.Group();
+    const orb = new THREE.Mesh(spotGeo, new THREE.MeshStandardMaterial({ color:0xC9A96E, emissive:0xC9A96E, emissiveIntensity:.55, roughness:.3 }));
+    const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color:0xC9A96E, transparent:true, opacity:.55, side:THREE.DoubleSide }));
+    ring.rotation.x = -Math.PI / 2; ring.position.y = -2.9;
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, 6, 6),
+      new THREE.MeshBasicMaterial({ color:0xC9A96E, transparent:true, opacity:.4 }));
+    beam.position.y = -3;
+    g.add(orb, ring, beam);
+    g.position.set(x, y, z);
+    scene.add(g);
+    const tag = document.createElement('button');
+    tag.className = 'tag3d'; tag.textContent = pr.n;
+    tag.addEventListener('click', () => openCard(pr, g));
+    document.body.appendChild(tag);
+    spots.push({ pr, g, orb, ring, tag, base:y });
+  });
+  TOWNS.forEach(tn => {
+    const el = document.createElement('div');
+    el.className = 'town'; el.textContent = tn.n;
+    document.body.appendChild(el);
+    townEls.push({ el, pos: new THREE.Vector3(lon2x(tn.lon), visY(Math.max(sampleH(tn.lon, tn.lat), 4)) + 1.2, lat2z(tn.lat)) });
+  });
+  ready = true;
+};
+
+/* ══════ OCÉANO en el nivel del mar real (y=0) ══════ */
+const oSeg = MOBILE ? 80 : 140;
+const oGeo = new THREE.PlaneGeometry(W * 1.04, D * 1.04, oSeg, Math.round(oSeg * D / W));
 oGeo.rotateX(-Math.PI / 2);
 const oBase = oGeo.attributes.position.array.slice();
 const ocean = new THREE.Mesh(oGeo, new THREE.MeshStandardMaterial({
-  color:0x0d2230, roughness:.32, metalness:.55, transparent:true, opacity:.94 }));
-ocean.position.y = 0;
+  color:0x0d2230, roughness:.3, metalness:.55, transparent:true, opacity:.92 }));
 scene.add(ocean);
-
-/* línea de costa dorada */
-{
-  const pts = [];
-  for (let x = -110; x <= 110; x += 1.5) pts.push(new THREE.Vector3(x, .35, shoreZ(x)));
-  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
-    new THREE.LineBasicMaterial({ color:0xC9A96E, transparent:true, opacity:.5 })));
-}
-
-/* ══════ HOTSPOTS de proyectos ══════ */
-const spots = [];
-const spotGeo = new THREE.SphereGeometry(1.1, 18, 18);
-const ringGeo = new THREE.RingGeometry(1.6, 1.85, 40);
-PROJECTS.forEach(pr => {
-  const x = -110 + pr.u * 220;
-  const z = shoreZ(x) - 9;                      // ligeramente tierra adentro
-  const y = Math.max(terrainH(x, z), 1.5) + 2.6;
-  const g = new THREE.Group();
-  const orb = new THREE.Mesh(spotGeo, new THREE.MeshStandardMaterial({ color:0xC9A96E, emissive:0xC9A96E, emissiveIntensity:.55, roughness:.3 }));
-  const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color:0xC9A96E, transparent:true, opacity:.55, side:THREE.DoubleSide }));
-  ring.rotation.x = -Math.PI / 2; ring.position.y = -2.2;
-  const beam = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, 4.6, 6),
-    new THREE.MeshBasicMaterial({ color:0xC9A96E, transparent:true, opacity:.4 }));
-  beam.position.y = -2.3;
-  g.add(orb, ring, beam);
-  g.position.set(x, y, z);
-  scene.add(g);
-  // etiqueta DOM proyectada
-  const tag = document.createElement('button');
-  tag.className = 'tag3d'; tag.textContent = pr.n;
-  tag.addEventListener('click', () => openCard(pr, g));
-  document.body.appendChild(tag);
-  spots.push({ pr, g, orb, ring, tag, base:y });
-});
 
 /* ══════ TARJETA ══════ */
 const card = document.getElementById('card');
@@ -276,32 +284,30 @@ document.getElementById('card-x').addEventListener('click', () => {
   spots.forEach(s => s.tag.classList.remove('on'));
 });
 
-/* ══════ CÁMARA CINEMATOGRÁFICA ══════
-   intro fly-in → órbita suave automática · drag para orbitar · rueda para zoom */
-let theta = -.55, phi = .42, radius = MOBILE ? 150 : 118, auto = true;
-const center = new THREE.Vector3(0, 4, -8);
-// intro: arranca lejos y alto
-let intro = REDUCED ? 1 : 0;
-const iFrom = { theta:-1.7, phi:.95, radius: 320 };
+/* ══════ CÁMARA CINEMATOGRÁFICA ══════ */
+let ready = false;
+let theta = -.62, phi = .46, radius = MOBILE ? 210 : 168, auto = true;
+const center = new THREE.Vector3(0, 3, -16);
+let intro = REDUCED ? 1 : 0, introT0 = null;
+const iFrom = { theta:-1.9, phi:1.05, radius: 520 };
 
 let drag = null;
 canvas.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY, t:theta, p:phi}; auto = false; });
 addEventListener('pointermove', e => {
   if (!drag) return;
   theta = drag.t + (e.clientX - drag.x) * .0042;
-  phi   = Math.max(.18, Math.min(1.15, drag.p + (e.clientY - drag.y) * .003));
+  phi   = Math.max(.16, Math.min(1.15, drag.p + (e.clientY - drag.y) * .003));
 });
 addEventListener('pointerup', () => { drag = null; setTimeout(() => auto = true, 4200); });
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
-  radius = Math.max(45, Math.min(330, radius + e.deltaY * .12));
+  radius = Math.max(55, Math.min(520, radius + e.deltaY * .16));
 }, { passive:false });
-/* pinch zoom táctil */
 let pinch = 0;
 canvas.addEventListener('touchmove', e => {
   if (e.touches.length === 2){
     const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    if (pinch) radius = Math.max(45, Math.min(330, radius - (d - pinch) * .35));
+    if (pinch) radius = Math.max(55, Math.min(520, radius - (d - pinch) * .5));
     pinch = d;
   }
 }, { passive:true });
@@ -322,58 +328,60 @@ function loop(ts){
   if (!t0) t0 = ts;
   const t = (ts - t0) / 1000;
 
-  // intro cinematográfica (4 s, easing)
-  if (intro < 1){
-    intro = Math.min(1, t / 4);
+  // la intro arranca cuando el heightmap está listo
+  if (ready && intro < 1){
+    if (introT0 === null){ introT0 = ts; document.getElementById('loading').classList.add('off'); }
+    intro = Math.min(1, (ts - introT0) / 4200);
     const e = 1 - Math.pow(1 - intro, 3);
-    theta  = iFrom.theta  + (-.55 - iFrom.theta) * e;
-    phi    = iFrom.phi    + (.42 - iFrom.phi) * e;
-    radius = iFrom.radius + ((MOBILE ? 150 : 118) - iFrom.radius) * e;
-    if (intro >= 1) document.getElementById('loading').classList.add('off');
+    theta  = iFrom.theta  + (-.62 - iFrom.theta) * e;
+    phi    = iFrom.phi    + (.46 - iFrom.phi) * e;
+    radius = iFrom.radius + ((MOBILE ? 210 : 168) - iFrom.radius) * e;
   }
-  if (auto && intro >= 1 && !REDUCED) theta += .0006;
+  if (auto && intro >= 1 && !REDUCED) theta += .00055;
 
-  // posición orbital
   camera.position.set(
     center.x + radius * Math.sin(theta) * Math.cos(phi),
     center.y + radius * Math.sin(phi),
     center.z + radius * Math.cos(theta) * Math.cos(phi)
   );
-  // si hay proyecto enfocado, mirar hacia él suavemente
-  const look = focus ? v3.copy(focus).lerp(center, .35) : center;
+  const look = focus ? v3.copy(focus).lerp(center, .3) : center;
   camera.lookAt(look);
 
-  // olas
   if (!REDUCED){
     const op = oGeo.attributes.position;
     for (let i = 0; i < op.count; i++){
       const x = oBase[i*3], z = oBase[i*3+2];
-      op.setY(i, Math.sin(x * .12 + t * 1.1) * .55 + Math.sin(z * .15 + t * .8) * .4 + Math.sin((x+z) * .07 + t * 1.6) * .25);
+      op.setY(i, Math.sin(x * .07 + t * 1.0) * .5 + Math.sin(z * .09 + t * .75) * .38 + Math.sin((x+z) * .045 + t * 1.5) * .22);
     }
     op.needsUpdate = true;
     oGeo.computeVertexNormals();
   }
 
-  // hotspots: pulso + flotación + proyección de etiquetas
   spots.forEach((s, i) => {
     const pulse = 1 + Math.sin(t * 2 + i) * .12;
     s.orb.scale.setScalar(pulse);
     s.ring.scale.setScalar(1 + ((t * .5 + i * .2) % 1) * .9);
     s.ring.material.opacity = .55 * (1 - ((t * .5 + i * .2) % 1));
-    s.g.position.y = s.base + Math.sin(t * 1.4 + i * 1.7) * .5;
+    s.g.position.y = s.base + Math.sin(t * 1.4 + i * 1.7) * .55;
     v3.copy(s.g.position); v3.project(camera);
     const sx = (v3.x * .5 + .5) * innerWidth, sy = (-v3.y * .5 + .5) * innerHeight;
     const visible = v3.z < 1 && sx > -80 && sx < innerWidth + 80;
     s.tag.style.display = visible ? 'block' : 'none';
     if (visible){ s.tag.style.left = sx + 'px'; s.tag.style.top = sy + 'px'; }
   });
+  townEls.forEach(tn => {
+    v3.copy(tn.pos); v3.project(camera);
+    const sx = (v3.x * .5 + .5) * innerWidth, sy = (-v3.y * .5 + .5) * innerHeight;
+    const visible = v3.z < 1 && sx > 0 && sx < innerWidth;
+    tn.el.style.display = visible ? 'block' : 'none';
+    if (visible){ tn.el.style.left = sx + 'px'; tn.el.style.top = sy + 'px'; }
+  });
 
   renderer.render(scene, camera);
 }
 requestAnimationFrame(loop);
-if (REDUCED) document.getElementById('loading').classList.add('off');
 
-/* click directo sobre los orbes (raycaster) */
+/* click directo en los orbes */
 const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
 canvas.addEventListener('click', e => {
   mouse.x = (e.clientX / innerWidth) * 2 - 1;

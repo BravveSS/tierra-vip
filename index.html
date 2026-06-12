@@ -2391,8 +2391,8 @@ function aipBuildReply(intent, userMsg) {
       '¡Gracias a ti! Para cualquier consulta adicional escríbenos a ventas@tierra.vip o por WhatsApp al +52 958 108 7977.'
     ],
     general: [
-      `Entiendo tu consulta. En Tierra Desarrollos somos especialistas en desarrollo inmobiliario eco-luxury en la Costa de Oaxaca.\n\nPuedo ayudarte con información sobre:\n• Nuestros proyectos (Azimut, Nabani, Aldea Tao, Serena, Depas Kora)\n• Precios y disponibilidad\n• Proceso de compra\n• Planes de financiamiento\n• Ubicación y accesos\n\n¿Sobre qué te gustaría saber más?`,
-      `Buena pregunta. Te cuento que en Tierra desarrollamos proyectos únicos en el Pacífico oaxaqueño — zonas que todavía conservan su esencia natural pero con infraestructura y respaldo legal.\n\n¿Hay algún proyecto específico que quieras explorar o prefieres que te cuente sobre todos?`
+      `Cuéntame un poco más — ¿estás buscando un terreno para construir, una casa lista para habitar, o más bien una inversión? Así te oriento mejor 🌿`,
+      `Claro. Para recomendarte bien: ¿lo tuyo es vivir frente al mar, un refugio en la selva, o hacer crecer tu patrimonio? Tenemos algo para cada historia.`
     ]
   };
 
@@ -2783,6 +2783,32 @@ const EN_REPLIES = {
 // Redefinimos aipGetReply con detección de idioma, sinónimos y memoria
 aipGetReply = function(text){
   const t = text.toLowerCase();
+  // ── conversación humana: presentaciones, small talk y saludos repetidos ──
+  const pres = text.match(/(?:soy|me llamo|mi nombre es|i'?m|my name is)\s+([a-záéíóúñA-ZÁÉÍÓÚÑ]{2,})/i);
+  if (pres && !/^(un|una|de|del|el|la|buscando|interesado|interesada|cliente|nuevo|aqui|aquí)$/i.test(pres[1])){
+    const name = pres[1].charAt(0).toUpperCase() + pres[1].slice(1).toLowerCase();
+    AIP.lead.nombre = AIP.lead.nombre || name;
+    aipLastIntent = 'presentacion';
+    aipHistory.push({role:'user', text});
+    const r = LL(`¡Mucho gusto, ${name}! 🌿 Cuéntame, ¿qué te trae por aquí — estás buscando un terreno para construir, una casa lista o una inversión en la costa?`,
+                 `Nice to meet you, ${name}! 🌿 Tell me — are you looking for land to build, a finished home, or an investment on the coast?`);
+    aipHistory.push({role:'ai', text:r});
+    return r;
+  }
+  if (/c[oó]mo est[aá]s|qu[eé] tal est[aá]s|how are you|todo bien/.test(t)){
+    aipHistory.push({role:'user', text});
+    const r = LL(`Muy bien, gracias por preguntar 🌿 ${AIP.lead.nombre ? AIP.lead.nombre + ', d' : 'D'}ime, ¿en qué te puedo ayudar hoy?`,
+                 `Very well, thanks for asking 🌿 ${AIP.lead.nombre ? AIP.lead.nombre + ', w' : 'W'}hat can I help you with today?`);
+    aipHistory.push({role:'ai', text:r});
+    return r;
+  }
+  if (aipLastIntent && /hola|buenas|hello|hi\b|hey/.test(t) && aipHistory.length > 2){
+    aipHistory.push({role:'user', text});
+    const r = LL(`¡Hola de nuevo${AIP.lead.nombre ? ', ' + AIP.lead.nombre : ''}! ¿Por dónde quieres empezar — proyectos, precios o agendar una visita?`,
+                 `Hello again${AIP.lead.nombre ? ', ' + AIP.lead.nombre : ''}! Where shall we start — projects, prices, or booking a visit?`);
+    aipHistory.push({role:'ai', text:r});
+    return r;
+  }
   const isEN = !/[áéíóúñ¿¡]/.test(text) && /\b(the|price|cost|how|where|when|buy|invest|beach|house|land|lot|hello|hi|thanks|what|can|info|you|visit|process|payment)\b/.test(t);
   let intent = aipDetectIntent(text);
   if (intent === 'general'){ // sinónimos EN → intents
@@ -2863,9 +2889,15 @@ function aipAfterReply(text){
 
 // ── Flujo de captura de lead: nombre → teléfono → correo → tipo de visita ──
 function leadStart(){
-  AIP.mode = 'lead'; AIP.step = 0;
+  AIP.mode = 'lead';
   AIP.lead.proyecto = AIP.interests[AIP.interests.length-1] || '';
-  aipAddMsg('ai', LL('Perfecto. ¿Cuál es tu nombre?','Perfect. What is your name?'));
+  if (AIP.lead.nombre){  // ya se presentó: ir directo al teléfono
+    AIP.step = 1;
+    aipAddMsg('ai', LL(`Perfecto, ${AIP.lead.nombre}. ¿Cuál es tu teléfono (WhatsApp)?`,`Perfect, ${AIP.lead.nombre}. What is your phone (WhatsApp)?`));
+  } else {
+    AIP.step = 0;
+    aipAddMsg('ai', LL('Perfecto. ¿Cuál es tu nombre?','Perfect. What is your name?'));
+  }
 }
 function leadStep(text){
   const t = text.trim();
