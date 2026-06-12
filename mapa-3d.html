@@ -107,12 +107,13 @@ const MOBILE  = matchMedia('(max-width:760px)').matches || (navigator.hardwareCo
 /* ══════ GEOGRAFÍA REAL ══════
    Heightmap: assets/img/costa-heightmap.png — tiles satelitales (AWS Terrain, z13)
    Bounds exactos del raster y rango de elevación decodificado: */
-const GEO = { minH:-1200, maxH:401, lonW:-96.6357421875, lonE:-96.43798828125, latN:15.728813770533975, latS:15.601874876739803 };
+/* heightmap 16-bit: altura codificada en R(alto)/G(bajo) → metros = (R·256+G)/64 − 60 */
+const GEO = { hOFF:60, hSCALE:64, lonW:-96.6357421875, lonE:-96.43798828125, latN:15.728813770533975, latS:15.601874876739803 };
 const KM_X = 111.32 * Math.cos(15.66 * Math.PI/180) * (GEO.lonE - GEO.lonW);  // ≈ 23.6 km
 const KM_Z = 111.32 * (GEO.latN - GEO.latS);                                   // ≈ 18.8 km
 const SCALE = 10;                       // 1 unidad = 100 m
 const W = KM_X * SCALE, D = KM_Z * SCALE;
-const VEXAG = 3.2;                      // exageración vertical de la tierra (drama cinematográfico)
+const VEXAG = 1.9;                      // exageración suave (-40%): relieve fiel, no caricatura
 const lon2x = lon => ((lon - GEO.lonW) / (GEO.lonE - GEO.lonW) - .5) * W;
 const lat2z = lat => ((GEO.latN - lat) / (GEO.latN - GEO.latS) - .5) * D;
 
@@ -165,6 +166,11 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.3;
+/* sombras largas de golden hour (solo desktop, suaves) */
+if (!MOBILE){
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+}
 
 const scene = new THREE.Scene();
 scene.background = null;                       // deja ver el cielo de atardecer (CSS)
@@ -176,6 +182,13 @@ const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 2000)
 scene.add(new THREE.HemisphereLight(0xff9a55, 0x1f1a14, .85));
 const sun = new THREE.DirectionalLight(0xFF8A3D, 2.4);
 sun.position.set(60, 38, 320);                  // bajo, desde el mar (sur)
+if (!MOBILE){
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  const sc = sun.shadow.camera;
+  sc.left = -130; sc.right = 130; sc.top = 110; sc.bottom = -110; sc.far = 700;
+  sun.shadow.bias = -0.0006;
+}
 scene.add(sun);
 const warm = new THREE.DirectionalLight(0xFFB36B, .8);
 warm.position.set(-200, 120, 60);
@@ -215,7 +228,8 @@ hImg.onload = () => {
   const meters = (u, v) => {
     const ix = Math.max(0, Math.min(cv.width - 1, Math.round(u * (cv.width - 1))));
     const iy = Math.max(0, Math.min(cv.height - 1, Math.round(v * (cv.height - 1))));
-    return GEO.minH + px[(iy * cv.width + ix) * 4] / 255 * (GEO.maxH - GEO.minH);
+    const o = (iy * cv.width + ix) * 4;
+    return (px[o] * 256 + px[o+1]) / GEO.hSCALE - GEO.hOFF;   // precisión 16-bit real
   };
   sampleH = (lon, lat) => meters((lon - GEO.lonW) / (GEO.lonE - GEO.lonW), (GEO.latN - lat) / (GEO.latN - GEO.latS));
 
@@ -235,7 +249,41 @@ hImg.onload = () => {
   /* FOTOGRAFÍA SATELITAL REAL como piel del terreno (misma zona, alineación exacta) */
   const sat = new THREE.TextureLoader().load('assets/img/costa-satelite.jpg');
   sat.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  scene.add(new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ map: sat, roughness:.93, metalness:0 })));
+  const terrain = new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ map: sat, roughness:.93, metalness:0 }));
+  terrain.castShadow = !MOBILE; terrain.receiveShadow = !MOBILE;   // el relieve se auto-sombrea: sombras largas reales
+  scene.add(terrain);
+
+  /* ── VEGETACIÓN TROPICAL instanciada (selva por altura, sin costo de FPS) ── */
+  if (!REDUCED){
+    const N_VEG = MOBILE ? 350 : 1400;
+    const vegGeo = new THREE.IcosahedronGeometry(.7, 0);
+    const vegMat = new THREE.MeshStandardMaterial({ color:0x2e4a26, roughness:1, flatShading:true });
+    const veg = new THREE.InstancedMesh(vegGeo, vegMat, N_VEG);
+    const dummy = new THREE.Object3D();
+    const cVar = new THREE.Color();
+    let placed = 0, tries = 0;
+    while (placed < N_VEG && tries < N_VEG * 12){
+      tries++;
+      const lon = GEO.lonW + Math.random() * (GEO.lonE - GEO.lonW);
+      const lat = GEO.latS + Math.random() * (GEO.latN - GEO.latS);
+      const m = sampleH(lon, lat);
+      if (m < 12 || m > 320) continue;                      // selva entre 12 y 320 m
+      const s = .6 + Math.random() * 1.5 + Math.min(1, m / 200) * .6;
+      dummy.position.set(lon2x(lon), visY(m) + s * .4, lat2z(lat));
+      dummy.scale.set(s, s * (1.1 + Math.random() * .5), s);
+      dummy.rotation.y = Math.random() * Math.PI;
+      dummy.updateMatrix();
+      veg.setMatrixAt(placed, dummy.matrix);
+      cVar.setHSL(.27 + Math.random() * .06, .42 + Math.random() * .2, .16 + Math.random() * .1);
+      veg.setColorAt(placed, cVar);
+      placed++;
+    }
+    veg.count = placed;
+    veg.instanceMatrix.needsUpdate = true;
+    if (veg.instanceColor) veg.instanceColor.needsUpdate = true;
+    veg.castShadow = !MOBILE;
+    scene.add(veg);
+  }
 
   /* hotspots anclados a su elevación real */
   const spotGeo = new THREE.SphereGeometry(1.5, 18, 18);
@@ -273,9 +321,10 @@ const oSeg = MOBILE ? 80 : 140;
 const oGeo = new THREE.PlaneGeometry(W * 1.04, D * 1.04, oSeg, Math.round(oSeg * D / W));
 oGeo.rotateX(-Math.PI / 2);
 const oBase = oGeo.attributes.position.array.slice();
-/* capa de oleaje translúcida SOBRE el mar fotográfico — refleja el atardecer */
+/* agua premium: oleaje translúcido sobre el mar fotográfico, con glint del atardecer
+   (specular alto + roughness mínima → camino de sol dorado sobre el Pacífico) */
 const ocean = new THREE.Mesh(oGeo, new THREE.MeshStandardMaterial({
-  color:0x2a5a72, roughness:.14, metalness:.65, transparent:true, opacity:.34 }));
+  color:0x2e6478, roughness:.06, metalness:.78, transparent:true, opacity:.38 }));
 ocean.position.y = .25;
 scene.add(ocean);
 
@@ -294,10 +343,17 @@ function openCard(pr, g){
   card.classList.add('show');
   spots.forEach(s => s.tag.classList.toggle('on', s.pr === pr));
   focus = g.position.clone();
+  // vuelo cinematográfico hacia el proyecto
+  tCenter.set(g.position.x, g.position.y - 1, g.position.z);
+  tRadius = MOBILE ? 92 : 72;
+  tPhi = Math.max(tPhi, .4);
+  auto = false;
 }
 document.getElementById('card-x').addEventListener('click', () => {
   card.classList.remove('show'); focus = null;
   spots.forEach(s => s.tag.classList.remove('on'));
+  tCenter.copy(BASE_CENTER); tRadius = BASE_RADIUS;   // regreso suave al plano general
+  setTimeout(() => auto = true, 1500);
 });
 
 /* ══════ CÁMARA CINEMATOGRÁFICA ══════ */
@@ -305,16 +361,29 @@ let ready = false;
 /* cámara con INERCIA: el usuario mueve los targets; la cámara los persigue con suavidad */
 let theta = -.62, phi = .58, radius = MOBILE ? 195 : 150, auto = true;
 let tTheta = theta, tPhi = phi, tRadius = radius;
-const center = new THREE.Vector3(0, 3, -16);
+const center  = new THREE.Vector3(0, 3, -16);
+const tCenter = center.clone();                      // objetivo del encuadre (flyTo)
+const BASE_CENTER = center.clone(), BASE_RADIUS = MOBILE ? 195 : 150;
 let intro = REDUCED ? 1 : 0, introT0 = null;
 const iFrom = { theta:-1.9, phi:1.05, radius: 520 };
 
 let drag = null;
 canvas.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY, t:tTheta, p:tPhi}; auto = false; });
+let hoverSpot = null;
 addEventListener('pointermove', e => {
-  if (!drag) return;
-  tTheta = drag.t + (e.clientX - drag.x) * .0042;
-  tPhi   = Math.max(.16, Math.min(1.15, drag.p + (e.clientY - drag.y) * .003));
+  if (drag){
+    tTheta = drag.t + (e.clientX - drag.x) * .0042;
+    tPhi   = Math.max(.16, Math.min(1.15, drag.p + (e.clientY - drag.y) * .003));
+    return;
+  }
+  // hover premium sobre los marcadores
+  if (MOBILE || !spots.length) return;
+  mouse.x = (e.clientX / innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+  ray.setFromCamera(mouse, camera);
+  const hits = ray.intersectObjects(spots.map(s => s.orb));
+  hoverSpot = hits.length ? spots.find(s => s.orb === hits[0].object) : null;
+  canvas.style.cursor = hoverSpot ? 'pointer' : 'grab';
 });
 addEventListener('pointerup', () => { drag = null; setTimeout(() => auto = true, 4200); });
 canvas.addEventListener('wheel', e => {
@@ -359,7 +428,8 @@ function loop(ts){
   // inercia: persecución suave de los targets (movimiento de seda)
   theta  += (tTheta  - theta)  * .075;
   phi    += (tPhi    - phi)    * .075;
-  radius += (tRadius - radius) * .085;
+  radius += (tRadius - radius) * .055;
+  center.lerp(tCenter, .05);                          // flyTo con ease profesional
 
   camera.position.set(
     center.x + radius * Math.sin(theta) * Math.cos(phi),
@@ -380,7 +450,9 @@ function loop(ts){
   }
 
   spots.forEach((s, i) => {
-    const pulse = 1 + Math.sin(t * 2 + i) * .12;
+    const hovered = s === hoverSpot;
+    const pulse = (1 + Math.sin(t * 2 + i) * .1) * (hovered ? 1.45 : 1);
+    s.orb.material.emissiveIntensity = hovered ? 1.1 : .55;
     s.orb.scale.setScalar(pulse);
     s.ring.scale.setScalar(1 + ((t * .5 + i * .2) % 1) * .9);
     s.ring.material.opacity = .55 * (1 - ((t * .5 + i * .2) % 1));
