@@ -759,8 +759,8 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
     <div class="aip-info">
       <div class="aip-dot"></div>
       <div>
-        <div class="aip-name">Asistente Virtual · Tierra</div>
-        <div class="aip-sub">Respondo sobre proyectos, compra e inversión</div>
+        <div class="aip-name">Asesor Tierra</div>
+        <div class="aip-sub">Equipo de ventas · Costa de Oaxaca</div>
       </div>
     </div>
     <button class="aip-close" id="aip-close">✕</button>
@@ -770,7 +770,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
     <input id="aip-input" type="text" placeholder="Escribe tu pregunta..." autocomplete="off">
     <button id="aip-send">→</button>
   </div>
-  <div class="aip-pwrd">Asistente Virtual · Tierra Desarrollos</div>
+  <div class="aip-pwrd">Tierra Desarrollos · Atención inmediata</div>
 </div>
 
 <canvas id="ptx"></canvas>
@@ -921,6 +921,9 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
         <img id="mp-card-img" src="assets/img/azimut/renderazimutyogashala.webp" alt="">
         <div class="b"><div class="n" id="mp-card-n">Azimut</div><div class="l" id="mp-card-l">Mazunte · Oaxaca</div></div>
       </div>
+    </div>
+    <div style="margin-top:40px">
+      <a href="mapa-3d.html" class="btn-go" style="display:inline-block" data-i18n="mp_3d">Explorar la costa en 3D →</a>
     </div>
   </div>
 </section>
@@ -1608,19 +1611,24 @@ function startHero(){
     .to('#sind',  {opacity:1,duration:.5,ease:'power2.out'},2.0);
 }
 
-// Scroll parallax + fade — sin shake
-gsap.to('#hvid', {
-  yPercent: 20, ease:'none',
-  scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}
-});
-gsap.to('#hbody', {
-  opacity:0, y:-60, ease:'none',
-  scrollTrigger:{trigger:'#hero',start:'top top',end:'40% top',scrub:true}
-});
-gsap.to('#sind', {
-  opacity:0, ease:'none',
-  scrollTrigger:{trigger:'#hero',start:'top top',end:'20% top',scrub:true}
-});
+// ── ESCENA 1: hero pinned — la cámara "entra" en el paisaje al scrollear ──
+if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
+  gsap.timeline({
+    scrollTrigger:{ trigger:'#hero', start:'top top', end:'+=85%', pin:true, scrub:.6, anticipatePin:1 }
+  })
+  .to('#hvid',  { scale:1.22, ease:'none' }, 0)
+  .to('.hgrad', { opacity:1.6, ease:'none' }, 0)
+  .to('#hbody', { opacity:0, y:-90, filter:'blur(6px)', ease:'none' }, .12)
+  .to('#sind',  { opacity:0, ease:'none' }, 0);
+} else {
+  // móvil / reduced: parallax simple sin pin
+  gsap.to('#hvid', { yPercent: 16, ease:'none',
+    scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+  gsap.to('#hbody', { opacity:0, y:-60, ease:'none',
+    scrollTrigger:{trigger:'#hero',start:'top top',end:'40% top',scrub:true}});
+  gsap.to('#sind', { opacity:0, ease:'none',
+    scrollTrigger:{trigger:'#hero',start:'top top',end:'20% top',scrub:true}});
+}
 
 /* ════════════════════════════════════════
    WAVES — organic dual-path morph
@@ -1652,14 +1660,41 @@ gsap.to('#mf-ri',{scaleX:1,duration:.85,ease:'power2.inOut',
 gsap.to('#mf-ro',{scaleX:1,duration:.85,ease:'power2.inOut',
   scrollTrigger:{trigger:'#manifesto',start:'bottom 85%'}});
 
-['#mfl1','#mfl2','#mfl3'].forEach((s,i)=>{
-  gsap.to(s,{
-    clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',
-    duration:.92,ease:'power3.out',
-    scrollTrigger:{trigger:s,start:'top 82%'},
-    delay:i*.22,
+// ── ESCENA 2: manifiesto pinned — cada frase emerge mientras se scrubea ──
+if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
+  gsap.timeline({
+    scrollTrigger:{ trigger:'#manifesto', start:'top top', end:'+=110%', pin:true, scrub:.7, anticipatePin:1 }
+  })
+  .to('#mfl1',{clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',ease:'power2.out',duration:1}, 0)
+  .to('#mfl2',{clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',ease:'power2.out',duration:1}, .8)
+  .to('#mfl3',{clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',ease:'power2.out',duration:1}, 1.6)
+  .fromTo('#manifesto > p',{opacity:0,y:26},{opacity:1,y:0,ease:'power2.out',duration:1}, 2.3);
+} else {
+  ['#mfl1','#mfl2','#mfl3'].forEach((s,i)=>{
+    gsap.to(s,{ clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)', duration:.92, ease:'power3.out',
+      scrollTrigger:{trigger:s,start:'top 82%'}, delay:i*.22 });
   });
-});
+}
+
+// Números de sección gigantes: profundidad extra (cada capa a su velocidad)
+if (!window.__REDUCED){
+  document.querySelectorAll('.pbgn').forEach(el => {
+    gsap.fromTo(el, {yPercent:-22}, {yPercent:22, ease:'none',
+      scrollTrigger:{trigger:el.parentElement, start:'top bottom', end:'bottom top', scrub:true}});
+  });
+}
+
+// Marquee reactivo: se inclina con la velocidad del scroll
+(function(){
+  const track = document.getElementById('mq1');
+  if (!track || window.__REDUCED) return;
+  let skew = 0;
+  lenis.on('scroll', e => {
+    const target = Math.max(-8, Math.min(8, (e.velocity || 0) * .35));
+    skew += (target - skew) * .15;
+    track.style.transform = 'skewX(' + skew.toFixed(2) + 'deg)';
+  });
+})();
 
 document.querySelectorAll('.mfn').forEach(el=>{
   const t=+el.dataset.t, s=el.dataset.s||'';
@@ -2397,14 +2432,29 @@ function aipGetReply(text) {
 }
 
 async function aipSendMsg() {
-  const text = aipInput.value.trim();
+  let text = aipInput.value.trim();
   if (!text) return;
   aipInput.value = '';
+  // comandos de los chips (no son texto del usuario real)
+  if (text === '__lead__'){ aipAddMsg('usr', LL('Sí, tomar mis datos','Yes, take my details')); leadStart(); return; }
+  if (text === '__skip__'){ aipAddMsg('usr', LL('Ahora no','Not now')); aipAddMsg('ai', LL('Sin problema 🌿 Aquí estoy para lo que necesites — y si cambias de opinión, WhatsApp: +52 958 108 7977.','No problem 🌿 I am here for anything you need — and if you change your mind, WhatsApp: +52 958 108 7977.')); return; }
+  if (text === '__virtual__' || text === '__presencial__'){
+    const v = text === '__virtual__';
+    aipAddMsg('usr', v ? LL('Visita virtual','Virtual visit') : LL('Visita presencial','In-person visit'));
+    AIP.step = 3; leadStep(v ? 'virtual' : 'presencial'); return;
+  }
   aipAddMsg('usr', text);
   const ty = aipShowTyping();
-  await new Promise(r => setTimeout(r, 820));
+  // 1) flujo de captura de lead activo → la entrada es un dato del lead
+  if (AIP.mode === 'lead'){ await new Promise(r => setTimeout(r, 500)); ty.remove(); leadStep(text); return; }
+  // 2) backend Claude si está configurado (window.TIERRA_API_URL) → si falla, motor local
+  let reply = null;
+  if (window.TIERRA_API_URL){ reply = await aipBackend(text).catch(() => null); }
+  await new Promise(r => setTimeout(r, reply ? 80 : 820));
   ty.remove();
-  aipAddMsg('ai', aipGetReply(text));
+  if (!reply) reply = aipGetReply(text);
+  aipAddMsg('ai', reply);
+  aipAfterReply(text);
 }
 
 aipSend.addEventListener('click', aipSendMsg);
@@ -2418,7 +2468,15 @@ function openAiPanel() {
       const ty = aipShowTyping();
       setTimeout(() => {
         ty.remove();
-        aipAddMsg('ai', 'Hola 👋 Soy el asistente de Tierra Desarrollos.\n\nPuedo responderte sobre nuestros proyectos en la Costa de Oaxaca, el proceso de compra, inversión, o cualquier cosa que necesites.\n\n¿En qué puedo ayudarte?');
+        aipAddMsg('ai', LL(
+          'Hola, bienvenido a Tierra Desarrollos 🌿\n\nSoy parte del equipo de ventas. Desarrollamos lotes, residencias y departamentos en la Costa de Oaxaca.\n\n¿Qué estás buscando?',
+          "Hello, welcome to Tierra Desarrollos 🌿\n\nI'm part of the sales team. We develop lots, residences and apartments on the Oaxaca Coast.\n\nWhat are you looking for?"));
+        aipChips([
+          [LL('Quiero un terreno','I want land'), 'quiero un terreno para construir'],
+          [LL('Busco invertir','I want to invest'), 'quiero invertir'],
+          [LL('Ver proyectos','See projects'), 'qué proyectos tienen'],
+          [LL('Agendar visita','Book a visit'), 'quiero agendar una visita'],
+        ]);
       }, 700);
     }, 300);
   }
@@ -2753,6 +2811,129 @@ aipGetReply = function(text){
 };
 
 /* ════════════════════════════════════════
+   ASESOR DE VENTAS — memoria, sugerencias,
+   captura de leads y arquitectura Claude-ready
+═══════════════════════════════════════ */
+// Estado de la conversación (memoria)
+const AIP = { mode:'chat', step:0, lead:{nombre:'',tel:'',email:'',visita:'',proyecto:''}, interests:[] };
+function LL(es,en){ return window.__LANG==='en' ? en : es; }
+
+// Chips de respuestas sugeridas (estilo .cpill existente — identidad Tierra)
+function aipChips(items){
+  const wrap = document.createElement('div');
+  wrap.className = 'cpills'; wrap.style.padding = '0 4px';
+  items.forEach(([label, send]) => {
+    const b = document.createElement('button');
+    b.className = 'cpill'; b.textContent = label;
+    b.addEventListener('click', () => { wrap.remove(); aipInput.value = send; aipSendMsg(); });
+    wrap.appendChild(b);
+  });
+  aipMsgs.appendChild(wrap);
+  aipMsgs.scrollTop = aipMsgs.scrollHeight;
+}
+
+// Recomendador según necesidades detectadas
+function aipRecommend(t){
+  if (/yoga|wellness|bienestar|holist|comunidad cerca|mazunte/.test(t)) return 'Azimut';
+  if (/eco|sustent|huerto|jard[ií]n|comunidad/.test(t)) return 'Serena';
+  if (/depa|departamento|apartment|zipolite|preventa/.test(t)) return 'Depas Kora';
+  if (/acantilado|vista|exclusiv|cliff|view|lujo/.test(t)) return 'Aldea Tao';
+  if (/inver|invest|roi|renta|patrimonio/.test(t)) return 'Nabani';
+  return '';
+}
+
+// Memoria de intereses + oferta de captura tras señales de interés
+function aipAfterReply(text){
+  const t = text.toLowerCase();
+  const proj = aipRecommend(t) || (t.match(/azimut|nabani|aldea|serena|kora/) || [''])[0];
+  if (proj && !AIP.interests.includes(proj)) AIP.interests.push(proj.charAt(0).toUpperCase()+proj.slice(1));
+  // honestidad si preguntan si es bot/humano
+  if (/eres (un )?(bot|robot|ia|inteligencia|humano)|are you (a )?(bot|robot|ai|human)/.test(t)){
+    aipAddMsg('ai', LL('Soy el asistente digital del equipo de Tierra — y detrás hay asesores humanos que dan seguimiento personal a cada conversación. ¿Te conecto con uno?','I am the digital assistant of the Tierra team — with human advisors following up personally on every conversation. Want me to connect you with one?'));
+    return;
+  }
+  const interested = /me interesa|interesad|quiero (comprar|invertir|agendar|visitar|ver|información|info)|disponibilidad|precio|cu[aá]nto cuesta|agendar|visita|interested|i want|how much|schedule|visit|contact/.test(t);
+  if (interested && AIP.mode === 'chat'){
+    setTimeout(() => {
+      aipAddMsg('ai', LL('Para darte atención personalizada, ¿me compartes tus datos? Un asesor te contacta hoy mismo.','To give you personal attention, may I take your details? An advisor will contact you today.'));
+      aipChips([[LL('Sí, tomar mis datos','Yes, take my details'),'__lead__'],[LL('Ahora no','Not now'),'__skip__']]);
+    }, 600);
+  }
+}
+
+// ── Flujo de captura de lead: nombre → teléfono → correo → tipo de visita ──
+function leadStart(){
+  AIP.mode = 'lead'; AIP.step = 0;
+  AIP.lead.proyecto = AIP.interests[AIP.interests.length-1] || '';
+  aipAddMsg('ai', LL('Perfecto. ¿Cuál es tu nombre?','Perfect. What is your name?'));
+}
+function leadStep(text){
+  const t = text.trim();
+  if (AIP.step === 0){
+    if (t.length < 2){ aipAddMsg('ai', LL('¿Me repites tu nombre, por favor?','Could you repeat your name, please?')); return; }
+    AIP.lead.nombre = t; AIP.step = 1;
+    aipAddMsg('ai', LL(`Gracias, ${t}. ¿Cuál es tu teléfono (WhatsApp)?`,`Thank you, ${t}. What is your phone (WhatsApp)?`));
+  } else if (AIP.step === 1){
+    const digits = t.replace(/\D/g,'');
+    if (digits.length < 8){ aipAddMsg('ai', LL('Ese número parece incompleto — ¿me lo compartes con lada?','That number looks incomplete — could you share it with area code?')); return; }
+    AIP.lead.tel = t; AIP.step = 2;
+    aipAddMsg('ai', LL('¿Y tu correo electrónico? (puedes escribir "omitir")','And your email? (you can type "skip")'));
+  } else if (AIP.step === 2){
+    if (!/omitir|skip/i.test(t)){
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(t)){ aipAddMsg('ai', LL('Ese correo no parece válido — ¿lo revisas? (o escribe "omitir")','That email does not look valid — could you check it? (or type "skip")')); return; }
+      AIP.lead.email = t;
+    }
+    AIP.step = 3;
+    aipAddMsg('ai', LL('¿Prefieres una visita virtual o presencial?','Do you prefer a virtual or an in-person visit?'));
+    aipChips([[LL('Visita virtual','Virtual visit'),'__virtual__'],[LL('Visita presencial','In-person visit'),'__presencial__']]);
+  } else {
+    AIP.lead.visita = /virtual/i.test(t) ? 'virtual' : 'presencial';
+    leadFinish();
+  }
+}
+function leadFinish(){
+  AIP.mode = 'chat';
+  try{ const all = JSON.parse(localStorage.getItem('tierraLeads')||'[]'); all.push({...AIP.lead, fecha:new Date().toISOString()}); localStorage.setItem('tierraLeads', JSON.stringify(all)); }catch(_){}
+  const L = AIP.lead;
+  const msg = encodeURIComponent(LL(
+    `Hola, soy ${L.nombre}. Hablé con el asesor de tierra.vip.${L.proyecto ? ' Me interesa ' + L.proyecto + '.' : ''} Prefiero visita ${L.visita}. Tel: ${L.tel}${L.email ? ' · Email: ' + L.email : ''}`,
+    `Hi, I'm ${L.nombre}. I spoke with the tierra.vip advisor.${L.proyecto ? " I'm interested in " + L.proyecto + '.' : ''} I prefer a ${L.visita === 'virtual' ? 'virtual' : 'site'} visit. Phone: ${L.tel}${L.email ? ' · Email: ' + L.email : ''}`));
+  aipAddMsg('ai', LL(
+    `Listo, ${L.nombre} 🌿 Un asesor te contactará hoy${L.proyecto ? ' con la información de ' + L.proyecto : ''}.\n\nSi prefieres no esperar, continúa ahora mismo por WhatsApp:`,
+    `Done, ${L.nombre} 🌿 An advisor will contact you today${L.proyecto ? ' with information on ' + L.proyecto : ''}.\n\nIf you'd rather not wait, continue right now on WhatsApp:`));
+  const wrap = document.createElement('div'); wrap.className = 'cacts'; wrap.style.padding = '0 4px';
+  const wa = document.createElement('button'); wa.className = 'cact wa';
+  wa.textContent = LL('Continuar por WhatsApp →','Continue on WhatsApp →');
+  wa.addEventListener('click', () => window.open('https://wa.me/529581087977?text=' + msg, '_blank'));
+  wrap.appendChild(wa); aipMsgs.appendChild(wrap); aipMsgs.scrollTop = aipMsgs.scrollHeight;
+}
+
+// ── Backend Claude-ready: si window.TIERRA_API_URL apunta a /api/chat (server.js),
+//    el asesor usa Claude real con streaming; si no, cae al motor local. ──
+async function aipBackend(text){
+  const messages = aipHistory.slice(-20).map(m => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text }));
+  messages.push({ role:'user', content:text });
+  const res = await fetch(window.TIERRA_API_URL, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ messages })
+  });
+  if (!res.ok) throw new Error('backend ' + res.status);
+  const reader = res.body.getReader(); const dec = new TextDecoder();
+  let out = '';
+  for(;;){
+    const {done, value} = await reader.read(); if (done) break;
+    dec.decode(value).split('\n').forEach(line => {
+      if (line.startsWith('data: ') && line !== 'data: [DONE]'){
+        try{ const j = JSON.parse(line.slice(6)); if (j.text) out += j.text; }catch(_){}
+      }
+    });
+  }
+  if (!out) throw new Error('empty');
+  aipHistory.push({role:'user', text}); aipHistory.push({role:'ai', text:out});
+  return out;
+}
+
+/* ════════════════════════════════════════
    CHAT CONCIERGE — entrada de texto libre
 ═══════════════════════════════════════ */
 (function(){
@@ -2881,12 +3062,12 @@ const CHAT_EN = new Map([
     // trust badge
     ['#trust-badge','<span class="d"></span>Guaranteed deeds · 100% legal backing','h'],
     // panel asistente
-    ['.aip-name','Virtual Assistant · Tierra'],['.aip-sub','Projects, buying & investment'],
+    ['.aip-name','Tierra Advisor'],['.aip-sub','Sales team · Oaxaca Coast'],
     ['#aip-input','Type your question…','p'],
-    ['.aip-pwrd','Virtual Assistant · Tierra Desarrollos'],
+    ['.aip-pwrd','Tierra Desarrollos · Immediate attention'],
   ];
   const DICT_EN = { nav_proyectos:'Projects', nav_construccion:'Construction', nav_nosotros:'About us', nav_galeria:'Gallery', nav_confianza:'Trust', nav_contacto:'Contact',
-    mp_tag:'Masterplan', mp_sub:'Explore the map: every dot is a Tierra development. Tap a pin to discover it.',
+    mp_tag:'Masterplan', mp_sub:'Explore the map: every dot is a Tierra development. Tap a pin to discover it.', mp_3d:'Explore the coast in 3D →',
     sold_tag:'Track record', sold_sub:'When a Tierra project sells out, it becomes a community. This is our history — and the best proof of what comes next.', sold_badge:'Sold out', sold_loc:'Oaxaca Coast · 100% sold out',
     lg_label:'Tierra Desarrollos · Est. Mexico', lg_sub:'Architecture in harmony with nature', lg_body:'Every project is born from listening to the land: understanding its topography, its history, its light. We do not build on top of nature — we build with it.' };
   const DICT_ES = {};   // se captura del DOM
