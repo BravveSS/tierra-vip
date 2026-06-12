@@ -16,8 +16,11 @@ html,body{height:100%;overflow:hidden;color:var(--cream);font-family:var(--fb);
   background:linear-gradient(to top,#41200b 0%,#5e2d0e 10%,#6b3514 16%,#3f2313 28%,#241723 46%,#101020 68%,#070710 100%)}
 /* color grading cinematográfico: luces cálidas, sombras frías (teal & orange) */
 #grade{position:fixed;inset:0;z-index:9;pointer-events:none;mix-blend-mode:soft-light;
-  background:linear-gradient(to top,rgba(0,60,80,.5) 0%,transparent 45%,rgba(255,130,40,.42) 100%)}
-#scene{filter:saturate(1.07) contrast(1.05)}
+  background:linear-gradient(to top,rgba(0,60,80,.5) 0%,transparent 42%,rgba(255,150,70,.18) 52%,transparent 62%,rgba(255,130,40,.46) 100%)}
+#scene{filter:saturate(1.07) contrast(1.07)}
+/* bruma del horizonte: franja cálida que funde mar y cielo */
+#haze{position:fixed;left:0;right:0;top:30%;height:34%;z-index:8;pointer-events:none;
+  background:radial-gradient(ellipse 120% 100% at 50% 50%,rgba(255,160,90,.10),transparent 70%)}
 #scene{position:fixed;inset:0;display:block;touch-action:none}
 #topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:linear-gradient(to bottom,rgba(8,7,6,.72),transparent)}
 #topbar img{height:42px;width:auto}
@@ -71,6 +74,7 @@ html,body{height:100%;overflow:hidden;color:var(--cream);font-family:var(--fb);
 
 <canvas id="scene" aria-label="Mapa 3D real de la Costa de Oaxaca con los proyectos de Tierra"></canvas>
 <div id="grade" aria-hidden="true"></div>
+<div id="haze" aria-hidden="true"></div>
 <div id="vig" aria-hidden="true"></div>
 
 <div id="topbar">
@@ -452,7 +456,10 @@ function loop(ts){
     phi   = tPhi   = iFrom.phi    + (.58 - iFrom.phi) * e;
     radius= tRadius= iFrom.radius + ((MOBILE ? 195 : 150) - iFrom.radius) * e;
   }
-  if (auto && intro >= 1 && !REDUCED) tTheta += .00036;   // deriva contemplativa
+  if (auto && intro >= 1 && !REDUCED){
+    tTheta += .00036;                                     // deriva contemplativa
+    tPhi += Math.sin(t * .12) * .00009;                   // respiración vertical de dron
+  }
   // inercia: persecución suave de los targets (movimiento de seda)
   theta  += (tTheta  - theta)  * .075;
   phi    += (tPhi    - phi)    * .075;
@@ -471,7 +478,7 @@ function loop(ts){
     const op = oGeo.attributes.position;
     for (let i = 0; i < op.count; i++){
       const x = oBase[i*3], z = oBase[i*3+2];
-      op.setY(i, Math.sin(x * .07 + t * .55) * .26 + Math.sin(z * .09 + t * .42) * .2 + Math.sin((x+z) * .045 + t * .85) * .12);
+      op.setY(i, Math.sin(x * .07 + t * .42) * .17 + Math.sin(z * .09 + t * .33) * .13 + Math.sin((x+z) * .045 + t * .62) * .08);
     }
     op.needsUpdate = true;
     oGeo.computeVertexNormals();
@@ -488,7 +495,7 @@ function loop(ts){
     }
     const hovered = s === hoverSpot;
     const pulse = (1 + Math.sin(t * 2 + i) * .1) * (hovered ? 1.45 : 1);
-    s.orb.material.emissiveIntensity = hovered ? 1.1 : .55;
+    s.orb.material.emissiveIntensity = hovered ? 1.0 : .42;   // glow discreto, joya no LED
     s.orb.scale.setScalar(pulse);
     s.ring.scale.setScalar(1 + ((t * .5 + i * .2) % 1) * .9);
     s.ring.material.opacity = .55 * (1 - ((t * .5 + i * .2) % 1));
