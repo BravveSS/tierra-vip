@@ -49,7 +49,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="assets/img/aldea-tao/dronaldeatao.webp">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.min.css?v=1">
+<link rel="stylesheet" href="assets/styles.min.css?v=2">
 </head>
 <body>
 
@@ -150,8 +150,10 @@
   </ul>
 </div>
 
+<main>
 <!-- HERO -->
 <section id="hero">
+  <h1 class="sr-only">Tierra Desarrollos — Lotes, residencias y departamentos eco-luxury en la Costa de Oaxaca: Azimut, Nabani, Aldea Tao, Serena y Depas Kora</h1>
   <div class="hvw">
     <video id="hvid" autoplay muted loop playsinline preload="auto" poster="assets/img/aldea-tao/dronaldeatao.webp" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">
       <source src="assets/video/hero.mp4" type="video/mp4">
@@ -279,10 +281,10 @@
 </div>
 
 <!-- PROJECTS -->
-<div id="sec-projects">
+<section id="sec-projects" aria-label="Proyectos de Tierra Desarrollos">
 
   <!-- AZIMUT -->
-  <div class="pcard pc1" id="pc-az">
+  <article class="pcard pc1" id="pc-az" aria-label="Proyecto Azimut, Mazunte">
     <div class="pbgn">01</div>
     <div class="piw" id="piw-az">
       <img src="assets/img/azimut/renderazimutyogashala.webp" alt="Azimut · Yoga Shala" loading="eager">
@@ -310,7 +312,7 @@
       </div>
       <a class="pcta" href="azimut.html">Descubrir Azimut →</a>
     </div>
-  </div>
+  </article>
 
   <div class="wd" style="background:var(--dark)">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" height="80">
@@ -320,7 +322,7 @@
   </div>
 
   <!-- NABANI -->
-  <div class="pcard pc2" id="pc-nb">
+  <article class="pcard pc2" id="pc-nb" aria-label="Proyecto Nabani, Costa Oaxaqueña">
     <div class="pbgn">02</div>
     <div class="piw" id="piw-nb">
       <img src="assets/img/nabani/dronnabani.webp" alt="Nabani" loading="eager">
@@ -348,7 +350,7 @@
       </div>
       <a class="pcta" href="nabani.html">Descubrir Nabani →</a>
     </div>
-  </div>
+  </article>
 
   <div class="wd" style="background:var(--earth)">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" height="80">
@@ -358,7 +360,7 @@
   </div>
 
   <!-- ALDEA TAO -->
-  <div class="pcard pc3" id="pc-at">
+  <article class="pcard pc3" id="pc-at" aria-label="Proyecto Aldea Tao, La Boquilla">
     <div class="pbgn">03</div>
     <div class="piw">
       <img src="assets/img/aldea-tao/dronaldeatao.webp" alt="Aldea Tao" loading="eager">
@@ -386,8 +388,8 @@
       </div>
       <a class="pcta" href="aldea-tao.html">Descubrir Aldea Tao →</a>
     </div>
-  </div>
-</div>
+  </article>
+</section>
 
 <!-- WAVE 5 -->
 <div class="wd" style="background:var(--earth)">
@@ -660,6 +662,8 @@
     <path id="w7a" fill="#080706" d="M0,35 C360,62 720,8 1080,36 C1250,50 1385,14 1440,35 L1440,70 L0,70 Z"/>
   </svg>
 </div>
+
+</main>
 
 <!-- FOOTER -->
 <footer>
