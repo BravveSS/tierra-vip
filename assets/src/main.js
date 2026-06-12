@@ -1845,4 +1845,26 @@ const CHAT_EN = new Map([
   if (init === 'en') apply('en');
 })();
 
+
+/* ════════════════════════════════════════
+   FAB WHATSAPP DINÁMICO — menú rápido
+   con mensaje pre-escrito por intención
+═══════════════════════════════════════ */
+(function(){
+  const fab = document.getElementById('wa-fab'), menu = document.getElementById('wa-menu');
+  if (!fab || !menu) return;
+  const MSGS = {
+    catalogo: ['Hola, quiero el catálogo de precios de los proyectos de Tierra 🌿', 'Hi, I would like the price catalog for the Tierra projects 🌿'],
+    visita:   ['Hola, quiero agendar una visita a la costa para conocer los proyectos.', 'Hi, I would like to book a visit to the coast to see the projects.'],
+    juridica: ['Hola, tengo dudas sobre la certeza jurídica y la escrituración de los lotes.', 'Hi, I have questions about legal certainty and the deeds of the lots.'],
+  };
+  fab.addEventListener('click', () => menu.classList.toggle('open'));
+  document.addEventListener('click', e => { if (!fab.contains(e.target) && !menu.contains(e.target)) menu.classList.remove('open'); });
+  menu.querySelectorAll('button[data-wa]').forEach(b => b.addEventListener('click', () => {
+    const m = MSGS[b.dataset.wa];
+    window.open('https://wa.me/529581087977?text=' + encodeURIComponent(window.__LANG === 'en' ? m[1] : m[0]), '_blank');
+    menu.classList.remove('open');
+  }));
+})();
+
 })();
