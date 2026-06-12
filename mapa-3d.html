@@ -174,7 +174,7 @@ if (!MOBILE){
 
 const scene = new THREE.Scene();
 scene.background = null;                       // deja ver el cielo de atardecer (CSS)
-scene.fog = new THREE.FogExp2(0x2a160a, 0.0016); // bruma cálida de atardecer
+scene.fog = new THREE.FogExp2(0x2a160a, 0.0019); // bruma costera cálida (profundidad aérea)
 
 const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 2000);
 
@@ -209,7 +209,7 @@ scene.add(sunBall);
   grad.addColorStop(0,'rgba(255,150,60,.9)'); grad.addColorStop(.4,'rgba(255,110,40,.35)'); grad.addColorStop(1,'rgba(255,90,30,0)');
   g.fillStyle = grad; g.fillRect(0,0,256,256);
   const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), transparent:true, depthWrite:false }));
-  halo.scale.set(420, 420, 1);
+  halo.scale.set(560, 560, 1);
   halo.position.copy(sunBall.position);
   scene.add(halo);
 }
@@ -313,6 +313,7 @@ hImg.onload = () => {
     document.body.appendChild(el);
     townEls.push({ el, pos: new THREE.Vector3(lon2x(tn.lon), visY(Math.max(sampleH(tn.lon, tn.lat), 4)) + 1.2, lat2z(tn.lat)) });
   });
+  paintOcean();          // batimetría real → color del agua
   ready = true;
 };
 
@@ -321,12 +322,30 @@ const oSeg = MOBILE ? 80 : 140;
 const oGeo = new THREE.PlaneGeometry(W * 1.04, D * 1.04, oSeg, Math.round(oSeg * D / W));
 oGeo.rotateX(-Math.PI / 2);
 const oBase = oGeo.attributes.position.array.slice();
-/* agua premium: oleaje translúcido sobre el mar fotográfico, con glint del atardecer
-   (specular alto + roughness mínima → camino de sol dorado sobre el Pacífico) */
+/* ── MAR PROTAGONISTA ──
+   Color por PROFUNDIDAD REAL (batimetría del DEM): turquesa en calas someras,
+   azul que se hunde mar adentro; glint dorado del sol; transparencia que deja
+   ver la arena fotográfica junto a la costa. (Se pinta al cargar el heightmap.) */
 const ocean = new THREE.Mesh(oGeo, new THREE.MeshStandardMaterial({
-  color:0x2e6478, roughness:.06, metalness:.78, transparent:true, opacity:.38 }));
+  color:0xffffff, vertexColors:true, roughness:.05, metalness:.62, transparent:true, opacity:.52 }));
 ocean.position.y = .25;
 scene.add(ocean);
+function paintOcean(){
+  const op = oGeo.attributes.position;
+  const cols = new Float32Array(op.count * 3);
+  const cTurq = new THREE.Color(0x57c0c2), cMid = new THREE.Color(0x1f6f86), cDeep = new THREE.Color(0x0c3146);
+  for (let i = 0; i < op.count; i++){
+    const u = oBase[i*3] / (W * 1.04) + .5, v = oBase[i*3+2] / (D * 1.04) + .5;
+    const lon = GEO.lonW + u * (GEO.lonE - GEO.lonW), lat = GEO.latN - v * (GEO.latN - GEO.latS);
+    const depth = -Math.min(0, sampleH(lon, lat));            // metros bajo el mar
+    let c;
+    if (depth < 8)       c = cTurq;                            // cala somera: turquesa
+    else if (depth < 35) c = cTurq.clone().lerp(cMid, (depth - 8) / 27);
+    else                 c = cMid.clone().lerp(cDeep, Math.min(1, (depth - 35) / 80));
+    cols[i*3] = c.r; cols[i*3+1] = c.g; cols[i*3+2] = c.b;
+  }
+  oGeo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+}
 
 /* ══════ TARJETA ══════ */
 const card = document.getElementById('card');
@@ -365,7 +384,7 @@ const center  = new THREE.Vector3(0, 3, -16);
 const tCenter = center.clone();                      // objetivo del encuadre (flyTo)
 const BASE_CENTER = center.clone(), BASE_RADIUS = MOBILE ? 195 : 150;
 let intro = REDUCED ? 1 : 0, introT0 = null;
-const iFrom = { theta:-1.9, phi:1.05, radius: 520 };
+const iFrom = { theta:-2.35, phi:.95, radius: 640 };   // apertura: barrido amplio desde el mar
 
 let drag = null;
 canvas.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY, t:tTheta, p:tPhi}; auto = false; });
@@ -443,7 +462,7 @@ function loop(ts){
     const op = oGeo.attributes.position;
     for (let i = 0; i < op.count; i++){
       const x = oBase[i*3], z = oBase[i*3+2];
-      op.setY(i, Math.sin(x * .07 + t * 1.0) * .5 + Math.sin(z * .09 + t * .75) * .38 + Math.sin((x+z) * .045 + t * 1.5) * .22);
+      op.setY(i, Math.sin(x * .07 + t * .55) * .26 + Math.sin(z * .09 + t * .42) * .2 + Math.sin((x+z) * .045 + t * .85) * .12);
     }
     op.needsUpdate = true;
     oGeo.computeVertexNormals();
