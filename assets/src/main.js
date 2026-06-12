@@ -1371,8 +1371,7 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
   const secs = [
     ['#hero','01 — Inicio','01 — Home'],['#manifesto','02 — Manifiesto','02 — Manifesto'],['#masterplan','03 — Masterplan','03 — Masterplan'],
     ['#sec-projects','04 — Proyectos','04 — Projects'],['#coming','05 — Próximamente','05 — Coming soon'],['#invertir','06 — Inversión','06 — Investment'],
-    ['#construccion','07 — Construcción','07 — Construction'],['#proceso','08 — Proceso','08 — Process'],['#comparador','09 — Comparador','09 — Compare'],
-    ['#g3d','10 — Galería','10 — Gallery'],['#confianza','11 — Confianza','11 — Trust'],['#entregados','12 — Entregados','12 — Delivered'],['#visitas','13 — Visitas','13 — Visits'],['#chat','14 — Contacto','14 — Contact'],
+    ['#construccion','07 — Construcción','07 — Construction'],['#g3d','08 — Galería','08 — Gallery'],['#confianza','09 — Confianza','09 — Trust'],['#chat','10 — Contacto','10 — Contact'],
   ];
   let curSec = null;
   window.__secLabelRefresh = () => { if (curSec) lbl.textContent = window.__LANG === 'en' ? curSec[2] : curSec[1]; };

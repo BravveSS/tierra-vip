@@ -215,3 +215,45 @@
   // aplicar idioma inicial DESPUÉS del split del título (para re-splitear traducido)
   if (initLang === 'en') apply('en');
 })();
+
+/* ── PORTADO: calculadora, visitas, comparador y timeline (con guards) ── */
+(function(){
+  'use strict';
+  const P = document.getElementById('calc-p'), E = document.getElementById('calc-e'), M = document.getElementById('calc-m');
+  if (P){
+    const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
+    const upd = () => {
+      const p = +P.value, e = +E.value, m = +M.value, eng = p*e/100, fin = p-eng;
+      document.getElementById('calc-p-v').textContent = fmt(p) + ' MXN';
+      document.getElementById('calc-e-v').textContent = e + '%';
+      document.getElementById('calc-m-v').textContent = m + ' meses';
+      document.getElementById('calc-eng').textContent = fmt(eng);
+      document.getElementById('calc-fin').textContent = fmt(fin);
+      document.getElementById('calc-out').textContent = fmt(fin/m);
+    };
+    [P,E,M].forEach(i => i.addEventListener('input', upd)); upd();
+  }
+  const form = document.getElementById('vis-form');
+  if (form){
+    const fEl = document.getElementById('vis-fecha');
+    if (fEl) fEl.min = new Date().toISOString().split('T')[0];
+    let tipo = 'presencial';
+    const tabs = [document.getElementById('vis-pres'), document.getElementById('vis-virt')].filter(Boolean);
+    tabs.forEach((t,i) => t.addEventListener('click', e => { e.preventDefault(); tipo = i===0 ? 'presencial' : 'virtual';
+      tabs.forEach(x => x.classList.remove('on')); t.classList.add('on'); }));
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const n = document.getElementById('vis-nombre').value.trim();
+      if (!n){ document.getElementById('vis-nombre').focus(); return; }
+      const w = document.getElementById('vis-wa').value.trim(), p2 = document.getElementById('vis-proj').value, f = fEl ? fEl.value : '';
+      let msg = 'Hola, soy ' + n + ' y quiero agendar una visita ' + tipo;
+      if (p2) msg += ' al proyecto ' + p2;
+      if (f) msg += '. Fecha preferida: ' + f;
+      if (w) msg += '. Mi WhatsApp: ' + w;
+      window.open('https://wa.me/529581087977?text=' + encodeURIComponent(msg + '. Vengo desde tierra.vip 🌿'), '_blank');
+    });
+  }
+  document.querySelectorAll('.cmp tbody tr[data-target]').forEach(tr => {
+    tr.addEventListener('click', () => { location.href = 'index.html' + tr.dataset.target.replace('#coming','#coming').replace('#','#'); });
+  });
+})();
