@@ -189,6 +189,7 @@ scene.background = null;                       // deja ver el cielo de atardecer
 scene.fog = new THREE.FogExp2(0x2a160a, 0.0019); // bruma costera cálida (profundidad aérea)
 
 const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 2000);
+let glintMesh = null, mistSprites = null;   // camino del sol y bruma (se crean con las luces)
 
 /* ATARDECER: sol naranja bajo sobre el Pacífico + cielo cálido + rebote frío del mar */
 scene.add(new THREE.HemisphereLight(0xff9a55, 0x1f1a14, .85));
@@ -255,7 +256,6 @@ scene.add(sunBall);
 /* ══════ TERRENO desde el heightmap satelital ══════ */
 let sampleH = () => 0;        // metros reales en (lon,lat) — listo tras cargar
 const spots = [], townEls = [];
-let glintMesh = null, mistSprites = null;   // camino del sol y bruma (sin globals)
 const hImg = new Image();
 hImg.src = 'assets/img/costa-heightmap.png';
 hImg.onload = () => {
