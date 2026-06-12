@@ -173,7 +173,7 @@ const TOWNS = [
 
 /* ══════ ESCENA ══════ */
 const canvas = document.getElementById('scene');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -232,12 +232,11 @@ scene.add(sunBall);
   lg.addColorStop(0,'rgba(255,140,50,0)'); lg.addColorStop(.5,'rgba(255,150,60,.55)'); lg.addColorStop(1,'rgba(255,140,50,0)');
   gg.fillStyle = lg; gg.fillRect(0,0,64,256);
   const glintTex = new THREE.CanvasTexture(gcv);
-  const glint = new THREE.Mesh(new THREE.PlaneGeometry(26, 330),
+  glintMesh = new THREE.Mesh(new THREE.PlaneGeometry(26, 330),
     new THREE.MeshBasicMaterial({ map:glintTex, transparent:true, opacity:.32, blending:THREE.AdditiveBlending, depthWrite:false }));
-  glint.rotation.x = -Math.PI/2;
-  glint.position.set(74, .6, 240);          // desde la costa hacia el sol
-  scene.add(glint);
-  window.__glint = glint;
+  glintMesh.rotation.x = -Math.PI/2;
+  glintMesh.position.set(74, .6, 240);      // desde la costa hacia el sol
+  scene.add(glintMesh);
 
   /* NIEBLA COSTERA: bancos suaves de bruma sobre las cañadas */
   const fcv = document.createElement('canvas'); fcv.width = 256; fcv.height = 64;
@@ -246,7 +245,7 @@ scene.add(sunBall);
   fgr.addColorStop(0,'rgba(255,210,170,.5)'); fgr.addColorStop(1,'rgba(255,210,170,0)');
   fg.fillStyle = fgr; fg.fillRect(0,0,256,64);
   const fogTex = new THREE.CanvasTexture(fcv);
-  window.__mists = [[-55,7,-30],[20,9,-52],[78,6,-18]].map(([x,y,z],i) => {
+  mistSprites = [[-55,7,-30],[20,9,-52],[78,6,-18]].map(([x,y,z],i) => {
     const m = new THREE.Sprite(new THREE.SpriteMaterial({ map:fogTex, transparent:true, opacity:.10, depthWrite:false }));
     m.scale.set(130, 26, 1); m.position.set(x, y, z); m.userData.i = i;
     scene.add(m); return m;
@@ -256,6 +255,7 @@ scene.add(sunBall);
 /* ══════ TERRENO desde el heightmap satelital ══════ */
 let sampleH = () => 0;        // metros reales en (lon,lat) — listo tras cargar
 const spots = [], townEls = [];
+let glintMesh = null, mistSprites = null;   // camino del sol y bruma (sin globals)
 const hImg = new Image();
 hImg.src = 'assets/img/costa-heightmap.png';
 hImg.onload = () => {
@@ -286,7 +286,8 @@ hImg.onload = () => {
   }
   tGeo.computeVertexNormals();
   /* FOTOGRAFÍA SATELITAL REAL como piel del terreno (misma zona, alineación exacta) */
-  const sat = new THREE.TextureLoader().load('assets/img/costa-satelite.jpg');
+  /* móvil: textura 1024px (~4x menos memoria GPU) */
+  const sat = new THREE.TextureLoader().load(MOBILE ? 'assets/img/costa-satelite-m.jpg' : 'assets/img/costa-satelite.jpg');
   sat.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const terrain = new THREE.Mesh(tGeo, new THREE.MeshStandardMaterial({ map: sat, roughness:.93, metalness:0 }));
   terrain.castShadow = !MOBILE; terrain.receiveShadow = !MOBILE;   // el relieve se auto-sombrea: sombras largas reales
@@ -512,7 +513,7 @@ function loop(ts){
       op.setY(i, Math.sin(x * .07 + t * .42) * .17 + Math.sin(z * .09 + t * .33) * .13 + Math.sin((x+z) * .045 + t * .62) * .08);
     }
     op.needsUpdate = true;
-    oGeo.computeVertexNormals();
+    if (!MOBILE) oGeo.computeVertexNormals();   // recomputar normales cada frame es caro: solo desktop
   }
 
   // revelación gradual: los proyectos emergen uno a uno tras la apertura
@@ -538,11 +539,11 @@ function loop(ts){
     if (visible){ s.tag.style.left = sx + 'px'; s.tag.style.top = sy + 'px'; }
   });
   // bruma viva: deriva lentísima + brillo del camino del sol
-  if (window.__mists && !REDUCED) window.__mists.forEach(m => {
+  if (mistSprites && !REDUCED) mistSprites.forEach(m => {
     m.position.x += Math.sin(t * .05 + m.userData.i * 2.1) * .012;
     m.material.opacity = .085 + Math.sin(t * .1 + m.userData.i) * .025;
   });
-  if (window.__glint) window.__glint.material.opacity = .28 + Math.sin(t * .35) * .06;
+  if (glintMesh) glintMesh.material.opacity = .28 + Math.sin(t * .35) * .06;
 
   townEls.forEach(tn => {
     v3.copy(tn.pos); v3.project(camera);
