@@ -105,12 +105,12 @@ const MOBILE  = matchMedia('(max-width:760px)').matches || (navigator.hardwareCo
 /* ══════ GEOGRAFÍA REAL ══════
    Heightmap: assets/img/costa-heightmap.png — tiles satelitales (AWS Terrain, z13)
    Bounds exactos del raster y rango de elevación decodificado: */
-const GEO = { minH:-2263, maxH:401, lonW:-96.6357421875, lonE:-96.416015625, latN:15.749962572748762, latS:15.580710739162129 };
+const GEO = { minH:-1200, maxH:401, lonW:-96.6357421875, lonE:-96.43798828125, latN:15.728813770533975, latS:15.601874876739803 };
 const KM_X = 111.32 * Math.cos(15.66 * Math.PI/180) * (GEO.lonE - GEO.lonW);  // ≈ 23.6 km
 const KM_Z = 111.32 * (GEO.latN - GEO.latS);                                   // ≈ 18.8 km
 const SCALE = 10;                       // 1 unidad = 100 m
 const W = KM_X * SCALE, D = KM_Z * SCALE;
-const VEXAG = 2.6;                      // exageración vertical de la tierra (visualización estándar)
+const VEXAG = 3.2;                      // exageración vertical de la tierra (drama cinematográfico)
 const lon2x = lon => ((lon - GEO.lonW) / (GEO.lonE - GEO.lonW) - .5) * W;
 const lat2z = lat => ((GEO.latN - lat) / (GEO.latN - GEO.latS) - .5) * D;
 
@@ -191,9 +191,9 @@ hImg.onload = () => {
   sampleH = (lon, lat) => meters((lon - GEO.lonW) / (GEO.lonE - GEO.lonW), (GEO.latN - lat) / (GEO.latN - GEO.latS));
 
   /* altura visual: tierra exagerada; fondo marino comprimido para que la costa luzca */
-  const visY = m => m >= 0 ? m / 100 * VEXAG : Math.max(m, -600) / 100 * .55;
+  const visY = m => m >= 0 ? m / 100 * VEXAG : Math.max(m, -500) / 100 * .5;
 
-  const SEG_X = MOBILE ? 160 : 300;
+  const SEG_X = MOBILE ? 200 : 420;
   const SEG_Z = Math.round(SEG_X * D / W);
   const tGeo = new THREE.PlaneGeometry(W, D, SEG_X, SEG_Z);
   tGeo.rotateX(-Math.PI / 2);
