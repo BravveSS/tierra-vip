@@ -173,16 +173,30 @@ const TOWNS = [
 
 /* ══════ ESCENA ══════ */
 const canvas = document.getElementById('scene');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true, powerPreference: 'high-performance' });
+const loadingEl = document.getElementById('loading');
+function fail(msg){
+  if (!loadingEl) return;
+  loadingEl.innerHTML = '<div class="t">' + msg + '</div><div class="s"><a href="index.html" style="color:var(--gold)">← Volver al sitio</a></div>';
+}
+
+// Guard 1: sin WebGL no hay nada que hacer — mensaje claro en vez de loader infinito
+if (!window.WebGLRenderingContext){ fail('Tu navegador no soporta la vista 3D.'); throw new Error('no WebGL'); }
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true, powerPreference: 'high-performance' });
+} catch(e){ fail('No se pudo iniciar la vista 3D en este dispositivo.'); throw e; }
 renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.3;
-/* sombras largas de golden hour (solo desktop, suaves) */
+/* sombras de golden hour — más ligeras (1024) y solo desktop */
 if (!MOBILE){
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 }
+// Guard 2: si la GPU pierde el contexto (sobrecarga), avisar en vez de quedar en negro
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); fail('La vista 3D se reinició. Recarga la página.'); });
 
 const scene = new THREE.Scene();
 scene.background = null;                       // deja ver el cielo de atardecer (CSS)
@@ -197,7 +211,7 @@ const sun = new THREE.DirectionalLight(0xFF8A3D, 2.4);
 sun.position.set(60, 38, 320);                  // bajo, desde el mar (sur)
 if (!MOBILE){
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(1024, 1024);
   const sc = sun.shadow.camera;
   sc.left = -130; sc.right = 130; sc.top = 110; sc.bottom = -110; sc.far = 700;
   sun.shadow.bias = -0.0006;
@@ -257,8 +271,10 @@ scene.add(sunBall);
 let sampleH = () => 0;        // metros reales en (lon,lat) — listo tras cargar
 const spots = [], townEls = [];
 const hImg = new Image();
+hImg.onerror = () => fail('No se pudo cargar el terreno. Revisa tu conexión.');
 hImg.src = 'assets/img/costa-heightmap.png';
 hImg.onload = () => {
+ try {
   const cv = document.createElement('canvas');
   cv.width = hImg.width; cv.height = hImg.height;
   const cx = cv.getContext('2d');
@@ -321,7 +337,7 @@ hImg.onload = () => {
     veg.count = placed;
     veg.instanceMatrix.needsUpdate = true;
     if (veg.instanceColor) veg.instanceColor.needsUpdate = true;
-    veg.castShadow = !MOBILE;
+    // sin castShadow: las sombras de 1400 instancias son lo más caro y casi no se notan
     scene.add(veg);
   }
 
@@ -357,6 +373,7 @@ hImg.onload = () => {
   });
   paintOcean();          // batimetría real → color del agua
   ready = true;
+ } catch(err){ console.error(err); fail('Hubo un problema al construir el mapa. Recarga la página.'); }
 };
 
 /* ══════ OCÉANO en el nivel del mar real (y=0) ══════ */
@@ -557,6 +574,8 @@ function loop(ts){
 }
 requestAnimationFrame(loop);
 if (REDUCED) document.getElementById('hud').classList.add('on');   // sin intro: texto visible directo
+// Red de seguridad: si en 14s el terreno no terminó de cargar, no dejar el loader infinito
+setTimeout(() => { if (!ready && loadingEl && !loadingEl.querySelector('a')) loadingEl.classList.add('off'); }, 14000);
 
 /* click directo en los orbes */
 const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();

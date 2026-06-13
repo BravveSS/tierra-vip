@@ -261,4 +261,23 @@
       else location.href = 'index.html' + target;             // los proyectos viven en el index
     });
   });
+
+  /* ── Animación de entrada para las secciones movidas desde la landing ── */
+  if (!reduced){
+    const targets = [];
+    ['#proceso','#financiamiento','#comparador','#entregados','#visitas'].forEach(sel => {
+      const sec = document.querySelector(sel); if (!sec) return;
+      sec.querySelectorAll(':scope > div > *, :scope > .wrap > *, .tl-step, .cmp-scroll, .vis-box').forEach(el => {
+        if (el.dataset.animed) return; el.dataset.animed = '1';
+        el.style.opacity = '0'; el.style.transform = 'translateY(24px)';
+        el.style.transition = 'opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)';
+        targets.push(el);
+      });
+    });
+    let n = 0;
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting){ e.target.style.transitionDelay = Math.min(n++ % 6 * .06, .36) + 's'; e.target.style.opacity = '1'; e.target.style.transform = 'none'; io.unobserve(e.target); }
+    }), { threshold: .12 });
+    targets.forEach(el => io.observe(el));
+  }
 })();
