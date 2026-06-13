@@ -169,3 +169,58 @@ section{position:relative}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
 /* ── PORTADO DESDE LA LANDING (proceso, comparador, calculadora, visitas) ── */
+/* PROCESO DE COMPRA (timeline) */
+#proceso{background:var(--dark);padding:120px 48px;overflow:hidden}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-top:64px;position:relative}
+.tl::before{content:'';position:absolute;top:7px;left:0;right:0;height:1px;background:rgba(201,169,110,.2)}
+.tl-step{padding:0 18px 0 0}
+.tl-step .dot{width:15px;height:15px;border-radius:50%;background:var(--black);border:1px solid var(--gold);position:relative;z-index:1;margin-bottom:20px}
+.tl-step .dot::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--gold)}
+.tl-step .num{font-family:var(--fh);font-size:15px;color:var(--gold-dim);letter-spacing:.1em}
+.tl-step h4{font-family:var(--fh);font-size:21px;font-weight:400;color:var(--cream);margin:6px 0 8px}
+.tl-step p{font-family:var(--fb);font-size:12.5px;line-height:1.65;color:rgba(240,234,224,.5)}
+@media(max-width:900px){.tl{grid-template-columns:1fr 1fr;gap:32px 20px}.tl::before{display:none}}
+@media(max-width:520px){.tl{grid-template-columns:1fr}}
+
+/* COMPARADOR DE PROYECTOS */
+#comparador{background:var(--black);padding:120px 48px}
+.cmp-scroll{overflow-x:auto;margin-top:52px;-webkit-overflow-scrolling:touch}
+.cmp{width:100%;min-width:760px;border-collapse:collapse}
+.cmp th,.cmp td{padding:18px 20px;text-align:left;border-bottom:1px solid rgba(201,169,110,.12);font-family:var(--fb);font-size:13.5px;font-weight:300;color:rgba(240,234,224,.7)}
+.cmp th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:400}
+.cmp td:first-child{font-family:var(--fh);font-size:19px;color:var(--cream)}
+.cmp tr{transition:background .25s;cursor:pointer}
+.cmp tbody tr:hover{background:rgba(201,169,110,.06)}
+.cmp .tag{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(201,169,110,.4);color:var(--gold);border-radius:14px;padding:3px 10px}
+.cmp .tag-sold{background:var(--gold);color:var(--black);font-weight:500}
+
+/* TOURS / VISITAS */
+#visitas{background:var(--dark);padding:120px 48px}
+.vis-box{max-width:680px;margin:48px auto 0;border:1px solid rgba(201,169,110,.22);border-radius:10px;padding:40px;background:rgba(201,169,110,.04)}
+.vis-tabs{display:flex;gap:10px;margin-bottom:26px}
+.vis-tab{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:10px 20px;border:1px solid rgba(201,169,110,.32);border-radius:22px;color:rgba(240,234,224,.6);cursor:pointer;transition:all .25s;background:none}
+.vis-tab.on{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.vis-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.vis-form .full{grid-column:1/-1}
+.vis-form input,.vis-form select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.2);color:var(--cream);padding:13px 15px;border-radius:8px;font-family:var(--fb);font-size:13.5px;font-weight:300;outline:none;transition:border-color .2s}
+.vis-form input:focus,.vis-form select:focus{border-color:rgba(201,169,110,.5)}
+.vis-form input::placeholder{color:var(--muted)}
+.vis-form select,.vis-form input[type=date]{color-scheme:dark}
+.vis-form select option{background:#0F0E0D;color:#F0EAE0}
+.vis-send{grid-column:1/-1;font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:var(--black);padding:15px;border-radius:8px;transition:background .25s;border:none;cursor:pointer}
+.vis-send:hover{background:var(--cream)}
+@media(max-width:600px){.vis-form{grid-template-columns:1fr}.vis-box{padding:26px}}
+
+/* CALCULADORA DE ENGANCHE */
+.calc{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+.calc-l label{display:flex;justify-content:space-between;font-family:var(--fb);font-size:12px;letter-spacing:.08em;color:rgba(240,234,224,.7);margin:22px 0 10px}
+.calc-l label b{color:var(--gold);font-weight:400}
+.calc-l input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:2px;background:rgba(201,169,110,.25);border-radius:2px;outline:none}
+.calc-l input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:none}
+.calc-l input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:none}
+.calc-r{border:1px solid rgba(201,169,110,.2);border-radius:8px;padding:30px;text-align:center;background:rgba(8,7,6,.5)}
+.calc-r .lbl{font-family:var(--fb);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.calc-r .big{font-family:var(--fh);font-size:clamp(34px,4.5vw,52px);color:var(--gold);margin:10px 0 4px}
+.calc-r .row{display:flex;justify-content:space-between;font-family:var(--fb);font-size:12.5px;color:rgba(240,234,224,.6);padding:9px 0;border-top:1px solid rgba(201,169,110,.1)}
+.calc-disc{grid-column:1/-1;font-family:var(--fb);font-size:11px;line-height:1.65;color:rgba(240,234,224,.38);font-style:italic}
+@media(max-width:760px){.calc{grid-template-columns:1fr}}

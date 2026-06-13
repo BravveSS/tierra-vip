@@ -254,6 +254,11 @@
     });
   }
   document.querySelectorAll('.cmp tbody tr[data-target]').forEach(tr => {
-    tr.addEventListener('click', () => { location.href = 'index.html' + tr.dataset.target.replace('#coming','#coming').replace('#','#'); });
+    tr.addEventListener('click', () => {
+      const target = tr.dataset.target;                       // p.ej. #pc-az, #coming, #entregados
+      const local = document.querySelector(target);           // ¿existe en esta misma página?
+      if (local) local.scrollIntoView({ behavior: 'smooth' });
+      else location.href = 'index.html' + target;             // los proyectos viven en el index
+    });
   });
 })();
