@@ -717,3 +717,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 #wa-menu button:hover{background:rgba(176,122,79,.14)}
 #wa-menu button span{color:var(--gold)}
 @media(max-width:768px){#wa-fab{bottom:78px;right:16px;width:50px;height:50px}#wa-menu{right:16px;bottom:138px;width:calc(100vw - 32px);max-width:280px}}
+
+/* ════════════════════════════════════════
+   MEJORAS DE COLOR — "al 100%"
+═══════════════════════════════════════ */
+/* #1 · SECCIÓN CLARA DE RESPIRO (contraste editorial premium) */
+#invertir.light{background:var(--cream)}
+#invertir.light .inv-grid{border-color:rgba(33,27,22,.16)}
+#invertir.light .inv-item{border-color:rgba(33,27,22,.12);background:rgba(33,27,22,.018)}
+#invertir.light .inv-item h3{color:#A0612F}                 /* terracota rico sobre crema */
+#invertir.light .inv-item p{color:rgba(33,27,22,.74)}        /* tierra legible */
+@media(max-width:900px){#invertir.light .inv-item{border-color:rgba(33,27,22,.12)}}
+
+/* #2 · CTA PREMIUM — terracota con peso y sombra cálida, hover oro */
+.btn-go,.btn-solid,.vis-send,.nlw-form button,.wait-form .btn-solid{
+  box-shadow:0 6px 22px rgba(176,122,79,.26);
+}
+.btn-go:hover,.btn-solid:hover,.vis-send:hover,.nlw-form button:hover{
+  box-shadow:0 10px 30px rgba(214,182,122,.42);
+}
+
+/* #3 · VELO CÁLIDO sutil en imágenes — cohesión con la paleta tierra */
+.piw img,.cs-card img,.gcard img,.ptb img{filter:saturate(1.04) sepia(.05) brightness(1.01)}
