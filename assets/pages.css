@@ -4,9 +4,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
 :root{
-  /* PALETA: verde bosque + marfil + oro suave + negro carbón */
-  --black:#15130F; --dark:#1C2A20; --earth:#24412E; --cream:#F3EEE2;
-  --gold:#CBAE79;  --gold-dim:#8B6F47; --green:#2E5A3C; --muted:#8A8A7C;
+  /* PALETA: negro carbón + verde bosque + marfil + oro suave · CTA esmeralda/oro */
+  --black:#0F1113; --dark:#163128; --earth:#1B3A2D; --cream:#F5F0E8;
+  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#2E6B57; --muted:#8A8A7C;
+  --emerald:#2E6B57; --gold-hi:#D6B67A;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
 }
@@ -107,9 +108,10 @@ section{position:relative}
 /* ── BOTONES ── */
 .btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--fb);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
   padding:16px 30px;border:1px solid var(--gold);color:var(--gold);transition:all .3s;cursor:pointer}
-.btn:hover{background:var(--gold);color:var(--black)}
-.btn-solid{background:var(--gold);color:var(--black)}
-.btn-solid:hover{background:var(--cream);border-color:var(--cream)}
+.btn:hover{background:var(--gold-hi);color:var(--black);border-color:var(--gold-hi)}
+/* CTA principal: verde esmeralda → hover oro premium */
+.btn-solid{background:var(--emerald);color:var(--cream);border-color:var(--emerald)}
+.btn-solid:hover{background:var(--gold-hi);color:var(--black);border-color:var(--gold-hi)}
 .cta-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:48px}
 
 /* ── DIVISOR ── */
@@ -208,8 +210,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .vis-form input::placeholder{color:var(--muted)}
 .vis-form select,.vis-form input[type=date]{color-scheme:dark}
 .vis-form select option{background:#0F0E0D;color:#F0EAE0}
-.vis-send{grid-column:1/-1;font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:var(--black);padding:15px;border-radius:8px;transition:background .25s;border:none;cursor:pointer}
-.vis-send:hover{background:var(--cream)}
+.vis-send{grid-column:1/-1;font-family:var(--fb);font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:var(--emerald);color:var(--cream);padding:15px;border-radius:8px;transition:background .25s;border:none;cursor:pointer}
+.vis-send:hover{background:var(--gold-hi);color:var(--black)}
 @media(max-width:600px){.vis-form{grid-template-columns:1fr}.vis-box{padding:26px}}
 
 /* CALCULADORA DE ENGANCHE */

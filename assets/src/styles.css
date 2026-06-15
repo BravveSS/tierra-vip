@@ -1,8 +1,9 @@
 
 :root {
-  /* PALETA: verde bosque + marfil + oro suave + negro carbón */
-  --black:#15130F; --dark:#1C2A20; --earth:#24412E; --cream:#F3EEE2;
-  --gold:#CBAE79;  --gold-dim:#8B6F47; --green:#2E5A3C; --muted:#8A8A7C;
+  /* PALETA: negro carbón + verde bosque + marfil + oro suave · CTA esmeralda/oro */
+  --black:#0F1113; --dark:#163128; --earth:#1B3A2D; --cream:#F5F0E8;
+  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#2E6B57; --muted:#8A8A7C;
+  --emerald:#2E6B57; --gold-hi:#D6B67A;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
 }
@@ -121,12 +122,12 @@ body.menu-open{overflow:hidden}
   pointer-events:all;opacity:0;transform:translateY(18px);
 }
 .btn-go{
-  font-family:var(--fb);font-size:11px;font-weight:400;
+  font-family:var(--fb);font-size:11px;font-weight:500;
   letter-spacing:.16em;text-transform:uppercase;
-  color:var(--gold);border:1px solid rgba(201,169,110,.52);
-  padding:13px 28px;transition:background .28s,color .28s,border-color .28s;
+  color:var(--cream);background:var(--emerald);border:1px solid var(--emerald);
+  padding:14px 30px;transition:background .28s,color .28s,border-color .28s;
 }
-.btn-go:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.btn-go:hover{background:var(--gold-hi);color:var(--black);border-color:var(--gold-hi)}
 .btn-arrow{
   font-family:var(--fb);font-size:11px;font-weight:400;
   letter-spacing:.14em;text-transform:uppercase;
@@ -605,8 +606,8 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
 .nlw-form input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.22);color:var(--cream);padding:14px 16px;border-radius:8px;font-family:var(--fb);font-size:13.5px;outline:none;transition:border-color .2s}
 .nlw-form input:focus{border-color:rgba(201,169,110,.55)}
 .nlw-form input.err{border-color:#c25b4e}
-.nlw-form button{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--gold);color:var(--black);padding:0 24px;border-radius:8px;transition:background .25s;flex-shrink:0}
-.nlw-form button:hover{background:var(--cream)}
+.nlw-form button{font-family:var(--fb);font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--emerald);color:var(--cream);padding:0 24px;border-radius:8px;transition:background .25s;flex-shrink:0}
+.nlw-form button:hover{background:var(--gold-hi);color:var(--black)}
 .nlw-ok{font-family:var(--fb);font-size:12.5px;color:var(--gold);margin-top:12px;opacity:0;transition:opacity .3s}
 .nlw-ok.show{opacity:1}
 @media(max-width:520px){.nlw-form{flex-direction:column}.nlw-form button{padding:14px}}
