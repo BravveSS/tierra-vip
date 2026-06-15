@@ -38,7 +38,7 @@
     ['Centro de bienestar holístico','Holistic wellness center'],['Terrenos frente al mar','Oceanfront land'],
     ['Comunidad sobre los acantilados','Community on the cliffs'],['Vida en comunidad','Community living'],
     ['Departamentos frente al mar','Oceanfront apartments'],['Casas reales, de clientes reales.','Real homes, for real clients.'],
-    ['Arquitectura en armonía con la naturaleza','Architecture in harmony with nature'],
+    ['Hogares que pertenecen a su entorno.','Homes that belong to their landscape.'],
     // eyebrows
     ['Mazunte · Oaxaca','Mazunte · Oaxaca'],['Costa Oaxaqueña','Oaxacan Coast'],['Costa de Oaxaca','Oaxaca Coast'],
     ['San Antonio · Oaxaca · Próximamente','San Antonio · Oaxaca · Coming soon'],['Zipolite · Oaxaca · Preventa','Zipolite · Oaxaca · Pre-sale'],
@@ -62,7 +62,7 @@
     ['Construye tu casa frente al mar, con acceso a Playa Tololote y Playa La Boquilla — calas salvajes que no aparecen en los mapas.','Build your house facing the sea, with access to Tololote and La Boquilla — wild coves that appear on no map.'],
     ['Acceso a Playa Tololote','Access to Tololote Beach'],['Acceso a Playa La Boquilla','Access to La Boquilla Beach'],
     ['Vista panorámica al Pacífico','Panoramic Pacific views'],['Acantilados sobre el océano','Cliffs over the ocean'],
-    ['Proyecto exclusivo y limitado','Exclusive limited project'],['Escrituración garantizada','Guaranteed deeds'],
+    ['Proyecto exclusivo y limitado','Exclusive limited project'],
     ['Un lugar que todavía es salvaje','A place that is still wild'],
     ['Aldea Tao es un proyecto limitado. Solicita información y disponibilidad antes de que se agote.','Aldea Tao is a limited project. Request information and availability before it sells out.'],
     // SERENA
@@ -100,7 +100,7 @@
     ['Cada proyecto es un ecosistema con identidad propia: impulsa la economía local, respeta el entorno natural y construye comunidad. Somos una empresa confiable que acompaña al cliente en todo el proceso — invertir con nosotros también significa transformar el futuro.','Each project is an ecosystem with its own identity: it boosts the local economy, respects nature and builds community. We are a trusted company that walks with the client through the whole process — investing with us also means transforming the future.'],
     ['Cada proyecto nace de escuchar la tierra: entender su topografía, su historia, su luz. Diseñamos lugares para vivir distinto — espacios que respetan el terreno, aprovechan la luz y conviven con el entorno que los rodea.','Every project is born from listening to the land: understanding its topography, its history, its light. We design places to live differently — spaces that respect the terrain, use the light and coexist with their surroundings.'],
     ['Arquitectura de autor para cada terreno','Signature architecture for every lot'],['Materiales nobles y mano de obra local','Noble materials and local craftsmanship'],
-    ['Respaldo legal y escrituración garantizada','Legal backing and guaranteed deeds'],['Acompañamiento de principio a fin','Support from start to finish'],
+    ['Respaldo legal','Legal backing'],['Acompañamiento de principio a fin','Support from start to finish'],
     ['Plusvalía en la Costa de Oaxaca','Appreciation on the Oaxaca Coast'],['Comunidad y legado a largo plazo','Community and long-term legacy'],
     ['Clientes felices','Happy clients'],['Años de trayectoria','Years of experience'],['Proyectos activos','Active projects'],
     ['Conoce nuestros proyectos','Discover our projects'],

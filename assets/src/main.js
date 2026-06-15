@@ -146,7 +146,7 @@ const ldTl = gsap.timeline({
 // Momento de misterio: la frase aparece letra a letra antes del logo
 (function(){
   const ph = document.getElementById('ld-phrase');
-  const PHRASE = 'Hay lugares que aún no aparecen en los mapas.';
+  const PHRASE = window.__LANG === 'en' ? 'Where the jungle meets the sea, Tierra begins.' : 'Donde la selva se encuentra con el mar, comienza la Tierra.';
   if (!ph || window.__REDUCED){ if (ph) ph.textContent = PHRASE; return; }
   let i = 0;
   const iv = setInterval(() => {
@@ -233,7 +233,7 @@ function startHero(){
 // ── ESCENA 1: hero pinned — la cámara "entra" en el paisaje al scrollear ──
 if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
   gsap.timeline({
-    scrollTrigger:{ trigger:'#hero', start:'top top', end:'+=85%', pin:true, scrub:.6, anticipatePin:1,
+    scrollTrigger:{ trigger:'#hero', start:'top top', end:'+=42%', pin:true, scrub:.6, anticipatePin:1,
       onLeave(){ gsap.to('.lbox',{height:0,duration:.6,ease:'power2.out'}); },
       onEnterBack(){ gsap.to('.lbox',{height:'6vh',duration:.6,ease:'power2.out'}); } }
   })
@@ -282,21 +282,13 @@ gsap.to('#mf-ri',{scaleX:1,duration:.85,ease:'power2.inOut',
 gsap.to('#mf-ro',{scaleX:1,duration:.85,ease:'power2.inOut',
   scrollTrigger:{trigger:'#manifesto',start:'bottom 85%'}});
 
-// ── ESCENA 2: manifiesto pinned — cada frase emerge mientras se scrubea ──
-if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
-  gsap.timeline({
-    scrollTrigger:{ trigger:'#manifesto', start:'top top', end:'+=110%', pin:true, scrub:.7, anticipatePin:1 }
-  })
-  .to('#mfl1',{clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',ease:'power2.out',duration:1}, 0)
-  .to('#mfl2',{clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',ease:'power2.out',duration:1}, .8)
-  .to('#mfl3',{clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)',ease:'power2.out',duration:1}, 1.6)
-  .fromTo('#manifesto > p',{opacity:0,y:26},{opacity:1,y:0,ease:'power2.out',duration:1}, 2.3);
-} else {
-  ['#mfl1','#mfl2','#mfl3'].forEach((s,i)=>{
-    gsap.to(s,{ clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)', duration:.92, ease:'power3.out',
-      scrollTrigger:{trigger:s,start:'top 82%'}, delay:i*.22 });
-  });
-}
+// ── MANIFIESTO: reveals secuenciales SIN pin (sin huecos de scroll, texto completo) ──
+['#mfl1','#mfl2','#mfl3'].forEach((s,i)=>{
+  gsap.to(s,{ clipPath:'polygon(0 0%,100% 0%,100% 100%,0 100%)', duration:.92, ease:'power3.out',
+    scrollTrigger:{trigger:s,start:'top 84%'}, delay:i*.18 });
+});
+gsap.fromTo('#manifesto > p',{opacity:0,y:24},{opacity:1,y:0,duration:.9,ease:'power3.out',
+  scrollTrigger:{trigger:'#manifesto > p',start:'top 86%'}});
 
 // Números de sección gigantes: profundidad extra (cada capa a su velocidad)
 if (!window.__REDUCED){
@@ -1000,7 +992,7 @@ function aipBuildReply(intent, userMsg) {
       'Los precios dependen del proyecto y el lote específico. Tenemos opciones desde inversiones accesibles hasta terrenos premium en acantilado.\n\n¿Cuál de nuestros proyectos te llama más la atención — Azimut, Nabani o Aldea Tao?'
     ],
     inversion: [
-      'La Costa de Oaxaca es una de las zonas con mayor plusvalía en México — todavía con precios accesibles antes del boom turístico masivo.\n\nNuestros proyectos ofrecen:\n✦ Plusvalía del terreno a largo plazo\n✦ Renta vacacional si construyes (Mazunte/Zipolite son destinos en auge)\n✦ Escrituración garantizada y respaldo legal completo\n\n¿Buscas invertir para construir, rentar o revender?'
+      'La Costa de Oaxaca es una de las zonas con mayor plusvalía en México — todavía con precios accesibles antes del boom turístico masivo.\n\nNuestros proyectos ofrecen:\n✦ Plusvalía del terreno a largo plazo\n✦ Renta vacacional si construyes (Mazunte/Zipolite son destinos en auge)\n✦ Acompañamiento y respaldo legal completo\n\n¿Buscas invertir para construir, rentar o revender?'
     ],
     proceso: [
       'El proceso de compra con Tierra Desarrollos es seguro y acompañado:\n\n1️⃣ Asesoría inicial — conocemos tu perfil\n2️⃣ Visita al terreno (presencial o virtual)\n3️⃣ Firma de promesa de compraventa\n4️⃣ Plan de pago acordado\n5️⃣ Escrituración notarial\n6️⃣ Entrega de terreno\n\nTodo con acompañamiento legal desde el día uno. ¿Tienes alguna duda sobre alguno de estos pasos?'
@@ -1167,7 +1159,7 @@ if (window.__PERF_LOW) {
   const DATA = {
     azimut:{n:'Azimut', l:'Mazunte · Oaxaca', l_en:'Mazunte · Oaxaca', img:'assets/img/azimut/renderazimutyogashala.webp'},
     serena:{n:'Serena', l:'San Antonio · Próximamente', l_en:'San Antonio · Coming soon', img:'assets/img/serena/renderserena-2.webp'},
-    nabani:{n:'Nabani', l:'Costa Oaxaqueña', l_en:'Oaxacan Coast', img:'assets/img/nabani/dronnabani.webp'},
+    nabani:{n:'Nabani', l:'Puerto Ángel', l_en:'Puerto Ángel', img:'assets/img/nabani/dronnabani.webp'},
     kora:  {n:'Depas Kora', l:'Zipolite · Preventa', l_en:'Zipolite · Pre-sale', img:'assets/img/kora/rs-w-719-h-836.webp'},
     aldea: {n:'Aldea Tao', l:'La Boquilla', l_en:'La Boquilla', img:'assets/img/aldea-tao/dronaldeatao.webp'},
   };
@@ -1371,7 +1363,7 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
   const secs = [
     ['#hero','01 — Inicio','01 — Home'],['#manifesto','02 — Manifiesto','02 — Manifesto'],['#masterplan','03 — Masterplan','03 — Masterplan'],
     ['#sec-projects','04 — Proyectos','04 — Projects'],['#coming','05 — Próximamente','05 — Coming soon'],['#invertir','06 — Inversión','06 — Investment'],
-    ['#construccion','07 — Construcción','07 — Construction'],['#g3d','08 — Galería','08 — Gallery'],['#confianza','09 — Confianza','09 — Trust'],['#chat','10 — Contacto','10 — Contact'],
+    ['#construccion','07 — Construcción','07 — Construction'],['#proceso','08 — Proceso','08 — Process'],['#g3d','09 — Galería','09 — Gallery'],['#confianza','10 — Confianza','10 — Trust'],['#chat','11 — Contacto','11 — Contact'],
   ];
   let curSec = null;
   window.__secLabelRefresh = () => { if (curSec) lbl.textContent = window.__LANG === 'en' ? curSec[2] : curSec[1]; };
@@ -1723,12 +1715,12 @@ const CHAT_EN = new Map([
     ['.calc-disc','* Reference figures only, without interest or fees, to size your plan. Real prices and terms are confirmed by an advisor per project and availability.'],
     // proceso
     ['#proceso h2','From the first call <em style="color:var(--gold)">to the keys.</em>','h'],
-    ['.tl-step:nth-child(1) h4','Initial consultation'],['.tl-step:nth-child(2) h4','Site visit'],['.tl-step:nth-child(3) h4','Purchase agreement'],['.tl-step:nth-child(4) h4','Payment plan'],['.tl-step:nth-child(5) h4','Notarized deed'],['.tl-step:nth-child(6) h4','Delivery'],
+    ['.tl-step:nth-child(1) h4','Initial consultation'],['.tl-step:nth-child(2) h4','Site visit'],['.tl-step:nth-child(3) h4','Purchase agreement'],['.tl-step:nth-child(4) h4','Payment plan'],['.tl-step:nth-child(5) h4','Possession title'],['.tl-step:nth-child(6) h4','Delivery'],
     ['.tl-step:nth-child(1) p','We get to know your profile, your timing and what you are looking for.'],
     ['.tl-step:nth-child(2) p','In person or virtual — walk the lot before deciding.'],
     ['.tl-step:nth-child(3) p','You sign with legal support from the first document.'],
     ['.tl-step:nth-child(4) p','Down payment and installments adapted to you.'],
-    ['.tl-step:nth-child(5) p','Notarized and guaranteed. Your patrimony is protected.'],
+    ['.tl-step:nth-child(5) p','In order and supported. Your patrimony is protected.'],
     ['.tl-step:nth-child(6) p','The land is yours. And if you want, Tierra builds it for you.'],
     // comparador
     ['#comparador h2','Which one is <em style="color:var(--gold)">your project?</em>','h'],
