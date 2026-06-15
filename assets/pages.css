@@ -4,8 +4,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
 :root{
-  --black:#080706; --dark:#0F0E0D; --earth:#1C1A17; --cream:#F0EAE0;
-  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#1E2B1F; --muted:#6B6560;
+  --black:#0A130E; --dark:#0F1A13; --earth:#18251B; --cream:#F0EAE0;
+  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#1E2B1F; --muted:#7E867A;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
 }

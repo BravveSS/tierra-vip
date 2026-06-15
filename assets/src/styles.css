@@ -1,7 +1,7 @@
 
 :root {
-  --black:#080706; --dark:#0F0E0D; --earth:#1C1A17; --cream:#F0EAE0;
-  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#1E2B1F; --muted:#6B6560;
+  --black:#0A130E; --dark:#0F1A13; --earth:#18251B; --cream:#F0EAE0;
+  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#1E2B1F; --muted:#7E867A;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
 }
@@ -683,6 +683,21 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   #ai-fab::before{display:none}
   /* panel del asistente a pantalla completa en móvil */
   #ai-panel{width:100%;right:-100%}
+  /* ── BRIEF: experiencia móvil — padding lateral cómodo, textos completos ── */
+  #manifesto,#construccion,#confianza,#invertir,#proceso{padding-left:22px!important;padding-right:22px!important}
+  #manifesto{padding-top:90px!important;padding-bottom:90px!important}
+  #construccion,#confianza,#invertir,#proceso{padding-top:84px!important;padding-bottom:84px!important}
+  #hbody{padding-left:22px;padding-right:22px}
+  .inv-grid{grid-template-columns:1fr!important}
+  /* legibilidad: cuerpos un punto más grandes y aireados */
+  .pdesc,.mf-q span,#manifesto>p{line-height:1.85}
+  .hsub{font-size:15px}
+  /* evitar que titulares largos se corten */
+  .hhl,.mfl,.sw,.cs-ttl,.g3d-ttl{overflow-wrap:break-word}
+}
+@media(max-width:420px){
+  .hhl{font-size:clamp(30px,10vw,40px)}
+  #manifesto,#construccion,#confianza,#invertir,#proceso{padding-left:18px!important;padding-right:18px!important}
 }
 
 /* utilidades de accesibilidad */
