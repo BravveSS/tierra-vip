@@ -1,7 +1,8 @@
 
 :root {
-  --black:#0A130E; --dark:#0F1A13; --earth:#18251B; --cream:#F0EAE0;
-  --gold:#C9A96E;  --gold-dim:#8B6F47; --green:#1E2B1F; --muted:#7E867A;
+  /* PALETA: verde bosque + marfil + oro suave + negro carbón */
+  --black:#15130F; --dark:#1C2A20; --earth:#24412E; --cream:#F3EEE2;
+  --gold:#CBAE79;  --gold-dim:#8B6F47; --green:#2E5A3C; --muted:#8A8A7C;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
 }
