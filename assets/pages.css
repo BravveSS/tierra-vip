@@ -224,3 +224,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .calc-r .row{display:flex;justify-content:space-between;font-family:var(--fb);font-size:12.5px;color:rgba(240,234,224,.6);padding:9px 0;border-top:1px solid rgba(201,169,110,.1)}
 .calc-disc{grid-column:1/-1;font-family:var(--fb);font-size:11px;line-height:1.65;color:rgba(240,234,224,.38);font-style:italic}
 @media(max-width:760px){.calc{grid-template-columns:1fr}}
+
+/* FORMULARIO LISTA DE ESPERA (Serena / Depas Kora) */
+.wait-form{display:flex;gap:10px;max-width:540px;margin:30px auto 0;flex-wrap:wrap;justify-content:center}
+.wait-form input{flex:1;min-width:220px;background:rgba(255,255,255,.06);border:1px solid rgba(201,169,110,.3);color:var(--cream);padding:14px 16px;border-radius:8px;font-family:var(--fb);font-size:14px;font-weight:300;outline:none;transition:border-color .2s}
+.wait-form input:focus{border-color:rgba(201,169,110,.6)}
+.wait-form input::placeholder{color:var(--muted)}
+.wait-form input.err{border-color:#c25b4e}
+.wait-form button{flex-shrink:0}
+.wait-ok{font-family:var(--fb);font-size:13.5px;color:var(--gold);margin-top:14px;min-height:1.1em}
+@media(max-width:520px){.wait-form{flex-direction:column}}

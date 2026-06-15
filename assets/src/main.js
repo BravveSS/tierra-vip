@@ -1329,9 +1329,10 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
       return;
     }
     inp.classList.remove('err');
-    ok.textContent = EN ? 'Done! We opened your email app to confirm your spot. 🌿' : '¡Listo! Abrimos tu correo para confirmar tu lugar en la lista. 🌿';
+    ok.textContent = EN ? 'Done! We opened Gmail to confirm your spot. 🌿' : '¡Listo! Abrimos Gmail para confirmar tu lugar en la lista. 🌿';
     ok.classList.add('show');
-    window.open('mailto:ventas@tierra.vip?subject=' + encodeURIComponent(EN ? 'Waitlist — Serena / Depas Kora' : 'Lista de espera — Serena / Depas Kora')
+    // Gmail compose: abre en el navegador sin necesitar app de correo
+    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=ventas@tierra.vip&su=' + encodeURIComponent(EN ? 'Waitlist — Serena / Depas Kora' : 'Lista de espera — Serena / Depas Kora')
       + '&body=' + encodeURIComponent(EN ? `Hi, I want to join the waitlist for Serena and Depas Kora.\nMy email: ${v}\n(Sent from tierra.vip)` : `Hola, quiero unirme a la lista de espera de Serena y Depas Kora.\nMi correo: ${v}\n(Enviado desde tierra.vip)`), '_blank');
     inp.value = '';
   });

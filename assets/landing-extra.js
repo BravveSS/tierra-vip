@@ -280,4 +280,30 @@
     }), { threshold: .12 });
     targets.forEach(el => io.observe(el));
   }
+
+  /* ── Lista de espera: abre Gmail compose (funciona sin app de correo) ── */
+  document.querySelectorAll('.wait-form').forEach(form => {
+    const inp = form.querySelector('input[type=email]');
+    const ok = form.parentElement.querySelector('.wait-ok');
+    const en = () => window.__LANG === 'en';
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = inp.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+        inp.classList.add('err'); inp.focus();
+        if (ok) ok.textContent = en() ? 'Check your email — it looks incomplete.' : 'Revisa tu correo — parece incompleto.';
+        return;
+      }
+      inp.classList.remove('err');
+      const proj = form.dataset.proj;
+      const su = encodeURIComponent((en() ? 'Interest in ' : 'Interés en ') + proj);
+      const body = encodeURIComponent(en()
+        ? 'Hi, I am interested in ' + proj + '. My email: ' + email + '. I want to join the waitlist. (Sent from tierra.vip)'
+        : 'Hola, me interesa ' + proj + '. Mi correo: ' + email + '. Quiero estar en la lista de espera. (Enviado desde tierra.vip)');
+      window.open('https://mail.google.com/mail/?view=cm&fs=1&to=ventas@tierra.vip&su=' + su + '&body=' + body, '_blank');
+      if (ok) ok.textContent = en() ? 'Done! We opened Gmail to confirm your spot. 🌿' : '¡Listo! Abrimos Gmail para confirmar tu lugar. 🌿';
+      inp.value = '';
+    });
+    inp.addEventListener('input', () => { inp.classList.remove('err'); if (ok) ok.textContent = ''; });
+  });
 })();
