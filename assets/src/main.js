@@ -902,47 +902,53 @@ const TIERRA_CONTEXT = {
   contacto: 'WhatsApp: +52 958 108 7977 | Email: ventas@tierra.vip | Instagram: @tierra_desarrollos',
   proyectos: {
     azimut: {
-      nombre: 'Azimut Mazunte',
+      nombre: 'Azimut',
       tipo: 'Lotes residenciales',
       ubicacion: 'Mazunte, Oaxaca',
-      descripcion: 'Lotes en ladera con selva nativa y vista panorámica al Pacífico. A minutos de la playa de Mazunte.',
-      amenidades: ['Yoga Shala al aire libre', 'Temazcal tradicional', 'Alberca natural con rocas', 'Senderos a la playa', 'Estacionamiento solar', 'Acceso controlado'],
-      ideal: 'Quienes buscan construir su propia casa o cabaña en contacto con la naturaleza.'
+      descripcion: 'Comunidad de yoga y meditación en Mazunte, un lugar pensado para la tranquilidad. Lotes en ladera de selva, con servicios de agua y luz.',
+      amenidades: ['Comunidad de yoga y meditación', 'Yoga shala y temazcal', 'Alberca natural', 'Servicios de agua y luz', 'A pasos del centro de Mazunte'],
+      precio: 'Precio medio-accesible.',
+      ideal: 'Quienes buscan tranquilidad, bienestar y vida en comunidad cerca de Mazunte.'
     },
     nabani: {
       nombre: 'Nabani',
-      tipo: 'Residencias de autor',
-      ubicacion: 'Costa Oaxaqueña',
-      descripcion: 'Residencias tropicales llave en mano. Arquitectura en palma y madera, albercas privadas y terrazas con hamacas.',
-      amenidades: ['Alberca privada', 'Terraza con hamaca', 'Jardín tropical', 'Arquitectura en palma y madera', 'Entrega llave en mano'],
-      ideal: 'Quienes buscan una residencia lista para habitar o rentar vacacionalente.'
+      tipo: 'Terrenos frente al mar',
+      ubicacion: 'Puerto Ángel, Oaxaca',
+      descripcion: 'Terrenos frente al mar con vista al océano. Acceso caminando a varias playas (Estacahuite, Aguete y Puerto Ángel) y conexión con Mazunte, Zipolite y Puerto Ángel. Servicios de agua y luz y áreas comunes.',
+      amenidades: ['Vista al mar', 'Playas caminando: Estacahuite, Aguete y Puerto Ángel', 'Arquitectura minimalista de autor', 'Beach Club con alberca privada', 'Área de hamaca y de tratamientos', 'Servicios de agua y luz'],
+      precio: 'Precios accesibles.',
+      ideal: 'Quienes quieren vivir frente al mar, con servicios y a pasos de las playas.'
     },
     aldea: {
       nombre: 'Aldea Tao',
       tipo: 'Lotes exclusivos en acantilado',
-      ubicacion: 'Costa de Oaxaca',
-      descripcion: 'Los terrenos más exclusivos sobre acantilados del Pacífico. Acceso a Playa Tololote y La Boquilla — calas privadas.',
-      amenidades: ['Vista panorámica al Pacífico', 'Acceso a Playa Tololote', 'Acceso a Playa La Boquilla', 'Acantilados volcánicos', 'Proyecto limitado'],
-      ideal: 'Inversores y compradores que buscan exclusividad y naturaleza salvaje.'
+      ubicacion: 'La Boquilla, Costa de Oaxaca',
+      descripcion: 'Lotes sobre acantilados con vistas al mar espectaculares, acceso a playa semiprivada y contacto directo con el océano. Las mejores vistas de todo el portafolio.',
+      amenidades: ['Vistas al mar espectaculares', 'Acceso a playa semiprivada', 'Contacto directo con el océano', 'Proyecto exclusivo y limitado'],
+      precio: 'El proyecto más exclusivo y premium del portafolio.',
+      ideal: 'Quienes buscan exclusividad, las mejores vistas y contacto directo con el mar.'
     },
     serena: {
       nombre: 'Serena',
-      tipo: 'Comunidad eco — próximamente',
+      tipo: 'Comunidad en el bosque — próximamente',
       ubicacion: 'San Antonio, Oaxaca',
-      descripcion: 'Proyecto de vida en comunidad junto a Mazunte. Jardín comunitario, huerto orgánico y arquitectura sustentable.',
-      amenidades: ['Jardín comunitario', 'Huerto orgánico', 'Arquitectura sustentable'],
-      ideal: 'Quienes buscan vivir en comunidad con valores ecológicos.'
+      descripcion: 'Comunidad para vivir en el bosque, con acceso a huerta y animales de granja. Lotes amplios y de precio accesible.',
+      amenidades: ['Vida en el bosque', 'Huerta', 'Animales de granja', 'Lotes amplios', 'Arquitectura sustentable'],
+      precio: 'Lotes amplios y de precio accesible.',
+      ideal: 'Quienes buscan vivir en el bosque, en comunidad y con valores ecológicos.'
     },
     kora: {
       nombre: 'Depas Kora',
-      tipo: 'Departamentos — preventa',
-      ubicacion: 'Zipolite, Oaxaca',
-      descripcion: 'Diseño minimalista con acceso a playa y vistas al océano. El nuevo referente de vida contemporánea en Zipolite.',
-      amenidades: ['Acceso a playa', 'Vista al océano', 'Diseño minimalista', 'Preventa'],
-      ideal: 'Quienes buscan un departamento moderno en Zipolite.'
+      tipo: 'Departamentos — próximamente',
+      ubicacion: 'Puerto Ángel, Oaxaca',
+      descripcion: 'Departamentos de diseño minimalista con vistas al mar en Puerto Ángel. Vida contemporánea rodeada de naturaleza. Próximamente.',
+      amenidades: ['Vista al mar', 'Acceso a playa', 'Diseño minimalista', 'Próximamente'],
+      precio: 'Próximamente — déjanos tu correo para conocer precios y disponibilidad primero.',
+      ideal: 'Quienes buscan un departamento moderno frente al mar en Puerto Ángel.'
     }
   }
 };
+// Lotes/precios exactos: no se publican en línea — el asistente deriva a un asesor para cifras y disponibilidad reales.
 
 let aipHistory = [];
 
@@ -985,11 +991,11 @@ function aipBuildReply(intent, userMsg) {
       `**${p.serena.nombre}** — ${p.serena.tipo}\n📍 ${p.serena.ubicacion}\n\n${p.serena.descripcion}\n\n✦ ${p.serena.amenidades.join('\n✦ ')}\n\nEste proyecto está próximo a lanzarse. ¿Te registramos en la lista de espera?`
     ],
     kora: [
-      `**${p.kora.nombre}** — ${p.kora.tipo}\n📍 ${p.kora.ubicacion}\n\n${p.kora.descripcion}\n\n✦ ${p.kora.amenidades.join('\n✦ ')}\n\nEstá en preventa — los mejores precios son ahora. ¿Te enviamos información detallada?`
+      `**${p.kora.nombre}** — ${p.kora.tipo}\n📍 ${p.kora.ubicacion}\n\n${p.kora.descripcion}\n\n✦ ${p.kora.amenidades.join('\n✦ ')}\n\nEstá por lanzarse. ¿Te dejo en la lista para conocer precios y disponibilidad primero?`
     ],
     precio: [
-      'Los precios varían según el proyecto y la disponibilidad actual. No los publicamos en línea para poder ofrecerte el mejor precio según tu perfil de inversión.\n\n¿Qué proyecto te interesa más? Con eso te conecto directo con un asesor que te da números concretos.',
-      'Los precios dependen del proyecto y el lote específico. Tenemos opciones desde inversiones accesibles hasta terrenos premium en acantilado.\n\n¿Cuál de nuestros proyectos te llama más la atención — Azimut, Nabani o Aldea Tao?'
+      'Te ubico por rangos para que elijas mejor:\n\n💎 **Aldea Tao** es el más exclusivo y premium — las mejores vistas, sobre acantilado.\n🌿 **Nabani** (frente al mar, Puerto Ángel) y **Serena** (bosque, San Antonio) son los más accesibles.\n🧘 **Azimut** (Mazunte) está en un punto medio.\n\nLos precios exactos y los lotes disponibles los confirma un asesor según el proyecto. ¿Cuál te interesa y te paso con ventas?',
+      'Tenemos opciones desde lotes accesibles (Nabani, Serena) hasta terrenos premium en acantilado (Aldea Tao). El número exacto y la disponibilidad de lotes los da un asesor — no los publicamos en línea.\n\n¿Cuál te llama más: vista al mar, bosque o acantilado?'
     ],
     inversion: [
       'La Costa de Oaxaca es una de las zonas con mayor plusvalía en México — todavía con precios accesibles antes del boom turístico masivo.\n\nNuestros proyectos ofrecen:\n✦ Plusvalía del terreno a largo plazo\n✦ Renta vacacional si construyes (Mazunte/Zipolite son destinos en auge)\n✦ Acompañamiento y respaldo legal completo\n\n¿Buscas invertir para construir, rentar o revender?'
@@ -1001,13 +1007,13 @@ function aipBuildReply(intent, userMsg) {
       'Sí, ofrecemos planes de pago flexibles — no necesitas pagar todo de contado.\n\nContamos con esquemas de enganche + mensualidades adaptados a cada cliente. Los detalles específicos los maneja nuestro equipo de ventas según tu capacidad de inversión.\n\n¿Prefieres que te contacte un asesor por WhatsApp para ver opciones concretas?'
     ],
     ubicacion: [
-      'Todos nuestros proyectos están en la Costa de Oaxaca, Pacífico mexicano:\n\n📍 **Azimut** — Mazunte, Oaxaca\n📍 **Nabani** — Costa Oaxaqueña\n📍 **Aldea Tao** — Acantilados Costa de Oaxaca\n📍 **Serena** — San Antonio, cerca de Mazunte\n📍 **Depas Kora** — Zipolite, Oaxaca\n\nLa zona está a ~7h de CDMX por carretera o ~1h en vuelo a Huatulco. ¿Quieres información de cómo llegar?'
+      'Todos nuestros proyectos están en la Costa de Oaxaca, Pacífico mexicano:\n\n📍 **Azimut** — Mazunte\n📍 **Nabani** — Puerto Ángel (frente al mar)\n📍 **Aldea Tao** — La Boquilla (acantilado)\n📍 **Serena** — San Antonio (bosque)\n📍 **Depas Kora** — Puerto Ángel (próximamente)\n\nLa zona está a ~7h de CDMX por carretera o ~1h en vuelo a Huatulco. ¿Quieres información de cómo llegar?'
     ],
     contacto: [
       '¡Con gusto! Puedes contactarnos por:\n\n📱 **WhatsApp:** +52 958 108 7977\n📧 **Email:** ventas@tierra.vip\n📸 **Instagram:** @tierra_desarrollos\n\nNuestro equipo atiende de lunes a domingo. ¿Quieres que te abra el WhatsApp directo?'
     ],
     proyectos: [
-      'Tenemos 5 proyectos en la Costa de Oaxaca:\n\n🌿 **Azimut** — Lotes en selva con vista al Pacífico, Mazunte\n🌴 **Nabani** — Residencias tropicales llave en mano\n🌊 **Aldea Tao** — Lotes exclusivos en acantilado\n🌱 **Serena** — Comunidad eco, próximamente\n🏙️ **Depas Kora** — Departamentos en Zipolite, preventa\n\n¿Cuál te interesa explorar primero?'
+      'Tenemos 5 proyectos en la Costa de Oaxaca:\n\n🧘 **Azimut** — Comunidad de yoga en Mazunte\n🌊 **Nabani** — Terrenos frente al mar, Puerto Ángel\n💎 **Aldea Tao** — Lotes exclusivos en acantilado, La Boquilla\n🌳 **Serena** — Comunidad en el bosque, San Antonio (próximamente)\n🏙️ **Depas Kora** — Departamentos en Puerto Ángel (próximamente)\n\n¿Cuál te interesa explorar primero?'
     ],
     agradecimiento: [
       'Un placer ayudarte 🌿 Si tienes más preguntas o quieres hablar con un asesor, estamos en WhatsApp: +52 958 108 7977',
@@ -1160,7 +1166,7 @@ if (window.__PERF_LOW) {
     azimut:{n:'Azimut', l:'Mazunte · Oaxaca', l_en:'Mazunte · Oaxaca', img:'assets/img/azimut/renderazimutyogashala.webp'},
     serena:{n:'Serena', l:'San Antonio · Próximamente', l_en:'San Antonio · Coming soon', img:'assets/img/serena/renderserena-2.webp'},
     nabani:{n:'Nabani', l:'Puerto Ángel', l_en:'Puerto Ángel', img:'assets/img/nabani/dronnabani.webp'},
-    kora:  {n:'Depas Kora', l:'Zipolite · Preventa', l_en:'Zipolite · Pre-sale', img:'assets/img/kora/rs-w-719-h-836.webp'},
+    kora:  {n:'Depas Kora', l:'Puerto Ángel · Próximamente', l_en:'Puerto Ángel · Coming soon', img:'assets/img/kora/rs-w-719-h-836.webp'},
     aldea: {n:'Aldea Tao', l:'La Boquilla', l_en:'La Boquilla', img:'assets/img/aldea-tao/dronaldeatao.webp'},
   };
   // ── POSICIONAMIENTO MATEMÁTICO: cada pin se ancla a la curva con getPointAtLength ──
@@ -1396,7 +1402,7 @@ const EN_REPLIES = {
   saludo: "Hi! Welcome to Tierra Desarrollos 🌿\n\nWe develop eco-luxury lots and homes on the Oaxaca coast: jungle lots near Mazunte, oceanfront land steps from Zipolite, and clifftop sites above hidden beaches.\n\nWhat are you looking for — land to build, a turnkey home, or an investment?",
   precio: "Prices vary by project and current availability, so we don't publish them online — that way an advisor can offer you the best option for your profile.\n\nTell me which project interests you (Azimut, Nabani, Aldea Tao, Serena or Depas Kora) and we'll connect you right away.",
   contacto: "Of course! You can reach us at:\n\n📱 **WhatsApp:** +52 958 108 7977\n📧 **Email:** ventas@tierra.vip\n📸 **Instagram:** @tierra_desarrollos\n\nWe reply every day of the week.",
-  proyectos: "We have 5 projects on the Oaxaca coast:\n\n🌿 **Azimut** — jungle lots in a holistic wellness center, Mazunte\n🌴 **Nabani** — oceanfront land, walking distance to beaches\n🌊 **Aldea Tao** — exclusive clifftop lots with hidden coves\n🌱 **Serena** — eco community, coming soon\n🏙️ **Depas Kora** — apartments in Zipolite, pre-sale\n\nWhich one would you like to explore?",
+  proyectos: "We have 5 projects on the Oaxaca coast:\n\n🧘 **Azimut** — yoga community in Mazunte\n🌊 **Nabani** — oceanfront land in Puerto Ángel\n💎 **Aldea Tao** — exclusive clifftop lots, La Boquilla\n🌳 **Serena** — forest community, San Antonio (coming soon)\n🏙️ **Depas Kora** — apartments in Puerto Ángel (coming soon)\n\nWhich one would you like to explore?",
   proceso: "Buying with Tierra is safe and guided:\n\n1️⃣ Initial consultation\n2️⃣ Site visit (in person or virtual)\n3️⃣ Purchase agreement\n4️⃣ Payment plan\n5️⃣ Notarized deed\n6️⃣ Delivery\n\nFull legal support from day one. Want an advisor to walk you through it?",
   inversion: "The Oaxaca coast is one of Mexico's fastest-appreciating regions — still affordable compared to saturated destinations like Tulum.\n\n✦ Long-term land appreciation\n✦ Vacation rental demand in Mazunte & Zipolite\n✦ Guaranteed deeds and full legal backing\n\nAre you looking to build, rent out, or hold?",
   financiamiento: "Yes — we offer flexible down payments and monthly installments adapted to each client. An advisor can share exact terms by WhatsApp: +52 958 108 7977.",
@@ -1444,7 +1450,7 @@ aipGetReply = function(text){
   if (/\bcasa\b|residencia|llave en mano|\bhouse\b|\bhome\b|turnkey/.test(t) && !/azimut|nabani|aldea|serena|kora/.test(t)){
     AIP.interests.push('Nabani'); aipLastIntent = 'nabani';
     aipHistory.push({role:'user', text});
-    const r = LL(`Entonces te va a encantar **Nabani**: terrenos frente al mar donde construimos residencias de autor llave en mano — madera, palma y piedra, con playas caminando.\n\n¿Quieres que te comparta disponibilidad?`,
+    const r = LL(`Para una casa lista, lo ideal es construir con Tierra sobre un terreno frente al mar en **Nabani** (Puerto Ángel) — nosotros la levantamos llave en mano, con playas caminando.\n\n¿Quieres que te comparta disponibilidad?`,
                  `Then you'll love **Nabani**: oceanfront land where we build turnkey signature residences — wood, palm and stone, with beaches within walking distance.\n\nWant me to share availability?`);
     aipHistory.push({role:'ai', text:r});
     return r;
@@ -1672,15 +1678,15 @@ const CHAT_EN = new Map([
     ['#manifesto > p',"At Tierra Desarrollos we don't sell square meters. We sell access to a place that still exists — where the ocean is still wild, the jungle hasn't given way and silence still has value. Every project we build is a promise that this place will go on existing."],
     // hero pre + ubicaciones de proyecto
     ['#hpre','Tierra  ·  Development & Construction'],
-    ['#pco-nb .ploc','Oaxacan Coast'],['#pco-at .ploc','Oaxacan Coast'],
+    ['#pco-nb .ploc','Puerto Ángel'],['#pco-at .ploc','Oaxacan Coast'],
     // features de los 3 proyectos (mismo orden del DOM)
-    ['#pco-az .pfeat:nth-of-type(1)','◆ Open-air Yoga Shala','h'],['#pco-az .pfeat:nth-of-type(2)','◆ Traditional temazcal','h'],['#pco-az .pfeat:nth-of-type(3)','◆ Natural rock pool','h'],['#pco-az .pfeat:nth-of-type(4)','◆ Trails to the beach','h'],['#pco-az .pfeat:nth-of-type(5)','◆ Bicycle trail','h'],['#pco-az .pfeat:nth-of-type(6)','◆ Full power service','h'],['#pco-az .pfeat:nth-of-type(7)','◆ Full legal backing','h'],
-    ['#pco-nb .pfeat:nth-of-type(1)','◆ Signature residences','h'],['#pco-nb .pfeat:nth-of-type(2)','◆ Private pools','h'],['#pco-nb .pfeat:nth-of-type(3)','◆ Palm & wood architecture','h'],['#pco-nb .pfeat:nth-of-type(4)','◆ Hammock terraces','h'],['#pco-nb .pfeat:nth-of-type(5)','◆ Private tropical gardens','h'],['#pco-nb .pfeat:nth-of-type(6)','◆ Turnkey delivery','h'],
+    ['#pco-az .pfeat:nth-of-type(1)','◆ Open-air Yoga Shala','h'],['#pco-az .pfeat:nth-of-type(2)','◆ Traditional temazcal','h'],['#pco-az .pfeat:nth-of-type(3)','◆ Natural rock pool','h'],['#pco-az .pfeat:nth-of-type(4)','◆ Trails to the beach','h'],['#pco-az .pfeat:nth-of-type(5)','◆ Bicycle trail','h'],['#pco-az .pfeat:nth-of-type(6)','◆ Water & power services','h'],['#pco-az .pfeat:nth-of-type(7)','◆ Full legal backing','h'],
+    ['#pco-nb .pfeat:nth-of-type(1)','◆ Ocean view','h'],['#pco-nb .pfeat:nth-of-type(2)','◆ Beaches on foot: Estacahuite, Aguete & Puerto Ángel','h'],['#pco-nb .pfeat:nth-of-type(3)','◆ Minimalist signature architecture','h'],['#pco-nb .pfeat:nth-of-type(4)','◆ Hammock area','h'],['#pco-nb .pfeat:nth-of-type(5)','◆ Beach Club with private pool','h'],['#pco-nb .pfeat:nth-of-type(6)','◆ Tropical gardens','h'],['#pco-nb .pfeat:nth-of-type(7)','◆ Treatment area','h'],['#pco-nb .pfeat:nth-of-type(8)','◆ Water & power services','h'],
     ['#pco-at .pfeat:nth-of-type(1)','◆ Access to Tololote Beach','h'],['#pco-at .pfeat:nth-of-type(2)','◆ Access to La Boquilla Beach','h'],['#pco-at .pfeat:nth-of-type(3)','◆ Panoramic Pacific views','h'],['#pco-at .pfeat:nth-of-type(4)','◆ Cliffs over the ocean','h'],['#pco-at .pfeat:nth-of-type(5)','◆ Exclusive limited project','h'],['#pco-at .pfeat:nth-of-type(6)','◆ Guaranteed deeds','h'],
     // próximamente: badges y descripciones
     ['.cs-card:nth-of-type(1) .cs-badge','Coming soon'],['.cs-card:nth-of-type(2) .cs-badge','Pre-sale'],
     ['.cs-card:nth-of-type(1) .cs-desc','Community living next to Mazunte: community garden, organic orchard and architecture that embraces the land.'],
-    ['.cs-card:nth-of-type(2) .cs-desc','One of the most innovative apartment projects on the Oaxaca Coast — minutes from Zipolite, with ocean views and surrounded by nature. Minimalist design, contemporary living.'],
+    ['.cs-card:nth-of-type(2) .cs-desc','One of the most innovative apartment projects on the Oaxaca Coast — in Puerto Ángel, with ocean views and surrounded by nature. Minimalist design, contemporary living.'],
     // comparador: columna ubicación (solo las traducibles)
     ['.cmp tbody tr:nth-child(2) td:nth-child(3)','Oaxacan Coast'],['.cmp tbody tr:nth-child(6) td:nth-child(3)','Oaxaca Coast'],
     // chat: cabecera y estado
@@ -1691,7 +1697,7 @@ const CHAT_EN = new Map([
     ['#masterplan h2','The Oaxaca Coast, <em style="color:var(--gold)">project by project.</em>','h'],
     // proyectos
     ['#pco-az .pdesc','Build your home inside a holistic wellness center, steps from the heart of Mazunte. Private jungle hillside lots with a yoga shala, temazcal and natural pool at the center of the community. Some lots have Pacific views; all come with full utilities and legal backing from day one.'],
-    ['#pco-nb .pdesc','Nabani — "home" in Zapotec — is oceanfront land with beaches within walking distance, steps from Zipolite and Mazunte. The place to build your signature residence in wood, palm and stone, where every sunrise happens in front of the Pacific.'],
+    ['#pco-nb .pdesc','Nabani —life, in Zapotec— is a project of oceanfront land, with ocean views and walking access to several beaches of Puerto Ángel within minutes. Oceanfront land where life takes root.'],
     ['#pco-at .pdesc','On the Pacific cliffs, where the ocean strikes volcanic rock and the horizon never ends, a unique community is born. Build your house facing the sea, with access to Tololote and La Boquilla — wild coves that appear on no map.'],
     ['#pco-az .pcta','Discover Azimut →'],['#pco-nb .pcta','Discover Nabani →'],['#pco-at .pcta','Discover Aldea Tao →'],
     // coming soon + newsletter
