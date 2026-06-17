@@ -1,8 +1,8 @@
 
 :root {
-  /* PALETA "Tierra cálida": tierra oscura + oliva profundo + crema + terracota */
-  --black:#211B16; --dark:#2C2A1E; --earth:#322E20; --cream:#F0E8DA;
-  --gold:#B07A4F;  --gold-dim:#8A5E38; --green:#3E4A32; --muted:#9A8C76;
+  /* PALETA "Tierra cálida": tierra oscura + verde bosque + crema + terracota */
+  --black:#211B16; --dark:#1F3A2A; --earth:#24472F; --cream:#F0E8DA;
+  --gold:#B07A4F;  --gold-dim:#8A5E38; --green:#357D4E; --muted:#9A8C76;
   --emerald:#B07A4F; --gold-hi:#C99B6E;
   --fh:'Cormorant Garamond',Georgia,serif;
   --fb:'DM Sans',sans-serif;
