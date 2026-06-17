@@ -1,0 +1,4 @@
+Coloca aquí las imágenes de los planos de lotes (se muestran automáticamente sobre la tabla):
+- azimut.webp
+- nabani.webp
+- aldea-tao.webp

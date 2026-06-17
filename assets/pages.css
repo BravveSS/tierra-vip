@@ -237,3 +237,31 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .wait-form button{flex-shrink:0}
 .wait-ok{font-family:var(--fb);font-size:13.5px;color:var(--gold);margin-top:14px;min-height:1.1em}
 @media(max-width:520px){.wait-form{flex-direction:column}}
+
+/* ── MAPA DE LOTES INTERACTIVO ── */
+.lt-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:10px}
+.lt-sum{font-family:var(--fb);font-size:14px;color:rgba(240,232,218,.7)}
+.lt-sum b{font-family:var(--fh);font-size:28px;color:var(--gold);font-weight:400;margin-right:5px}
+.lt-filt{display:flex;gap:8px}
+.lt-filt button{font-family:var(--fb);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border:1px solid rgba(176,122,79,.4);border-radius:20px;color:rgba(240,232,218,.7);background:none;cursor:pointer;transition:all .25s}
+.lt-filt button.on{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.lt-plano{margin:28px 0 6px;border-radius:8px;overflow:hidden;border:1px solid rgba(176,122,79,.2);background:var(--earth)}
+.lt-plano img{width:100%;display:block}
+.lt-leg{display:flex;gap:24px;flex-wrap:wrap;margin:20px 0 24px;font-family:var(--fb);font-size:12px;color:rgba(240,232,218,.65)}
+.lt-leg span{display:flex;align-items:center;gap:8px}
+.lt-leg i{width:14px;height:14px;border-radius:3px;display:inline-block}
+.d-disp{background:#357D4E}.d-sold{background:#9B4A3C}.d-loft{background:#3E6E8E}
+.lt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.lt-cell{display:flex;flex-direction:column;gap:3px;padding:14px 13px;border-radius:8px;border:1px solid rgba(176,122,79,.25);background:rgba(240,232,218,.02);text-align:left;font-family:var(--fb)}
+.lt-cell .lt-n{font-family:var(--fh);font-size:23px;color:var(--cream);line-height:1}
+.lt-cell .lt-m{font-size:11px;color:rgba(240,232,218,.55);letter-spacing:.04em}
+.lt-cell .lt-p{font-size:13px;font-weight:500;margin-top:4px}
+.lt-cell.av{cursor:pointer;border-color:rgba(176,122,79,.5);transition:transform .2s,box-shadow .2s,border-color .2s}
+.lt-cell.av .lt-p{color:var(--gold-hi)}
+.lt-cell.av:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(176,122,79,.28);border-color:var(--gold)}
+.lt-cell.sold{opacity:.5;border-color:rgba(155,74,60,.4)}
+.lt-cell.sold .lt-p{color:#C77;text-transform:uppercase;font-size:10px;letter-spacing:.14em}
+.lt-cell.loft{border-color:rgba(62,110,142,.5)}
+.lt-cell.loft .lt-p{color:#7FB0CE;text-transform:uppercase;font-size:11px;letter-spacing:.1em}
+.lt-nota{font-family:var(--fb);font-size:11.5px;color:rgba(240,232,218,.4);font-style:italic;margin-top:22px}
+@media(max-width:520px){.lt-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}.lt-cell .lt-n{font-size:20px}}
