@@ -461,6 +461,8 @@ const gdata = [
   {src:'assets/img/azimut/renderazimutyogashala.webp', lbl:'Azimut · Yoga Shala (render)',     tag:'Azimut'},
   {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut'},
   {src:'assets/img/azimut/g-render.webp',              lbl:'Azimut · Residencia en la selva',  tag:'Azimut'},
+  {src:'assets/img/azimut/g-temazcal.webp',            lbl:'Azimut · Temazcal tradicional',    tag:'Azimut'},
+  {src:'assets/img/azimut/g-yoga.webp',                lbl:'Azimut · Deck de yoga',            tag:'Azimut'},
   // ── NABANI ──
   {src:'assets/img/nabani/dronnabani.webp',                 lbl:'Nabani · Frente al mar desde el aire', tag:'Nabani'},
   {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Terreno frente al mar',   tag:'Nabani'},
@@ -472,6 +474,7 @@ const gdata = [
   {src:'assets/img/nabani/g-terraza.webp',                  lbl:'Nabani · Terraza con vista',       tag:'Nabani'},
   {src:'assets/img/nabani/g-punto.webp',                    lbl:'Nabani · El punto sobre el Pacífico', tag:'Nabani'},
   {src:'assets/img/nabani/g-playa.webp',                    lbl:'Nabani · Playa a pasos del terreno', tag:'Nabani'},
+  {src:'assets/img/nabani/g-escalinata.webp',               lbl:'Nabani · Sendero de piedra a la selva', tag:'Nabani'},
   // ── DEPAS KORA ──
   {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Diseño contemporáneo', tag:'Depas Kora'},
   {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Vista al mar',          tag:'Depas Kora'},
@@ -1856,7 +1859,7 @@ const CHAT_EN = new Map([
   const calcEN = ['Estimated lot price ', 'Down payment ', 'Term '];
 
   // labels de la galería 3D (parte tras el "·" de cada gdata.lbl)
-  const G_LBL = [['Vista aérea','Aerial view'],['Acantilados del Pacífico','Pacific cliffs'],['Costa salvaje','Wild coast'],['Vista al mar','Ocean view'],['Render del proyecto','Project render'],['Diseño en acantilado','Clifftop design'],['Mazunte desde el aire','Mazunte from above'],['Selva nativa','Native jungle'],['El terreno','The land'],['Vista al Pacífico','Pacific view'],['Yoga Shala (render)','Yoga Shala (render)'],['Frente al mar desde el aire','Oceanfront from above'],['Terreno frente al mar','Oceanfront land'],['Playa Aguete','Aguete Beach'],['Render de residencia','Residence render'],['Diseño de autor','Signature design'],['Diseño contemporáneo','Contemporary design'],['Departamentos','Apartments'],['Comunidad eco','Eco community'],['Vida en comunidad','Community living'],['La Boquilla desde el aire','La Boquilla from above'],['El punto sobre el Pacífico','The point over the Pacific'],['Playa a pasos del terreno','Beach steps from the land']];
+  const G_LBL = [['Vista aérea','Aerial view'],['Acantilados del Pacífico','Pacific cliffs'],['Costa salvaje','Wild coast'],['Vista al mar','Ocean view'],['Render del proyecto','Project render'],['Diseño en acantilado','Clifftop design'],['Mazunte desde el aire','Mazunte from above'],['Selva nativa','Native jungle'],['El terreno','The land'],['Vista al Pacífico','Pacific view'],['Yoga Shala (render)','Yoga Shala (render)'],['Frente al mar desde el aire','Oceanfront from above'],['Terreno frente al mar','Oceanfront land'],['Playa Aguete','Aguete Beach'],['Render de residencia','Residence render'],['Diseño de autor','Signature design'],['Diseño contemporáneo','Contemporary design'],['Departamentos','Apartments'],['Comunidad eco','Eco community'],['Vida en comunidad','Community living'],['La Boquilla desde el aire','La Boquilla from above'],['El punto sobre el Pacífico','The point over the Pacific'],['Playa a pasos del terreno','Beach steps from the land'],['Temazcal tradicional','Traditional temazcal'],['Deck de yoga','Yoga deck'],['Sendero de piedra a la selva','Stone path into the jungle']];
   window.__txGallery = function(){
     const en = window.__LANG === 'en';
     document.querySelectorAll('.gcard-name').forEach(n => {
