@@ -1438,6 +1438,35 @@ aipGetReply = function(text){
     aipHistory.push({role:'ai', text:r});
     return r;
   }
+  // ── criterios combinados: presupuesto + preferencia (mar / selva / bosque) ──
+  const _barato = /barat|econ[oó]m|accesib|bajo costo|lo m[aá]s barat|m[aá]s barat|poco|menos caro|presupuesto bajo/.test(t);
+  const _mar = /vista al mar|frente al mar|al mar|oc[eé]ano|oceano|playa|\bmar\b|costa/.test(t);
+  const _selva = /selva|bosque|naturaleza|jungla|tranquil|yoga|medita/.test(t);
+  const _noProj = !/azimut|nabani|aldea|serena|kora/.test(t);
+  if (_mar && _barato && _noProj){
+    AIP.interests.push('Nabani'); aipLastIntent='nabani'; aipHistory.push({role:'user',text});
+    const r = LL(`Para **terreno con vista al mar y precio accesible**, tu mejor opción es **Nabani** (Puerto Ángel): terrenos frente al mar desde ~$502,000 MXN, con playas caminando y servicios de agua y luz. Hay 25 lotes disponibles.\n\n¿Te muestro el mapa de lotes con el precio de cada uno?`,
+                 `For **oceanview land at an accessible price**, your best fit is **Nabani** (Puerto Ángel): oceanfront lots from ~$502,000 MXN, beaches within walking distance, water & power. 25 lots available.\n\nShall I show you the lot map with each price?`);
+    aipHistory.push({role:'ai',text:r}); return r;
+  }
+  if (_barato && _noProj){
+    AIP.interests.push('Nabani'); aipLastIntent='precio'; aipHistory.push({role:'user',text});
+    const r = LL(`Los más accesibles del portafolio:\n\n🌊 **Nabani** (frente al mar, Puerto Ángel) — desde ~$502,000 MXN\n🧘 **Azimut** (Mazunte, yoga) — desde ~$464,000 MXN\n🌳 **Serena** (bosque, San Antonio) — lotes amplios y accesibles\n\n¿De cuál te muestro los lotes disponibles con precio?`,
+                 `The most accessible options:\n\n🌊 **Nabani** (oceanfront, Puerto Ángel) — from ~$502,000 MXN\n🧘 **Azimut** (Mazunte, yoga) — from ~$464,000 MXN\n🌳 **Serena** (forest) — large, accessible lots\n\nWhich one's lots would you like to see, with prices?`);
+    aipHistory.push({role:'ai',text:r}); return r;
+  }
+  if (_mar && _noProj){
+    AIP.interests.push('Nabani'); aipLastIntent='nabani'; aipHistory.push({role:'user',text});
+    const r = LL(`Para vivir **frente al mar** tienes dos caminos:\n\n🌊 **Nabani** (Puerto Ángel) — terrenos con vista al mar, accesibles (desde ~$502,000 MXN) y a pasos de varias playas.\n💎 **Aldea Tao** — lotes sobre acantilado con las mejores vistas del portafolio (premium, desde ~$825,000 MXN).\n\n¿Cuál te late: accesible o premium?`,
+                 `To live **by the sea** you have two paths:\n\n🌊 **Nabani** (Puerto Ángel) — oceanview lots, accessible (from ~$502,000 MXN), steps from several beaches.\n💎 **Aldea Tao** — clifftop lots with the best views (premium, from ~$825,000 MXN).\n\nAccessible or premium?`);
+    aipHistory.push({role:'ai',text:r}); return r;
+  }
+  if (_selva && _noProj && !/^\s*$/.test(t)){
+    AIP.interests.push('Azimut'); aipLastIntent='azimut'; aipHistory.push({role:'user',text});
+    const r = LL(`Para naturaleza y tranquilidad: **Azimut** (Mazunte) — comunidad de yoga y meditación, lotes en ladera de selva desde ~$464,000 MXN. Y **Serena** (San Antonio) — vida en el bosque con huerta, lotes amplios y accesibles.\n\n¿Cuál te muestro?`,
+                 `For nature and calm: **Azimut** (Mazunte) — yoga & meditation community, jungle hillside lots from ~$464,000 MXN. And **Serena** (San Antonio) — forest living with an orchard, large accessible lots.\n\nWhich one shall I show you?`);
+    aipHistory.push({role:'ai',text:r}); return r;
+  }
   // ── contexto: respuesta directa a "¿qué buscas?" (terreno / casa / depa) ──
   if (/terreno|lote|para construir|\bland\b|\blot\b/.test(t) && !/azimut|nabani|aldea|serena|kora/.test(t)){
     AIP.interests.push('terreno'); aipLastIntent = 'proyectos';
@@ -1492,7 +1521,8 @@ aipGetReply = function(text){
   let reply;
   if (isEN && EN_REPLIES[intent]) reply = EN_REPLIES[intent];
   else if (intent === 'general' && aipGeneralStreak > 1)
-    reply = 'Para esa pregunta, lo mejor es un asesor humano 🌿 Escríbenos por WhatsApp (+52 958 108 7977) — o dime si te interesa un **terreno**, una **residencia** o **invertir**, y te oriento.';
+    reply = LL('Cuéntame qué buscas y te oriento al toque 🌿\n\n• ¿**Frente al mar**? → Nabani o Aldea Tao\n• ¿**Naturaleza y tranquilidad**? → Azimut o Serena\n• ¿**Lo más accesible**? → desde ~$464,000 MXN\n\nO si prefieres, te paso con un asesor por WhatsApp: +52 958 108 7977.',
+                'Tell me what you are after and I will point you right away 🌿\n\n• **Oceanfront?** → Nabani or Aldea Tao\n• **Nature & calm?** → Azimut or Serena\n• **Most accessible?** → from ~$464,000 MXN\n\nOr I can connect you with an advisor on WhatsApp: +52 958 108 7977.');
   else reply = aipBuildReply(intent, text);
   aipLastIntent = intent;
   aipHistory.push({ role: 'ai', text: reply });
