@@ -704,6 +704,17 @@ footer{background:var(--black);border-top:1px solid rgba(201,169,110,.2);padding
   .hsub{font-size:15px}
   /* evitar que titulares largos se corten */
   .hhl,.mfl,.sw,.cs-ttl,.g3d-ttl{overflow-wrap:break-word}
+  /* iOS: inputs a 16px para que NO haga auto-zoom al enfocar (chat y formularios) */
+  #aip-input,#vis-form input,#vis-form select,input,select,textarea{font-size:16px}
+  /* chat: barra de contacto cómoda y burbujas legibles */
+  .aip-quick{padding:9px 12px;gap:7px}
+  .aqbtn{padding:12px 8px;font-size:12px;border-radius:9px}
+  .aip-bub{font-size:14.5px}
+  #aip-send{width:46px;height:46px}
+  /* animaciones de sección más ágiles en móvil: menos recorrido y duración → sin "lag" */
+  .scn{transition-duration:.7s;transform:translateY(28px)}
+  /* respeta el notch / barra inferior del navegador */
+  #ai-fab{bottom:calc(16px + env(safe-area-inset-bottom))}
 }
 @media(max-width:420px){
   .hhl{font-size:clamp(30px,10vw,40px)}

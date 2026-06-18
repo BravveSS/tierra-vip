@@ -331,7 +331,7 @@ if (!window.__REDUCED){
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold:.35 });
   strips.forEach(s => {
     io.observe(s);
-    if (!window.__REDUCED){
+    if (!window.__REDUCED && !window.__PERF_LOW){   // parallax solo donde rinde fluido
       const img = s.querySelector('img');
       gsap.fromTo(img, { yPercent:-7 }, { yPercent:7, ease:'none',
         scrollTrigger:{ trigger:s, start:'top bottom', end:'bottom top', scrub:true } });

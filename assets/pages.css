@@ -166,6 +166,16 @@ section{position:relative}
   .ba-grid{grid-template-columns:1fr}
   .step{grid-template-columns:60px 1fr;gap:18px}
   .stats{gap:36px}
+  /* iOS: inputs a 16px para que NO haga auto-zoom al enfocar el formulario */
+  .vis-form input,.vis-form select,.wait-form input,.wait-form select,input,select,textarea{font-size:16px}
+  /* hero de proyecto: un poco menos alto y logo proporcionado en celular */
+  .phero{height:84vh;min-height:480px}
+  .phero-logo{height:clamp(96px,26vw,150px)}
+  .phero-eyebrow{font-size:11px;letter-spacing:.2em;margin-bottom:16px}
+  /* galería: 2 columnas cómodas y formulario de visita en 1 columna */
+  .vis-form{grid-template-columns:1fr}
+  /* tap targets cómodos */
+  .vis-tab,.btn{min-height:46px}
 }
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
