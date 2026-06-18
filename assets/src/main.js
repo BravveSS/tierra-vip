@@ -907,7 +907,7 @@ const TIERRA_CONTEXT = {
       ubicacion: 'Mazunte, Oaxaca',
       descripcion: 'Comunidad de yoga y meditación en Mazunte, un lugar pensado para la tranquilidad. Lotes en ladera de selva, con servicios de agua y luz.',
       amenidades: ['Comunidad de yoga y meditación', 'Yoga shala y temazcal', 'Alberca natural', 'Servicios de agua y luz', 'A pasos del centro de Mazunte'],
-      precio: 'Precio medio-accesible.',
+      precio: 'Lotes desde ~$464,000 hasta ~$1,300,000 MXN · 11 lotes disponibles.',
       ideal: 'Quienes buscan tranquilidad, bienestar y vida en comunidad cerca de Mazunte.'
     },
     nabani: {
@@ -916,7 +916,7 @@ const TIERRA_CONTEXT = {
       ubicacion: 'Puerto Ángel, Oaxaca',
       descripcion: 'Terrenos frente al mar con vista al océano. Acceso caminando a varias playas (Estacahuite, Aguete y Puerto Ángel) y conexión con Mazunte, Zipolite y Puerto Ángel. Servicios de agua y luz y áreas comunes.',
       amenidades: ['Vista al mar', 'Playas caminando: Estacahuite, Aguete y Puerto Ángel', 'Arquitectura minimalista de autor', 'Beach Club con alberca privada', 'Área de hamaca y de tratamientos', 'Servicios de agua y luz'],
-      precio: 'Precios accesibles.',
+      precio: 'Lotes desde ~$502,000 hasta ~$1,750,000 MXN · 25 lotes disponibles. Precios accesibles.',
       ideal: 'Quienes quieren vivir frente al mar, con servicios y a pasos de las playas.'
     },
     aldea: {
@@ -925,7 +925,7 @@ const TIERRA_CONTEXT = {
       ubicacion: 'La Boquilla, Costa de Oaxaca',
       descripcion: 'Lotes sobre acantilados con vistas al mar espectaculares, acceso a playa semiprivada y contacto directo con el océano. Las mejores vistas de todo el portafolio.',
       amenidades: ['Vistas al mar espectaculares', 'Acceso a playa semiprivada', 'Contacto directo con el océano', 'Proyecto exclusivo y limitado'],
-      precio: 'El proyecto más exclusivo y premium del portafolio.',
+      precio: 'El más exclusivo: lotes desde ~$825,000 hasta ~$2,200,000 MXN · 24 disponibles. Las mejores vistas, el proyecto más premium.',
       ideal: 'Quienes buscan exclusividad, las mejores vistas y contacto directo con el mar.'
     },
     serena: {
@@ -979,29 +979,29 @@ function aipBuildReply(intent, userMsg) {
       'Hola, qué gusto tenerte aquí. En Tierra Desarrollos desarrollamos espacios donde la arquitectura vive en armonía con la naturaleza — todos en la Costa de Oaxaca, Pacífico mexicano.\n\n¿Estás buscando un terreno para construir, una residencia lista o una inversión?'
     ],
     azimut: [
-      `**${p.azimut.nombre}** — ${p.azimut.tipo}\n📍 ${p.azimut.ubicacion}\n\n${p.azimut.descripcion}\n\n✦ ${p.azimut.amenidades.join('\n✦ ')}\n\nIdeal para: ${p.azimut.ideal}\n\n¿Te gustaría saber más sobre precios o disponibilidad?`
+      `**${p.azimut.nombre}** — ${p.azimut.tipo}\n📍 ${p.azimut.ubicacion}\n\n${p.azimut.descripcion}\n\n✦ ${p.azimut.amenidades.join('\n✦ ')}\n\n💰 ${p.azimut.precio}\n\nIdeal para: ${p.azimut.ideal}\n\n¿Quieres ver el mapa de lotes disponibles?`
     ],
     nabani: [
-      `**${p.nabani.nombre}** — ${p.nabani.tipo}\n📍 ${p.nabani.ubicacion}\n\n${p.nabani.descripcion}\n\n✦ ${p.nabani.amenidades.join('\n✦ ')}\n\nIdeal para: ${p.nabani.ideal}\n\n¿Te interesa conocer los precios actuales?`
+      `**${p.nabani.nombre}** — ${p.nabani.tipo}\n📍 ${p.nabani.ubicacion}\n\n${p.nabani.descripcion}\n\n✦ ${p.nabani.amenidades.join('\n✦ ')}\n\n💰 ${p.nabani.precio}\n\nIdeal para: ${p.nabani.ideal}\n\n¿Te muestro los lotes disponibles?`
     ],
     aldea: [
-      `**${p.aldea.nombre}** — ${p.aldea.tipo}\n📍 ${p.aldea.ubicacion}\n\n${p.aldea.descripcion}\n\n✦ ${p.aldea.amenidades.join('\n✦ ')}\n\nIdeal para: ${p.aldea.ideal}\n\nEs nuestro proyecto más exclusivo con disponibilidad limitada. ¿Quieres que un asesor te contacte?`
+      `**${p.aldea.nombre}** — ${p.aldea.tipo}\n📍 ${p.aldea.ubicacion}\n\n${p.aldea.descripcion}\n\n✦ ${p.aldea.amenidades.join('\n✦ ')}\n\n💰 ${p.aldea.precio}\n\nIdeal para: ${p.aldea.ideal}\n\nDisponibilidad limitada. ¿Quieres que un asesor te contacte?`
     ],
     serena: [
-      `**${p.serena.nombre}** — ${p.serena.tipo}\n📍 ${p.serena.ubicacion}\n\n${p.serena.descripcion}\n\n✦ ${p.serena.amenidades.join('\n✦ ')}\n\nEste proyecto está próximo a lanzarse. ¿Te registramos en la lista de espera?`
+      `**${p.serena.nombre}** — ${p.serena.tipo}\n📍 ${p.serena.ubicacion}\n\n${p.serena.descripcion}\n\n✦ ${p.serena.amenidades.join('\n✦ ')}\n\n💰 ${p.serena.precio}\n\nEstá próximo a lanzarse. ¿Te registramos en la lista de espera?`
     ],
     kora: [
-      `**${p.kora.nombre}** — ${p.kora.tipo}\n📍 ${p.kora.ubicacion}\n\n${p.kora.descripcion}\n\n✦ ${p.kora.amenidades.join('\n✦ ')}\n\nEstá por lanzarse. ¿Te dejo en la lista para conocer precios y disponibilidad primero?`
+      `**${p.kora.nombre}** — ${p.kora.tipo}\n📍 ${p.kora.ubicacion}\n\n${p.kora.descripcion}\n\n✦ ${p.kora.amenidades.join('\n✦ ')}\n\n💰 ${p.kora.precio}\n\n¿Te dejo en la lista para conocer precios y disponibilidad primero?`
     ],
     precio: [
-      'Te ubico por rangos para que elijas mejor:\n\n💎 **Aldea Tao** es el más exclusivo y premium — las mejores vistas, sobre acantilado.\n🌿 **Nabani** (frente al mar, Puerto Ángel) y **Serena** (bosque, San Antonio) son los más accesibles.\n🧘 **Azimut** (Mazunte) está en un punto medio.\n\nLos precios exactos y los lotes disponibles los confirma un asesor según el proyecto. ¿Cuál te interesa y te paso con ventas?',
-      'Tenemos opciones desde lotes accesibles (Nabani, Serena) hasta terrenos premium en acantilado (Aldea Tao). El número exacto y la disponibilidad de lotes los da un asesor — no los publicamos en línea.\n\n¿Cuál te llama más: vista al mar, bosque o acantilado?'
+      `Estos son los rangos por proyecto (MXN), con lotes realmente disponibles:\n\n🧘 **Azimut** (Mazunte) — ${p.azimut.precio}\n🌊 **Nabani** (Puerto Ángel) — ${p.nabani.precio}\n💎 **Aldea Tao** (acantilado) — ${p.aldea.precio}\n🌳 **Serena** (bosque) — ${p.serena.precio}\n\n¿De cuál te muestro el mapa de lotes con precio por lote?`,
+      `Hay opciones para cada presupuesto:\n\n• Más accesible: **Azimut** y **Nabani** (desde ~$464,000–$502,000 MXN)\n• Comunidad en bosque: **Serena** (lotes amplios y accesibles)\n• Premium con las mejores vistas: **Aldea Tao** (hasta ~$2,200,000 MXN)\n\nCada landing tiene el mapa de lotes con el precio exacto de cada uno. ¿Cuál te interesa?`
     ],
     inversion: [
       'La Costa de Oaxaca es una de las zonas con mayor plusvalía en México — todavía con precios accesibles antes del boom turístico masivo.\n\nNuestros proyectos ofrecen:\n✦ Plusvalía del terreno a largo plazo\n✦ Renta vacacional si construyes (Mazunte/Zipolite son destinos en auge)\n✦ Acompañamiento y respaldo legal completo\n\n¿Buscas invertir para construir, rentar o revender?'
     ],
     proceso: [
-      'El proceso de compra con Tierra Desarrollos es seguro y acompañado:\n\n1️⃣ Asesoría inicial — conocemos tu perfil\n2️⃣ Visita al terreno (presencial o virtual)\n3️⃣ Firma de promesa de compraventa\n4️⃣ Plan de pago acordado\n5️⃣ Escrituración notarial\n6️⃣ Entrega de terreno\n\nTodo con acompañamiento legal desde el día uno. ¿Tienes alguna duda sobre alguno de estos pasos?'
+      'El proceso de compra con Tierra Desarrollos es seguro y acompañado:\n\n1️⃣ Asesoría inicial — conocemos tu perfil\n2️⃣ Visita al terreno (presencial o virtual)\n3️⃣ Firma de promesa de compraventa\n4️⃣ Plan de pago acordado\n5️⃣ Título de posesión\n6️⃣ Entrega de terreno\n\nTodo con acompañamiento legal desde el día uno. ¿Tienes alguna duda sobre alguno de estos pasos?'
     ],
     financiamiento: [
       'Sí, ofrecemos planes de pago flexibles — no necesitas pagar todo de contado.\n\nContamos con esquemas de enganche + mensualidades adaptados a cada cliente. Los detalles específicos los maneja nuestro equipo de ventas según tu capacidad de inversión.\n\n¿Prefieres que te contacte un asesor por WhatsApp para ver opciones concretas?'
