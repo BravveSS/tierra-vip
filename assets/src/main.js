@@ -307,6 +307,21 @@ if (!window.__REDUCED){
   scns.forEach(s => { const el = document.querySelector(s); if (el){ el.classList.add('scn'); ioScn.observe(el); } });
 }
 
+// EXPERIENCIA: reveal del texto + parallax suave de cada franja inmersiva
+(function(){
+  const strips = document.querySelectorAll('.exp-strip');
+  if (!strips.length) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold:.35 });
+  strips.forEach(s => {
+    io.observe(s);
+    if (!window.__REDUCED){
+      const img = s.querySelector('img');
+      gsap.fromTo(img, { yPercent:-7 }, { yPercent:7, ease:'none',
+        scrollTrigger:{ trigger:s, start:'top bottom', end:'bottom top', scrub:true } });
+    }
+  });
+})();
+
 // Marquee reactivo: se inclina con la velocidad del scroll
 (function(){
   const track = document.getElementById('mq1');
@@ -435,12 +450,16 @@ const gdata = [
   {src:'assets/img/aldea-tao/vistaaldeatao.webp',      lbl:'Aldea Tao · Vista al mar',         tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/renderaldeatao.webp',     lbl:'Aldea Tao · Render del proyecto',  tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/renderaldeatao2png.webp', lbl:'Aldea Tao · Diseño en acantilado', tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/g-cala.webp',             lbl:'Aldea Tao · Cala privada',         tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao'},
   // ── AZIMUT ──
   {src:'assets/img/azimut/dronazimut.webp',            lbl:'Azimut · Mazunte desde el aire',   tag:'Azimut'},
   {src:'assets/img/azimut/fotorealazimut.webp',        lbl:'Azimut · Selva nativa',            tag:'Azimut'},
   {src:'assets/img/azimut/fotorealazimut2.webp',       lbl:'Azimut · El terreno',              tag:'Azimut'},
   {src:'assets/img/azimut/vistaazimut.webp',           lbl:'Azimut · Vista al Pacífico',       tag:'Azimut'},
   {src:'assets/img/azimut/renderazimutyogashala.webp', lbl:'Azimut · Yoga Shala (render)',     tag:'Azimut'},
+  {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut'},
+  {src:'assets/img/azimut/g-render.webp',              lbl:'Azimut · Residencia en la selva',  tag:'Azimut'},
   // ── NABANI ──
   {src:'assets/img/nabani/dronnabani.webp',                 lbl:'Nabani · Frente al mar desde el aire', tag:'Nabani'},
   {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Terreno frente al mar',   tag:'Nabani'},
@@ -448,6 +467,8 @@ const gdata = [
   {src:'assets/img/nabani/vistanabani.webp',                lbl:'Nabani · Vista al Pacífico',       tag:'Nabani'},
   {src:'assets/img/nabani/rendernabani.webp',               lbl:'Nabani · Render de residencia',    tag:'Nabani'},
   {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Diseño de autor',         tag:'Nabani'},
+  {src:'assets/img/nabani/g-villa.webp',                    lbl:'Nabani · Residencia con alberca',  tag:'Nabani'},
+  {src:'assets/img/nabani/g-terraza.webp',                  lbl:'Nabani · Terraza con vista',       tag:'Nabani'},
   // ── DEPAS KORA ──
   {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Diseño contemporáneo', tag:'Depas Kora'},
   {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Vista al mar',          tag:'Depas Kora'},
@@ -1369,8 +1390,8 @@ gsap.utils.toArray('.tl-step').forEach((el,i)=>{
   const lbl = document.getElementById('sec-label'); if (!lbl) return;
   const secs = [
     ['#hero','01 — Inicio','01 — Home'],['#manifesto','02 — Manifiesto','02 — Manifesto'],['#masterplan','03 — Masterplan','03 — Masterplan'],
-    ['#sec-projects','04 — Proyectos','04 — Projects'],['#coming','05 — Próximamente','05 — Coming soon'],['#invertir','06 — Inversión','06 — Investment'],
-    ['#construccion','07 — Construcción','07 — Construction'],['#proceso','08 — Proceso','08 — Process'],['#g3d','09 — Galería','09 — Gallery'],['#confianza','10 — Confianza','10 — Trust'],['#chat','11 — Contacto','11 — Contact'],
+    ['#sec-projects','04 — Proyectos','04 — Projects'],['#coming','05 — Próximamente','05 — Coming soon'],['#experiencia','06 — Experiencia','06 — Experience'],['#invertir','07 — Inversión','07 — Investment'],
+    ['#construccion','08 — Construcción','08 — Construction'],['#proceso','09 — Proceso','09 — Process'],['#g3d','10 — Galería','10 — Gallery'],['#confianza','11 — Confianza','11 — Trust'],['#chat','12 — Contacto','12 — Contact'],
   ];
   let curSec = null;
   window.__secLabelRefresh = () => { if (curSec) lbl.textContent = window.__LANG === 'en' ? curSec[2] : curSec[1]; };
