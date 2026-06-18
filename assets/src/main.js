@@ -452,6 +452,7 @@ const gdata = [
   {src:'assets/img/aldea-tao/renderaldeatao2png.webp', lbl:'Aldea Tao · Diseño en acantilado', tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/g-cala.webp',             lbl:'Aldea Tao · Cala privada',         tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/g-aire.webp',             lbl:'Aldea Tao · La Boquilla desde el aire', tag:'Aldea Tao'},
   // ── AZIMUT ──
   {src:'assets/img/azimut/dronazimut.webp',            lbl:'Azimut · Mazunte desde el aire',   tag:'Azimut'},
   {src:'assets/img/azimut/fotorealazimut.webp',        lbl:'Azimut · Selva nativa',            tag:'Azimut'},
@@ -469,6 +470,8 @@ const gdata = [
   {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Diseño de autor',         tag:'Nabani'},
   {src:'assets/img/nabani/g-villa.webp',                    lbl:'Nabani · Residencia con alberca',  tag:'Nabani'},
   {src:'assets/img/nabani/g-terraza.webp',                  lbl:'Nabani · Terraza con vista',       tag:'Nabani'},
+  {src:'assets/img/nabani/g-punto.webp',                    lbl:'Nabani · El punto sobre el Pacífico', tag:'Nabani'},
+  {src:'assets/img/nabani/g-playa.webp',                    lbl:'Nabani · Playa a pasos del terreno', tag:'Nabani'},
   // ── DEPAS KORA ──
   {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Diseño contemporáneo', tag:'Depas Kora'},
   {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Vista al mar',          tag:'Depas Kora'},
@@ -952,7 +955,7 @@ const TIERRA_CONTEXT = {
     serena: {
       nombre: 'Serena',
       tipo: 'Comunidad en el bosque — próximamente',
-      ubicacion: 'San Antonio, Oaxaca',
+      ubicacion: 'Mazunte, Oaxaca',
       descripcion: 'Comunidad para vivir en el bosque, con acceso a huerta y animales de granja. Lotes amplios y de precio accesible.',
       amenidades: ['Vida en el bosque', 'Huerta', 'Animales de granja', 'Lotes amplios', 'Arquitectura sustentable'],
       precio: 'Lotes amplios y de precio accesible.',
@@ -1028,13 +1031,13 @@ function aipBuildReply(intent, userMsg) {
       'Sí, ofrecemos planes de pago flexibles — no necesitas pagar todo de contado.\n\nContamos con esquemas de enganche + mensualidades adaptados a cada cliente. Los detalles específicos los maneja nuestro equipo de ventas según tu capacidad de inversión.\n\n¿Prefieres que te contacte un asesor por WhatsApp para ver opciones concretas?'
     ],
     ubicacion: [
-      'Todos nuestros proyectos están en la Costa de Oaxaca, Pacífico mexicano:\n\n📍 **Azimut** — Mazunte\n📍 **Nabani** — Puerto Ángel (frente al mar)\n📍 **Aldea Tao** — La Boquilla (acantilado)\n📍 **Serena** — San Antonio (bosque)\n📍 **Depas Kora** — Puerto Ángel (próximamente)\n\nLa zona está a ~7h de CDMX por carretera o ~1h en vuelo a Huatulco. ¿Quieres información de cómo llegar?'
+      'Todos nuestros proyectos están en la Costa de Oaxaca, Pacífico mexicano:\n\n📍 **Azimut** — Mazunte\n📍 **Nabani** — Puerto Ángel (frente al mar)\n📍 **Aldea Tao** — La Boquilla (acantilado)\n📍 **Serena** — Mazunte (bosque)\n📍 **Depas Kora** — Puerto Ángel (próximamente)\n\nLa zona está a ~7h de CDMX por carretera o ~1h en vuelo a Huatulco. ¿Quieres información de cómo llegar?'
     ],
     contacto: [
       '¡Con gusto! Puedes contactarnos por:\n\n📱 **WhatsApp:** +52 958 108 7977\n📧 **Email:** ventas@tierra.vip\n📸 **Instagram:** @tierra_desarrollos\n\nNuestro equipo atiende de lunes a domingo. ¿Quieres que te abra el WhatsApp directo?'
     ],
     proyectos: [
-      'Tenemos 5 proyectos en la Costa de Oaxaca:\n\n🧘 **Azimut** — Comunidad de yoga en Mazunte\n🌊 **Nabani** — Terrenos frente al mar, Puerto Ángel\n💎 **Aldea Tao** — Lotes exclusivos en acantilado, La Boquilla\n🌳 **Serena** — Comunidad en el bosque, San Antonio (próximamente)\n🏙️ **Depas Kora** — Departamentos en Puerto Ángel (próximamente)\n\n¿Cuál te interesa explorar primero?'
+      'Tenemos 5 proyectos en la Costa de Oaxaca:\n\n🧘 **Azimut** — Comunidad de yoga en Mazunte\n🌊 **Nabani** — Terrenos frente al mar, Puerto Ángel\n💎 **Aldea Tao** — Lotes exclusivos en acantilado, La Boquilla\n🌳 **Serena** — Comunidad en el bosque, Mazunte (próximamente)\n🏙️ **Depas Kora** — Departamentos en Puerto Ángel (próximamente)\n\n¿Cuál te interesa explorar primero?'
     ],
     agradecimiento: [
       'Un placer ayudarte 🌿 Si tienes más preguntas o quieres hablar con un asesor, estamos en WhatsApp: +52 958 108 7977',
@@ -1136,6 +1139,28 @@ function openAiPanel() {
 aiFab.addEventListener('click', () => { openAiPanel(); gsap.to(aiFab, {rotate: 90, duration: .4, ease: 'back.out(2)'}); });
 aipClose.addEventListener('click', () => { aiPanel.classList.remove('open'); gsap.to(aiFab, {rotate: 0, duration: .4}); });
 
+// ── Barra de contacto rápido del chat: copiar número + WhatsApp ──
+const aqCopy = document.getElementById('aq-copy');
+if (aqCopy){
+  const PHONE = '+52 958 108 7977';
+  const lbl = document.getElementById('aq-copy-label');
+  aqCopy.addEventListener('click', async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(PHONE); ok = true; }
+    catch(e){
+      try { const ta=document.createElement('textarea'); ta.value=PHONE; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); ok=document.execCommand('copy'); document.body.removeChild(ta); } catch(_){}
+    }
+    if (ok){
+      aqCopy.classList.add('ok');
+      const prev = lbl.textContent;
+      lbl.textContent = (window.__LANG==='en' ? 'Copied ✓' : 'Copiado ✓');
+      setTimeout(()=>{ aqCopy.classList.remove('ok'); lbl.textContent = prev; }, 1600);
+    } else {
+      window.open('https://wa.me/529581087977', '_blank');
+    }
+  });
+}
+
 /* ════════════════════════════════════════
    MODO PERFORMANCE (flags ya definidos arriba)
 ═══════════════════════════════════════ */
@@ -1185,7 +1210,7 @@ if (window.__PERF_LOW) {
         cn = document.getElementById('mp-card-n'), cl = document.getElementById('mp-card-l');
   const DATA = {
     azimut:{n:'Azimut', l:'Mazunte · Oaxaca', l_en:'Mazunte · Oaxaca', img:'assets/img/azimut/renderazimutyogashala.webp'},
-    serena:{n:'Serena', l:'San Antonio · Próximamente', l_en:'San Antonio · Coming soon', img:'assets/img/serena/renderserena-2.webp'},
+    serena:{n:'Serena', l:'Mazunte · Próximamente', l_en:'Mazunte · Coming soon', img:'assets/img/serena/renderserena-2.webp'},
     nabani:{n:'Nabani', l:'Puerto Ángel', l_en:'Puerto Ángel', img:'assets/img/nabani/dronnabani.webp'},
     kora:  {n:'Depas Kora', l:'Puerto Ángel · Próximamente', l_en:'Puerto Ángel · Coming soon', img:'assets/img/kora/rs-w-719-h-836.webp'},
     aldea: {n:'Aldea Tao', l:'La Boquilla', l_en:'La Boquilla', img:'assets/img/aldea-tao/dronaldeatao.webp'},
@@ -1423,7 +1448,7 @@ const EN_REPLIES = {
   saludo: "Hi! Welcome to Tierra Desarrollos 🌿\n\nWe develop eco-luxury lots and homes on the Oaxaca coast: jungle lots near Mazunte, oceanfront land steps from Zipolite, and clifftop sites above hidden beaches.\n\nWhat are you looking for — land to build, a turnkey home, or an investment?",
   precio: "Prices vary by project and current availability, so we don't publish them online — that way an advisor can offer you the best option for your profile.\n\nTell me which project interests you (Azimut, Nabani, Aldea Tao, Serena or Depas Kora) and we'll connect you right away.",
   contacto: "Of course! You can reach us at:\n\n📱 **WhatsApp:** +52 958 108 7977\n📧 **Email:** ventas@tierra.vip\n📸 **Instagram:** @tierra_desarrollos\n\nWe reply every day of the week.",
-  proyectos: "We have 5 projects on the Oaxaca coast:\n\n🧘 **Azimut** — yoga community in Mazunte\n🌊 **Nabani** — oceanfront land in Puerto Ángel\n💎 **Aldea Tao** — exclusive clifftop lots, La Boquilla\n🌳 **Serena** — forest community, San Antonio (coming soon)\n🏙️ **Depas Kora** — apartments in Puerto Ángel (coming soon)\n\nWhich one would you like to explore?",
+  proyectos: "We have 5 projects on the Oaxaca coast:\n\n🧘 **Azimut** — yoga community in Mazunte\n🌊 **Nabani** — oceanfront land in Puerto Ángel\n💎 **Aldea Tao** — exclusive clifftop lots, La Boquilla\n🌳 **Serena** — forest community, Mazunte (coming soon)\n🏙️ **Depas Kora** — apartments in Puerto Ángel (coming soon)\n\nWhich one would you like to explore?",
   proceso: "Buying with Tierra is safe and guided:\n\n1️⃣ Initial consultation\n2️⃣ Site visit (in person or virtual)\n3️⃣ Purchase agreement\n4️⃣ Payment plan\n5️⃣ Notarized deed\n6️⃣ Delivery\n\nFull legal support from day one. Want an advisor to walk you through it?",
   inversion: "The Oaxaca coast is one of Mexico's fastest-appreciating regions — still affordable compared to saturated destinations like Tulum.\n\n✦ Long-term land appreciation\n✦ Vacation rental demand in Mazunte & Zipolite\n✦ Guaranteed deeds and full legal backing\n\nAre you looking to build, rent out, or hold?",
   financiamiento: "Yes — we offer flexible down payments and monthly installments adapted to each client. An advisor can share exact terms by WhatsApp: +52 958 108 7977.",
@@ -1472,7 +1497,7 @@ aipGetReply = function(text){
   }
   if (_barato && _noProj){
     AIP.interests.push('Nabani'); aipLastIntent='precio'; aipHistory.push({role:'user',text});
-    const r = LL(`Los más accesibles del portafolio:\n\n🌊 **Nabani** (frente al mar, Puerto Ángel) — desde ~$502,000 MXN\n🧘 **Azimut** (Mazunte, yoga) — desde ~$464,000 MXN\n🌳 **Serena** (bosque, San Antonio) — lotes amplios y accesibles\n\n¿De cuál te muestro los lotes disponibles con precio?`,
+    const r = LL(`Los más accesibles del portafolio:\n\n🌊 **Nabani** (frente al mar, Puerto Ángel) — desde ~$502,000 MXN\n🧘 **Azimut** (Mazunte, yoga) — desde ~$464,000 MXN\n🌳 **Serena** (bosque, Mazunte) — lotes amplios y accesibles\n\n¿De cuál te muestro los lotes disponibles con precio?`,
                  `The most accessible options:\n\n🌊 **Nabani** (oceanfront, Puerto Ángel) — from ~$502,000 MXN\n🧘 **Azimut** (Mazunte, yoga) — from ~$464,000 MXN\n🌳 **Serena** (forest) — large, accessible lots\n\nWhich one's lots would you like to see, with prices?`);
     aipHistory.push({role:'ai',text:r}); return r;
   }
@@ -1484,8 +1509,8 @@ aipGetReply = function(text){
   }
   if (_selva && _noProj && !/^\s*$/.test(t)){
     AIP.interests.push('Azimut'); aipLastIntent='azimut'; aipHistory.push({role:'user',text});
-    const r = LL(`Para naturaleza y tranquilidad: **Azimut** (Mazunte) — comunidad de yoga y meditación, lotes en ladera de selva desde ~$464,000 MXN. Y **Serena** (San Antonio) — vida en el bosque con huerta, lotes amplios y accesibles.\n\n¿Cuál te muestro?`,
-                 `For nature and calm: **Azimut** (Mazunte) — yoga & meditation community, jungle hillside lots from ~$464,000 MXN. And **Serena** (San Antonio) — forest living with an orchard, large accessible lots.\n\nWhich one shall I show you?`);
+    const r = LL(`Para naturaleza y tranquilidad: **Azimut** (Mazunte) — comunidad de yoga y meditación, lotes en ladera de selva desde ~$464,000 MXN. Y **Serena** (Mazunte) — vida en el bosque con huerta, lotes amplios y accesibles.\n\n¿Cuál te muestro?`,
+                 `For nature and calm: **Azimut** (Mazunte) — yoga & meditation community, jungle hillside lots from ~$464,000 MXN. And **Serena** (Mazunte) — forest living with an orchard, large accessible lots.\n\nWhich one shall I show you?`);
     aipHistory.push({role:'ai',text:r}); return r;
   }
   // ── contexto: respuesta directa a "¿qué buscas?" (terreno / casa / depa) ──
@@ -1725,8 +1750,8 @@ const CHAT_EN = new Map([
     ['#hl1','We create spaces'],['#hl2','where the land speaks.'],['#hsub','Architecture in harmony with nature'],
     ['#hctas a:nth-child(1)','Explore projects'],['#hctas a:nth-child(2)','Talk to an advisor <span>→</span>','h'],
     // manifesto
-    ['#mfl1','We believe land'],['#mfl2','is not owned.'],['#mfl3','It is cared for.'],
-    ['#manifesto > p',"At Tierra Desarrollos we don't sell square meters. We sell access to a place that still exists — where the ocean is still wild, the jungle hasn't given way and silence still has value. Every project we build is a promise that this place will go on existing."],
+    ['#mfl1','There are many ways'],['#mfl2','to own the land.'],['#mfl3','We choose to care for it.'],
+    ['#manifesto > p',"Tierra Desarrollos builds homes where the ocean is still wild, the jungle hasn't given way and silence still has value. Every project we build is a promise that this place will go on existing."],
     // hero pre + ubicaciones de proyecto
     ['#hpre','Tierra  ·  Development & Construction'],
     ['#pco-nb .ploc','Puerto Ángel'],['#pco-at .ploc','Oaxacan Coast'],
@@ -1831,7 +1856,7 @@ const CHAT_EN = new Map([
   const calcEN = ['Estimated lot price ', 'Down payment ', 'Term '];
 
   // labels de la galería 3D (parte tras el "·" de cada gdata.lbl)
-  const G_LBL = [['Vista aérea','Aerial view'],['Acantilados del Pacífico','Pacific cliffs'],['Costa salvaje','Wild coast'],['Vista al mar','Ocean view'],['Render del proyecto','Project render'],['Diseño en acantilado','Clifftop design'],['Mazunte desde el aire','Mazunte from above'],['Selva nativa','Native jungle'],['El terreno','The land'],['Vista al Pacífico','Pacific view'],['Yoga Shala (render)','Yoga Shala (render)'],['Frente al mar desde el aire','Oceanfront from above'],['Terreno frente al mar','Oceanfront land'],['Playa Aguete','Aguete Beach'],['Render de residencia','Residence render'],['Diseño de autor','Signature design'],['Diseño contemporáneo','Contemporary design'],['Departamentos','Apartments'],['Comunidad eco','Eco community'],['Vida en comunidad','Community living']];
+  const G_LBL = [['Vista aérea','Aerial view'],['Acantilados del Pacífico','Pacific cliffs'],['Costa salvaje','Wild coast'],['Vista al mar','Ocean view'],['Render del proyecto','Project render'],['Diseño en acantilado','Clifftop design'],['Mazunte desde el aire','Mazunte from above'],['Selva nativa','Native jungle'],['El terreno','The land'],['Vista al Pacífico','Pacific view'],['Yoga Shala (render)','Yoga Shala (render)'],['Frente al mar desde el aire','Oceanfront from above'],['Terreno frente al mar','Oceanfront land'],['Playa Aguete','Aguete Beach'],['Render de residencia','Residence render'],['Diseño de autor','Signature design'],['Diseño contemporáneo','Contemporary design'],['Departamentos','Apartments'],['Comunidad eco','Eco community'],['Vida en comunidad','Community living'],['La Boquilla desde el aire','La Boquilla from above'],['El punto sobre el Pacífico','The point over the Pacific'],['Playa a pasos del terreno','Beach steps from the land']];
   window.__txGallery = function(){
     const en = window.__LANG === 'en';
     document.querySelectorAll('.gcard-name').forEach(n => {

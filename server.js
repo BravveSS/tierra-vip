@@ -33,7 +33,7 @@ PROYECTOS (datos reales, no inventes otros):
 - NABANI (Costa Oaxaqueña): terrenos frente al mar con acceso a playas caminando, a pasos de Zipolite y Mazunte. Para levantar residencias de autor en madera, palma y piedra.
 - ALDEA TAO (Costa de Oaxaca): lotes en acantilado sobre el Pacífico, comunidad única. Acceso a Playa Tololote y La Boquilla. Escrituración garantizada.
 - DEPAS KORA (Zipolite): departamentos en preventa, diseño minimalista, vistas al mar, a minutos de Zipolite.
-- SERENA (San Antonio): comunidad eco próxima a lanzarse junto a Mazunte: jardín comunitario, huerto orgánico, arquitectura sustentable.
+- SERENA (Mazunte): comunidad eco próxima a lanzarse junto a Mazunte: jardín comunitario, huerto orgánico, arquitectura sustentable.
 - CONSTRUCCIÓN: Tierra construye llave en mano (casas reales entregadas, p. ej. Yuu'Kee en La Boquilla). +6 años de trayectoria, +40 clientes.
 
 MANEJO DE INFORMACIÓN:

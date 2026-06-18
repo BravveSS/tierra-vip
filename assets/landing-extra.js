@@ -41,7 +41,7 @@
     ['Hogares que pertenecen a su entorno.','Homes that belong to their landscape.'],
     // eyebrows
     ['Mazunte · Oaxaca','Mazunte · Oaxaca'],['Costa Oaxaqueña','Oaxacan Coast'],['Costa de Oaxaca','Oaxaca Coast'],
-    ['San Antonio · Oaxaca · Próximamente','San Antonio · Oaxaca · Coming soon'],['Zipolite · Oaxaca · Preventa','Zipolite · Oaxaca · Pre-sale'],
+    ['Mazunte · Oaxaca · Próximamente','Mazunte · Oaxaca · Coming soon'],['Zipolite · Oaxaca · Preventa','Zipolite · Oaxaca · Pre-sale'],
     // AZIMUT
     ['Construye tu hogar dentro de un centro de bienestar holístico, a pocos pasos del centro de Mazunte. Lotes privados en ladera de selva nativa, con yoga shala, temazcal y alberca natural en el corazón de la comunidad.','Build your home inside a holistic wellness center, steps from the heart of Mazunte. Private jungle hillside lots with a yoga shala, temazcal and natural pool at the center of the community.'],
     ['Algunos terrenos cuentan con vista al Pacífico; todos comparten servicios completos y respaldo legal desde el primer día — para que vivir en armonía con la naturaleza no signifique renunciar a nada.','Some lots have Pacific views; all share full utilities and legal backing from day one — so living in harmony with nature never means giving anything up.'],
@@ -73,11 +73,11 @@
     ['Sé parte de Serena','Be part of Serena'],
     ['Serena está por lanzarse. Regístrate en la lista de espera y sé de los primeros en conocer la disponibilidad.','Serena is about to launch. Join the waitlist and be among the first to know availability.'],
     // DEPAS KORA
-    ['Uno de los proyectos de departamentos más innovadores de la Costa de Oaxaca, a pocos minutos de Zipolite, con vistas al mar y rodeado de naturaleza.','One of the most innovative apartment projects on the Oaxaca Coast, minutes from Zipolite, with ocean views and surrounded by nature.'],
+    ['Uno de los proyectos de departamentos más innovadores de la Costa de Oaxaca, en Puerto Ángel, con vistas al mar y rodeado de naturaleza.','One of the most innovative apartment projects on the Oaxaca Coast, minutes from Zipolite, with ocean views and surrounded by nature.'],
     ['Diseño minimalista y vida contemporánea, en preventa — los mejores precios son ahora.','Minimalist design and contemporary living, in pre-sale — the best prices are now.'],
     ['Las imágenes son renders de inspiración del diseño que tendrán los departamentos.','The images are inspiration renders of the design the apartments will have.'],
     ['Acceso a playa','Beach access'],['Vistas al océano','Ocean views'],['Diseño minimalista','Minimalist design'],
-    ['Rodeado de naturaleza','Surrounded by nature'],['A minutos de Zipolite','Minutes from Zipolite'],['Etapa de preventa','Pre-sale stage'],
+    ['Rodeado de naturaleza','Surrounded by nature'],['En Puerto Ángel','Minutes from Zipolite'],['Etapa de preventa','Pre-sale stage'],
     ['Asegura tu departamento en preventa','Secure your apartment in pre-sale'],
     ['Los precios de preventa son por tiempo limitado. Recibe la información detallada de Depas Kora.','Pre-sale prices are for a limited time. Get the full details of Depas Kora.'],
     // CONSTRUCCIÓN
