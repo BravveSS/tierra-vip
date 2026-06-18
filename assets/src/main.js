@@ -585,11 +585,20 @@ function stopAuto() {
   if (gAutoTimer) { clearInterval(gAutoTimer); gAutoTimer = null; }
 }
 
-// Arrow buttons
+// Arrow buttons — en móvil mueven el carrusel nativo (.g3d-mob); en desktop, el 3D
 const gPrev = document.getElementById('g3d-prev');
 const gNext = document.getElementById('g3d-next');
-if (gPrev) gPrev.addEventListener('click', () => { stopAuto(); goToCard(gActive - 1); startAuto(); });
-if (gNext) gNext.addEventListener('click', () => { stopAuto(); goToCard(gActive + 1); startAuto(); });
+function galleryNav(dir){
+  if (window.matchMedia('(max-width:768px)').matches && gmob){
+    const item = gmob.querySelector('.g3d-mob-item');
+    const step = item ? item.getBoundingClientRect().width + 10 : gmob.clientWidth * 0.75;
+    gmob.scrollBy({ left: dir * step, behavior: 'smooth' });
+  } else {
+    stopAuto(); goToCard(gActive + dir); startAuto();
+  }
+}
+if (gPrev) gPrev.addEventListener('click', () => galleryNav(-1));
+if (gNext) gNext.addEventListener('click', () => galleryNav(1));
 
 // Dot clicks
 function rebuildDots(filtered) {

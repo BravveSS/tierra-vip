@@ -49,7 +49,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="assets/img/aldea-tao/dronaldeatao.webp">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.min.css?v=13">
+<link rel="stylesheet" href="assets/styles.min.css?v=14">
 </head>
 <body>
 
@@ -531,10 +531,10 @@
   <div style="position:relative">
     <div class="g3d-counter" id="g3d-bigc" aria-hidden="true">01 <small>/ 23</small></div>
     <div id="g3d-stage" role="region" aria-roledescription="carrusel" aria-label="Galería de imágenes de los proyectos"><div id="g3d-cards"></div></div>
-    <button id="g3d-prev" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(8,7,6,.7);border:1px solid rgba(201,169,110,.3);color:var(--cream);font-size:18px;cursor:pointer;z-index:10;backdrop-filter:blur(8px);transition:all .25s">←</button>
-    <button id="g3d-next" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(8,7,6,.7);border:1px solid rgba(201,169,110,.3);color:var(--cream);font-size:18px;cursor:pointer;z-index:10;backdrop-filter:blur(8px);transition:all .25s">→</button>
+    <div class="g3d-mob" id="g3d-mob"></div>
+    <button id="g3d-prev" aria-label="Anterior" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(8,7,6,.7);border:1px solid rgba(201,169,110,.3);color:var(--cream);font-size:18px;cursor:pointer;z-index:10;backdrop-filter:blur(8px);transition:all .25s">←</button>
+    <button id="g3d-next" aria-label="Siguiente" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(8,7,6,.7);border:1px solid rgba(201,169,110,.3);color:var(--cream);font-size:18px;cursor:pointer;z-index:10;backdrop-filter:blur(8px);transition:all .25s">→</button>
   </div>
-  <div class="g3d-mob" id="g3d-mob"></div>
   <div class="g3d-dots" id="g3d-dots"></div>
   <p style="text-align:center;font-family:var(--fb);font-size:11px;letter-spacing:.14em;color:var(--muted);padding-bottom:24px">← Arrastrá, tocá las flechas o usá el teclado →</p>
 </section>
@@ -655,7 +655,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="assets/main.min.js?v=10" defer></script>
+<script src="assets/main.min.js?v=11" defer></script>
 </body>
 </html>
 

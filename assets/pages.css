@@ -20,8 +20,13 @@ img{display:block;max-width:100%}
 
 /* ── NAV ── */
 .pnav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-  padding:20px 48px;transition:background .4s ease,padding .4s ease,backdrop-filter .4s ease}
-.pnav.scrolled{background:rgba(8,7,6,.82);backdrop-filter:blur(14px);padding:14px 48px;border-bottom:1px solid rgba(201,169,110,.12)}
+  padding:20px 48px;transition:padding .4s ease}
+/* fondo+blur en un pseudo-elemento: si fuera en .pnav, su backdrop-filter rompe el
+   position:fixed del menú móvil (lo ancla al nav y corta las opciones a la mitad) */
+.pnav::before{content:'';position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .4s ease;
+  background:rgba(8,7,6,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(201,169,110,.12)}
+.pnav.scrolled::before{opacity:1}
+.pnav.scrolled{padding:14px 48px}
 .pnav-logo img{height:46px;width:auto;display:block}
 .pnav-links{display:flex;gap:34px;list-style:none;align-items:center}
 .pnav-links a{font-family:var(--fb);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,238,228,.72);transition:color .25s;position:relative}
@@ -157,8 +162,8 @@ section{position:relative}
 /* ── MOBILE ── */
 @media(max-width:860px){
   .pnav{padding:16px 24px}.pnav.scrolled{padding:12px 24px}
-  .pnav-links{position:fixed;inset:0;background:rgba(8,7,6,.97);flex-direction:column;justify-content:center;
-    gap:30px;transform:translateX(100%);transition:transform .4s ease}
+  .pnav-links{position:fixed;inset:0;z-index:99;background:rgba(8,7,6,.97);flex-direction:column;justify-content:center;align-items:center;
+    gap:28px;padding:84px 24px;overflow-y:auto;transform:translateX(100%);transition:transform .4s ease}
   .pnav-links.open{transform:none}
   .pnav-links a{font-size:18px}
   .pnav-ham{display:flex;z-index:101}
