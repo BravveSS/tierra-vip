@@ -93,7 +93,24 @@ const cobj   = {n:0};
 
 // Pre-start video silently so it's ready
 const vid = document.getElementById('hvid');
-if (vid) { vid.load(); vid.play().catch(()=>{}); }
+// Hero video: misma resolución/calidad full; solo evitamos descargarlo en
+// conexiones lentas o con ahorro de datos (ahí se ve el póster en full-res).
+(function initHeroVideo(){
+  if (!vid) return;
+  const c = navigator.connection || navigator.webkitConnection || {};
+  const slow = c.saveData === true || /(^|\b)(slow-2g|2g|3g)$/.test(c.effectiveType || '');
+  if (window.__REDUCED || slow) return;            // queda el póster (imagen full-res)
+  const start = () => {
+    if (vid.querySelector('source')) return;
+    const s = document.createElement('source');
+    s.src = vid.dataset.src; s.type = 'video/mp4';
+    vid.appendChild(s);
+    vid.load(); vid.play().catch(()=>{});
+  };
+  // arranca tras la carga para no competir con el render inicial
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
+})();
 
 // ── PRELOAD ALL IMAGES DURING LOADER ────────────
 // Browser fetches everything while user watches the intro
