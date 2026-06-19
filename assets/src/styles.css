@@ -736,6 +736,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 #wa-menu button:hover{background:rgba(201,169,110,.14)}
 #wa-menu button span{color:var(--gold)}
 @media(max-width:768px){#wa-fab{bottom:78px;right:16px;width:50px;height:50px}#wa-menu{right:16px;bottom:138px;width:calc(100vw - 32px);max-width:280px}}
+/* con el menú móvil abierto, ocultar los FAB para que no tapen el cambio de idioma */
+body.menu-open #wa-fab,body.menu-open #wa-menu,body.menu-open #ai-fab{opacity:0;pointer-events:none;visibility:hidden}
 
 /* ════════════════════════════════════════
    EXPERIENCIA — franjas inmersivas full-bleed

@@ -947,6 +947,10 @@ const aipInput= document.getElementById('aip-input');
 const aipSend = document.getElementById('aip-send');
 const aipClose= document.getElementById('aip-close');
 let aipStarted = false;
+// ── Memoria del chat: persiste la conversación en el navegador ──
+const AIP_KEY = 'tierraChat';
+let aipLog = [];
+function aipPersist(){ try { localStorage.setItem(AIP_KEY, JSON.stringify(aipLog.slice(-40))); } catch(e){} }
 
 // ── TIERRA AI SALES ASSISTANT ─────────────────
 const TIERRA_CONTEXT = {
@@ -1082,9 +1086,11 @@ function aipBuildReply(intent, userMsg) {
   return options[Math.floor(Math.random() * options.length)];
 }
 
-function aipAddMsg(role, text) {
+function aipAddMsg(role, text, opts) {
+  opts = opts || {};
   const w = document.createElement('div');
   w.className = `aip-msg ${role}`;
+  if (opts.noAnim) w.style.animation = 'none';
   const b = document.createElement('div');
   b.className = 'aip-bub';
   // Format bold **text**
@@ -1094,6 +1100,18 @@ function aipAddMsg(role, text) {
   w.appendChild(b);
   aipMsgs.appendChild(w);
   aipMsgs.scrollTop = aipMsgs.scrollHeight;
+  if (opts.save !== false) { aipLog.push({ r: role, t: text }); aipPersist(); }
+}
+
+// Restaura la conversación guardada (sin animación, sin re-guardar). Devuelve true si había historial.
+function aipRestore() {
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(AIP_KEY) || '[]'); } catch(e){}
+  if (!Array.isArray(saved) || !saved.length) return false;
+  saved.forEach(m => aipAddMsg(m.r, m.t, { save: false, noAnim: true }));
+  aipLog = saved.slice();
+  aipMsgs.scrollTop = aipMsgs.scrollHeight;
+  return true;
 }
 
 function aipShowTyping() {
@@ -1146,6 +1164,8 @@ function openAiPanel() {
   aiPanel.classList.add('open');
   if (!aipStarted) {
     aipStarted = true;
+    // si ya hubo conversación en este navegador, la recuperamos y no repetimos el saludo
+    if (aipRestore()) { aipInput.focus(); return; }
     setTimeout(() => {
       const ty = aipShowTyping();
       setTimeout(() => {
