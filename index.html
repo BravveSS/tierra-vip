@@ -50,6 +50,7 @@
 <link rel="preload" as="image" href="assets/img/aldea-tao/dronaldeatao.webp">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.min.css?v=15">
+<link rel="stylesheet" href="assets/tierra-forms.css?v=1">
 </head>
 <body>
 
@@ -439,11 +440,26 @@
   <div class="nlw">
     <div style="font-family:var(--fh);font-style:italic;font-size:clamp(18px,2.4vw,24px);color:rgba(201,169,110,.85)">Sé el primero en enterarte</div>
     <p style="font-family:var(--fb);font-size:13px;color:rgba(242,238,228,.5);margin-top:8px;line-height:1.7">Déjanos tu correo y te avisamos cuando Serena y Depas Kora abran disponibilidad.</p>
-    <form class="nlw-form" id="nlw-form" novalidate>
-      <input type="email" id="nlw-email" placeholder="tu@correo.com" autocomplete="email" aria-label="Correo electrónico">
-      <button type="submit">Unirme a la lista</button>
+    <form class="tierra-form" data-origen="Lista de espera (home)" novalidate>
+      <div class="tf-body">
+        <div class="tf-row">
+          <input name="name" type="text" required autocomplete="name" placeholder="Nombre" data-es="Nombre" data-en="Name" aria-label="Nombre">
+          <input name="phone" type="tel" required autocomplete="tel" placeholder="WhatsApp / Teléfono" data-es="WhatsApp / Teléfono" data-en="WhatsApp / Phone" aria-label="WhatsApp o teléfono">
+        </div>
+        <input name="email" type="email" required autocomplete="email" placeholder="tu@correo.com" aria-label="Correo electrónico">
+        <select name="proyecto" required aria-label="Proyecto de interés">
+          <option value="" disabled selected data-es="¿Qué proyecto te interesa?" data-en="Which project interests you?">¿Qué proyecto te interesa?</option>
+          <option value="Azimut">Azimut · Mazunte</option>
+          <option value="Nabani">Nabani</option>
+          <option value="Aldea Tao">Aldea Tao</option>
+          <option value="Serena">Serena</option>
+          <option value="Depas Kora">Depas Kora</option>
+          <option value="No sé aún" data-es="No sé aún" data-en="Not sure yet">No sé aún</option>
+        </select>
+        <button type="submit" data-es="Unirme a la lista" data-en="Join the list">Unirme a la lista</button>
+        <p class="tf-status" role="status" aria-live="polite"></p>
+      </div>
     </form>
-    <div class="nlw-ok" id="nlw-ok" role="status"></div>
   </div>
 </section>
 
@@ -588,6 +604,30 @@
     <p>Cuéntanos qué buscas y te conectamos con el proyecto ideal.</p>
     <p style="margin-top:10px"><a href="https://wa.me/529581087977?text=Hola%2C%20quiero%20agendar%20una%20visita%20a%20la%20costa." target="_blank" rel="noopener" style="font-family:var(--fb);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,169,110,.45)" data-i18n="cta_visita">o agenda tu visita directa →</a></p>
   </div>
+
+  <!-- FORMULARIO DE CONTACTO REAL (llega por email a ventas@tierra.vip vía Web3Forms) -->
+  <form class="tierra-form" data-origen="Encuentra tu tierra (home)" novalidate>
+    <div class="tf-body">
+      <div class="tf-row">
+        <input name="name" type="text" required autocomplete="name" placeholder="Nombre" data-es="Nombre" data-en="Name" aria-label="Nombre">
+        <input name="phone" type="tel" required autocomplete="tel" placeholder="WhatsApp / Teléfono" data-es="WhatsApp / Teléfono" data-en="WhatsApp / Phone" aria-label="WhatsApp o teléfono">
+      </div>
+      <input name="email" type="email" required autocomplete="email" placeholder="tu@correo.com" aria-label="Correo electrónico">
+      <select name="proyecto" required aria-label="Proyecto de interés">
+        <option value="" disabled selected data-es="¿Qué proyecto te interesa?" data-en="Which project interests you?">¿Qué proyecto te interesa?</option>
+        <option value="Azimut">Azimut · Mazunte</option>
+        <option value="Nabani">Nabani</option>
+        <option value="Aldea Tao">Aldea Tao</option>
+        <option value="Serena">Serena</option>
+        <option value="Depas Kora">Depas Kora</option>
+        <option value="No sé aún" data-es="No sé aún" data-en="Not sure yet">No sé aún</option>
+      </select>
+      <textarea name="mensaje" rows="2" placeholder="¿Qué estás buscando? (opcional)" data-es="¿Qué estás buscando? (opcional)" data-en="What are you looking for? (optional)" aria-label="Mensaje"></textarea>
+      <button type="submit" data-es="Quiero que me contacten" data-en="Have someone contact me">Quiero que me contacten</button>
+      <p class="tf-status" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+
   <div class="cwin">
     <div class="cbar">
       <div class="cav"><img src="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/tierra-white2%20copy.png" alt="T"></div>
@@ -656,6 +696,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="assets/main.min.js?v=12" defer></script>
+<script src="assets/tierra-forms.js?v=1" defer></script>
 </body>
 </html>
 
