@@ -13,9 +13,9 @@
     { es: '+40 clientes felices', en: '40+ happy clients' },
     { es: '6+ años de trayectoria', en: '6+ years of experience' },
     { es: '5 proyectos activos', en: '5 active projects' },
-    { es: 'Escrituras garantizadas', en: 'Guaranteed deeds' },
     { es: 'Costa de Oaxaca', en: 'Oaxaca Coast' },
-    { es: '100% respaldo legal', en: '100% legal backing' }
+    { es: 'Acompañamiento legal', en: 'Legal support' },
+    { es: 'Frente al Pacífico', en: 'Facing the Pacific' }
   ];
 
   function tickerHTML() {
@@ -61,7 +61,47 @@
     els.forEach(function (e) { io.observe(e); });
   }
 
-  function init() { buildTicker(); initReveal(); }
+  // Fade-in de imágenes al cargar (en PC y móvil por igual)
+  function fadeImages() {
+    var EXCLUDE = '#hero, .hvw, .exp-strip, .pcard, .piw, header, footer, .pnav, .pfoot, .tmbar, #wa-fab, #wa-menu';
+    document.querySelectorAll('img').forEach(function (img) {
+      if (img.closest(EXCLUDE)) return;                 // no tocar hero/GSAP/nav
+      if (img.dataset.tFade) return;
+      img.dataset.tFade = '1';
+      img.classList.add('t-fade-img');
+      var done = function () { img.classList.add('loaded'); };
+      if (img.complete && img.naturalWidth) done();
+      else { img.addEventListener('load', done, { once: true });
+             img.addEventListener('error', done, { once: true }); }
+    });
+  }
+
+  // Videos de Experiencia: cargar y reproducir solo cuando entran en pantalla
+  function expVideos() {
+    var vids = document.querySelectorAll('.exp-vid');
+    if (!vids.length) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var c = navigator.connection || {};
+    var save = c.saveData === true || /(^|\b)(slow-2g|2g)$/.test(c.effectiveType || '');
+    if (reduce || save) return;                 // queda la foto real
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          if (!v.src && v.dataset.src) v.src = v.dataset.src;
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+          v.classList.add('on');
+        } else {
+          v.classList.remove('on');
+          try { v.pause(); } catch (_) {}
+        }
+      });
+    }, { threshold: 0.25 });
+    vids.forEach(function (v) { io.observe(v); });
+  }
+
+  function init() { buildTicker(); initReveal(); fadeImages(); expVideos(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

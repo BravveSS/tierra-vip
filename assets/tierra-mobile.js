@@ -13,18 +13,9 @@
   function isEN() { return window.__LANG === 'en' || document.documentElement.getAttribute('lang') === 'en'; }
   var isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-  /* -- Perf: no descargar el video pesado del hero en móvil --
-     El hero ya trae un póster full-res. En pantallas chicas evitamos los ~31MB
-     del .mp4: pre-insertamos un <source> vacío para que el cargador diferido del
-     sitio no adjunte el video (queda el póster). Corre antes del evento load. */
-  (function guardHeroVideo() {
-    if (!isMobile) return;
-    var v = document.getElementById('hvid');
-    if (v && !v.querySelector('source')) {
-      v.appendChild(document.createElement('source')); // centinela sin src
-      v.removeAttribute('data-src');
-    }
-  })();
+  /* Nota: el video del hero ahora pesa ~1.9MB (optimizado), así que SÍ se
+     reproduce también en móvil. El sitio ya evita cargarlo en conexiones
+     lentas / ahorro de datos (queda el póster full-res). */
 
   /* -- Lazy-load para imágenes que aún no lo declaran (mejora Lighthouse) -- */
   (function lazyImages() {
