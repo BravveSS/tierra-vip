@@ -219,6 +219,7 @@
 /* ── PORTADO: calculadora, visitas, comparador y timeline (con guards) ── */
 (function(){
   'use strict';
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const P = document.getElementById('calc-p'), E = document.getElementById('calc-e'), M = document.getElementById('calc-m');
   if (P){
     const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
