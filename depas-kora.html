@@ -18,6 +18,7 @@
 <link rel="icon" type="image/png" href="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/tierra-white2%20copy.png">
 <link rel="apple-touch-icon" href="https://img1.wsimg.com/isteam/ip/55e35788-46e9-46a1-a282-5ca2f74e27f2/tierra-white2%20copy.png">
 <link rel="stylesheet" href="assets/pages.css?v=11">
+<link rel="stylesheet" href="assets/tierra-forms.css?v=1">
 </head>
 <body>
 
@@ -85,11 +86,25 @@
     <div class="eyebrow reveal">Lista de espera</div>
     <h2 class="h2 reveal">Sé el primero en enterarte</h2>
     <p class="lead reveal d1" style="margin:18px auto 0;text-align:center">Déjanos tu correo y serás de los primeros en conocer la disponibilidad de Depas Kora.</p>
-    <form class="wait-form reveal d2" data-proj="Depas Kora">
-      <input type="email" required placeholder="tu@correo.com" aria-label="Correo electrónico">
-      <button type="submit" class="btn btn-solid">Unirme a la lista</button>
+    <form class="tierra-form reveal d2" data-origen="Lista de espera — Depas Kora" data-proyecto="Depas Kora" novalidate>
+      <div class="tf-body">
+        <div class="tf-row">
+          <input name="name" type="text" required autocomplete="name" placeholder="Nombre" data-es="Nombre" data-en="Name" aria-label="Nombre">
+          <input name="phone" type="tel" required autocomplete="tel" placeholder="WhatsApp / Teléfono" data-es="WhatsApp / Teléfono" data-en="WhatsApp / Phone" aria-label="WhatsApp o teléfono">
+        </div>
+        <input name="email" type="email" required autocomplete="email" placeholder="tu@correo.com" aria-label="Correo electrónico">
+        <select name="proyecto" required aria-label="Proyecto de interés">
+          <option value="Depas Kora" selected>Depas Kora</option>
+          <option value="Azimut">Azimut · Mazunte</option>
+          <option value="Nabani">Nabani</option>
+          <option value="Aldea Tao">Aldea Tao</option>
+          <option value="Serena">Serena</option>
+          <option value="No sé aún" data-es="No sé aún" data-en="Not sure yet">No sé aún</option>
+        </select>
+        <button type="submit" class="btn btn-solid" data-es="Unirme a la lista" data-en="Join the list">Unirme a la lista</button>
+        <p class="tf-status" role="status" aria-live="polite"></p>
+      </div>
     </form>
-    <p class="wait-ok" aria-live="polite"></p>
     <div class="cta-row reveal d2" style="justify-content:center;margin-top:8px">
       <a class="btn" href="https://wa.me/529581087977?text=Hola%2C%20me%20interesa%20Depas%20Kora.%20%C2%BFMe%20avisan%20cuando%20abra%20disponibilidad%3F" target="_blank" rel="noopener">Prefiero WhatsApp</a>
       <a class="btn" href="index.html#sec-projects">Ver otros proyectos</a>
@@ -114,5 +129,6 @@
   </footer>
 <script src="assets/pages.js"></script>
 <script src="assets/landing-extra.js?v=5"></script>
+<script src="assets/tierra-forms.js?v=1" defer></script>
 </body>
 </html>

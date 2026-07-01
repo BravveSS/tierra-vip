@@ -250,6 +250,21 @@
       if (p2) msg += ' al proyecto ' + p2;
       if (f) msg += '. Fecha preferida: ' + f;
       if (w) msg += '. Mi WhatsApp: ' + w;
+      // 1) El lead nos llega por email aunque no completen el WhatsApp (Web3Forms)
+      if (window.TierraForms && window.TierraForms.sendLead){
+        window.TierraForms.sendLead({
+          origen: 'Agendar visita (nosotros)',
+          name: n, phone: w, proyecto: p2 || 'No especificado',
+          tipo_visita: tipo, fecha_preferida: f || 'No especificada'
+        });
+      }
+      // 2) Confirmación visual + abre WhatsApp (canal directo, se mantiene)
+      let ok = form.querySelector('.vis-ok');
+      if (!ok){ ok = document.createElement('p'); ok.className = 'vis-ok'; ok.setAttribute('role','status');
+        ok.style.cssText = 'margin:12px 0 0;font-size:13.5px;color:var(--gold);line-height:1.6'; form.appendChild(ok); }
+      ok.textContent = (window.__LANG === 'en')
+        ? '✓ Got it! We saved your request and opened WhatsApp to confirm.'
+        : '✓ ¡Listo! Guardamos tu solicitud y abrimos WhatsApp para confirmar.';
       window.open('https://wa.me/529581087977?text=' + encodeURIComponent(msg + '. Vengo desde tierra.vip 🌿'), '_blank');
     });
   }
