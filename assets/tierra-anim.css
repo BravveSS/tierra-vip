@@ -124,3 +124,23 @@
   .pcard .piw img, .gcard img, .cs-card img, .ptb img { transition: none; }
   .t-reveal { opacity: 1; transform: none; }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   5) AJUSTES DE FEEDBACK
+   ──────────────────────────────────────────────────────────────── */
+
+/* "Encuentra tu tierra": una sola vía de contacto — el formulario real.
+   Ocultamos el chat simulado (no enviaba nada) para no duplicar. */
+#chat .cwin { display: none !important; }
+#chat .cht-hd { margin-bottom: 10px; }
+
+/* Menos espacio vacío al principio.
+   En móvil el hero ancla el texto en el tercio inferior (la costa llena
+   arriba) → composición editorial moderna, sin hueco muerto al entrar. */
+@media (max-width: 768px) {
+  #hero { align-items: flex-end !important; }
+  #hbody { padding-bottom: 13vh; }
+  #manifesto { padding-top: 50px !important; }
+  /* el indicador de scroll no debe pelear con el texto reubicado */
+  #sind { bottom: 14px !important; }
+}
