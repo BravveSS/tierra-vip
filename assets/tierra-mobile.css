@@ -1,0 +1,77 @@
+/* ============================================================================
+   TIERRA — Mejoras mobile-first (Bloque 2)
+   - Barra fija de contacto (solo móvil)
+   - Ajustes de touch targets y galería
+   ========================================================================== */
+
+/* ---- Barra fija inferior de contacto (solo ≤768px) ---- */
+.tmbar {
+  --tm-gold: var(--gold, #C9A96E);
+  --tm-cream: var(--cream, #F2EEE4);
+  --tm-fb: var(--fb, 'DM Sans', sans-serif);
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 940;
+  display: none;                 /* se activa solo en móvil (abajo) */
+  gap: 10px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(12, 18, 14, .82);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  border-top: 1px solid rgba(201, 169, 110, .22);
+  transform: translateY(120%);
+  transition: transform .4s cubic-bezier(.16, 1, .3, 1);
+}
+.tmbar.show { transform: translateY(0); }
+
+.tmbar a {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  border-radius: 12px;
+  font-family: var(--tm-fb);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-decoration: none;
+  transition: transform .15s ease, filter .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tmbar a:active { transform: scale(.97); }
+.tmbar .tm-wa {
+  background: #25D366;
+  color: #06240f;
+}
+.tmbar .tm-visit {
+  background: var(--tm-gold);
+  color: #14110c;
+}
+.tmbar a svg { width: 19px; height: 19px; flex: 0 0 auto; }
+
+/* Mostrar solo en móvil y dejar aire para que no tape el footer */
+@media (max-width: 768px) {
+  .tmbar { display: flex; }
+  body.has-tmbar { padding-bottom: 76px; }
+  /* En móvil el FAB flotante de WhatsApp es redundante con la barra: lo ocultamos */
+  body.has-tmbar #wa-fab,
+  body.has-tmbar #wa-menu { display: none !important; }
+}
+
+/* ---- Touch targets mínimos cómodos en móvil ---- */
+@media (max-width: 768px) {
+  .pnav-links a,
+  .fnav a, .flinks a { min-height: 40px; display: inline-flex; align-items: center; }
+  .btn, .btn-solid { min-height: 46px; }
+}
+
+/* ---- Galería: mejor arrastre horizontal con el dedo ---- */
+@media (max-width: 768px) {
+  .g3d-track, .exp-strip, .cmp-scroll { -webkit-overflow-scrolling: touch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tmbar { transition: none; }
+}
