@@ -134,6 +134,29 @@
 #chat .cwin { display: none !important; }
 #chat .cht-hd { margin-bottom: 10px; }
 
+/* Videos de la sección Experiencia (superpuestos a la foto real).
+   La foto queda de fallback/póster debajo; el video entra con fade. */
+.exp-strip .exp-vid {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(.6) saturate(1.05);
+  opacity: 0; transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+.exp-strip .exp-vid.on { opacity: 1; }
+.exp-strip::after { z-index: 1; }   /* la viñeta queda sobre el video */
+.exp-strip .exp-txt { z-index: 2; }
+
+/* Fade-in de imágenes al cargar (PC y móvil) — solo opacidad, no choca
+   con los transforms del hero/parallax (esos quedan excluidos por JS). */
+.t-fade-img { opacity: 0; transition: opacity .9s ease; }
+.t-fade-img.loaded { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .t-fade-img { opacity: 1 !important; }
+}
+
 /* Menos espacio vacío al principio.
    En móvil el hero ancla el texto en el tercio inferior (la costa llena
    arriba) → composición editorial moderna, sin hueco muerto al entrar. */
