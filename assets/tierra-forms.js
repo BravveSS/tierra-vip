@@ -56,14 +56,17 @@
     fd.append('pagina', location.href);
     fd.append('destinatario', LEADS_EMAIL);
 
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 12000);
     return fetch(ENDPOINT, {
       method: 'POST',
       headers: { Accept: 'application/json' },
-      body: fd
+      body: fd,
+      signal: ctrl ? ctrl.signal : undefined
     })
-      .then(function (r) { return r.json(); })
+      .then(function (r) { clearTimeout(to); return r.json(); })
       .then(function (d) { return { success: !!d.success, message: d.message || '' }; })
-      .catch(function () { return { success: false, message: 'network' }; });
+      .catch(function () { clearTimeout(to); return { success: false, message: 'network' }; });
   }
 
   /* --------------------------------------------------------------------------
