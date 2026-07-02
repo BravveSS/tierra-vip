@@ -1,0 +1,100 @@
+/* ============================================================================
+   TIERRA — Comparador antes/después ("Del render a la realidad")
+   Slider arrastrable que muestra el render del proyecto vs la obra real.
+   Prueba de venta: lo que prometemos, lo construimos.
+   ========================================================================== */
+.tc-wrap { margin: 44px auto 0; max-width: 980px; }
+
+.t-compare {
+  --tc: 50%;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  background: var(--earth, #1E3A2C);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .42);
+  outline: none;
+}
+@media (max-width: 640px) {
+  .t-compare { aspect-ratio: 4 / 3; }
+}
+
+.t-compare img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  display: block;
+}
+
+/* capa superior (render) recortada por el divisor */
+.t-compare .tc-over {
+  position: absolute; inset: 0;
+  clip-path: inset(0 calc(100% - var(--tc)) 0 0);
+}
+
+/* divisor + perilla */
+.t-compare .tc-handle {
+  position: absolute; top: 0; bottom: 0;
+  left: var(--tc);
+  width: 2px;
+  margin-left: -1px;
+  background: rgba(242, 238, 228, .92);
+  box-shadow: 0 0 14px rgba(0, 0, 0, .5);
+  pointer-events: none;
+}
+.t-compare .tc-knob {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  gap: 3px;
+  background: rgba(18, 32, 25, .78);
+  border: 1px solid rgba(201, 169, 110, .8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: var(--gold, #C9A96E);
+  font-size: 13px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* etiquetas Render / Obra real */
+.t-compare .tc-tag {
+  position: absolute; top: 14px;
+  padding: 7px 13px;
+  font-family: var(--fb, 'DM Sans', sans-serif);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cream, #F2EEE4);
+  background: rgba(18, 32, 25, .58);
+  border: 1px solid rgba(201, 169, 110, .38);
+  border-radius: 3px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+.t-compare .tc-tag.a { left: 14px; }
+.t-compare .tc-tag.b { right: 14px; }
+
+.tc-cap {
+  margin-top: 14px;
+  font-family: var(--fb, 'DM Sans', sans-serif);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: .02em;
+  color: var(--muted, #8FA396);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-compare { cursor: default; }
+}
