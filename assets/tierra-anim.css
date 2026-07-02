@@ -32,6 +32,17 @@
   #experiencia .exp-strip { height: 40vh !important; min-height: 260px !important; }
 }
 
+/* PC: que quede tan ágil como en móvil — menos espacio vacío en desktop.
+   (El gran hueco arriba de "El amanecer" era el padding de .exp-intro.) */
+@media (min-width: 769px) {
+  #experiencia .exp-intro { padding-top: 74px !important; padding-bottom: 34px !important; }
+  #manifesto { padding-top: 104px !important; padding-bottom: 104px !important; }
+  #construccion, #confianza, #invertir, #proceso {
+    padding-top: 96px !important; padding-bottom: 96px !important;
+  }
+  .sec { padding-top: 84px !important; padding-bottom: 84px !important; }
+}
+
 /* ────────────────────────────────────────────────────────────────
    2) SCROLL-REVEAL — más lindo y ágil (menos recorrido, mejor curva)
    Aplica a .reveal (páginas secundarias) sin tocar su JS.
@@ -149,12 +160,17 @@
 .exp-strip::after { z-index: 1; }   /* la viñeta queda sobre el video */
 .exp-strip .exp-txt { z-index: 2; }
 
+/* Hero de video en páginas secundarias (Construcción) */
+.phero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.phero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(18,32,25,.35) 0%, rgba(18,32,25,.12) 42%, rgba(18,32,25,.78) 100%); }
+
 /* Fade-in de imágenes al cargar (PC y móvil) — solo opacidad, no choca
    con los transforms del hero/parallax (esos quedan excluidos por JS). */
-.t-fade-img { opacity: 0; transition: opacity .9s ease; }
-.t-fade-img.loaded { opacity: 1; }
+.t-fade-img { opacity: 0; transform: translateY(14px); transition: opacity .8s ease, transform .9s cubic-bezier(.16, 1, .3, 1); }
+.t-fade-img.loaded { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .t-fade-img { opacity: 1 !important; }
+  .t-fade-img { opacity: 1 !important; transform: none !important; }
 }
 
 /* Menos espacio vacío al principio.
