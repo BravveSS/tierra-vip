@@ -97,7 +97,11 @@
         var v = e.target;
         if (e.isIntersecting) {
           v.muted = true; v.setAttribute('muted', '');    // autoplay confiable
-          if (!v.src && v.dataset.src) { v.src = v.dataset.src; v.load(); }
+          if (!v.src && v.dataset.src) {
+            v.src = v.dataset.src; v.load();
+            // si el video falla (red, códec), se oculta y queda la foto real
+            v.addEventListener('error', function () { v.remove(); }, { once: true });
+          }
           var p = v.play(); if (p && p.catch) p.catch(function () {});
           v.classList.add('on');
         } else {
