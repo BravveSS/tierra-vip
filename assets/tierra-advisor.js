@@ -128,15 +128,46 @@
   }
 
   /* ---------- Modo IA real (Netlify Function + Claude) ----------
-     Si el backend no está desplegado (ej. GitHub Pages), cae con
-     elegancia a WhatsApp + flujo guiado. */
+     AI_ENABLED: poner en true cuando el backend esté desplegado en Netlify
+     con la variable ANTHROPIC_API_KEY configurada. Mientras esté en false,
+     el chat muestra un aviso de mantenimiento elegante y sigue captando
+     leads por WhatsApp y el recorrido guiado. */
+  var AI_ENABLED = false;
   var AI_ENDPOINT = '/.netlify/functions/chat';
   var aiHistory = [];
   var aiTurns = 0;
 
   function aiMode() {
+    if (!AI_ENABLED) { aiMaintenance(); return; }
     botSay(t('¡Claro! Escribime tu pregunta y te respondo al instante. 👇',
              'Sure! Type your question and I\'ll answer right away. 👇'), showAiInput);
+  }
+
+  function aiMaintenance() {
+    botSay(t('Nuestro asistente inteligente está en mantenimiento por unas horas 🔧 Pero no te quedás sin respuesta: un asesor humano te contesta al instante por WhatsApp.',
+             'Our smart assistant is under maintenance for a few hours 🔧 But you\'re not left hanging: a human advisor replies instantly on WhatsApp.'), function () {
+      var cta = document.createElement('a');
+      cta.className = 'tadv-wa-cta';
+      cta.href = WA + '?text=' + encodeURIComponent(t('Hola, tengo una pregunta sobre los proyectos de Tierra.', 'Hi, I have a question about Tierra\'s projects.'));
+      cta.target = '_blank'; cta.rel = 'noopener';
+      cta.textContent = t('Preguntar por WhatsApp', 'Ask on WhatsApp');
+      els.body.appendChild(cta); scroll();
+      botSay(t('O te ayudo yo con el recorrido guiado — en 1 minuto encontramos tu proyecto ideal:', 'Or I can help you with the guided tour — we\'ll find your ideal project in 1 minute:'), function () {
+        options([
+          { v: 'g', label: t('🌿 Recorrido guiado', '🌿 Guided tour') },
+          { v: 'd', label: t('📝 Dejar mis datos', '📝 Leave my details') }
+        ], function (o) {
+          if (o.v === 'g') { botSay(t('¿Qué estás buscando?', 'What are you looking for?'), function () {
+            options([
+              { v: 'Terreno / lote', label: t('🏝️ Un terreno / lote', '🏝️ Land / a lot') },
+              { v: 'Construir mi casa', label: t('🏠 Construir mi casa', '🏠 Build my home') },
+              { v: 'Invertir', label: t('📈 Invertir', '📈 Invest') }
+            ], function (x) { lead.busca = x.v; askProject(); });
+          }); }
+          else { lead.busca = 'Chat'; lead.proyecto = 'No sé aún'; lead.tiempo = 'Explorando opciones'; askData(); }
+        });
+      });
+    });
   }
 
   function showAiInput() {
@@ -312,11 +343,56 @@
     });
   }
 
+  /* ---------- Exit-intent (solo desktop) ----------
+     Cuando el mouse sale por arriba (va a cerrar la pestaña), el asesor
+     se abre UNA vez con una oferta de último momento. Se recuerda por
+     3 días para no molestar. */
+  function exitIntent() {
+    if (window.innerWidth <= 1024) return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var KEY = 'tierra-exit';
+    try { if (Date.now() - (+localStorage.getItem(KEY) || 0) < 3 * 864e5) return; } catch (_) {}
+
+    var fired = false;
+    function onOut(e) {
+      if (fired || opened || started) { cleanup(); return; }
+      if (e.clientY > 8 || e.relatedTarget) return;
+      fired = true; cleanup();
+      try { localStorage.setItem(KEY, String(Date.now())); } catch (_) {}
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'exit_intent_shown', { event_category: 'engagement' });
+      }
+      open(); started = true;                       // flujo propio, no el normal
+      botSay(t('¡Espera! 🌿 Antes de irte: dejame tu WhatsApp y te mando disponibilidad y precios de los proyectos — sin compromiso.',
+               'Wait! 🌿 Before you go: leave your WhatsApp and I\'ll send you availability and prices — no strings attached.'), function () {
+        options([
+          { v: 'd', label: t('📝 Sí, quiero la info', '📝 Yes, send me the info') },
+          { v: 'w', label: t('💬 Mejor por WhatsApp', '💬 WhatsApp me instead') },
+          { v: 'n', label: t('Ahora no, gracias', 'Not now, thanks') }
+        ], function (o) {
+          if (o.v === 'd') { lead.busca = 'Exit intent'; lead.proyecto = 'No sé aún'; lead.tiempo = 'Explorando opciones'; askData(); }
+          else if (o.v === 'w') {
+            var cta = document.createElement('a');
+            cta.className = 'tadv-wa-cta';
+            cta.href = WA + '?text=' + encodeURIComponent(t('Hola, me interesa recibir disponibilidad y precios de los proyectos de Tierra.', 'Hi, I\'d like availability and prices for Tierra\'s projects.'));
+            cta.target = '_blank'; cta.rel = 'noopener';
+            cta.textContent = t('Abrir WhatsApp', 'Open WhatsApp');
+            els.body.appendChild(cta); scroll();
+          }
+          else { botSay(t('¡Sin problema! Aquí me quedo por si me necesitas. 🌿', 'No problem! I\'ll be right here if you need me. 🌿'), close ? function () { setTimeout(close, 1200); } : null); }
+        });
+      });
+    }
+    function cleanup() { document.removeEventListener('mouseout', onOut); }
+    document.addEventListener('mouseout', onOut);
+  }
+
   /* ---------- Init ---------- */
   function init() {
     // Ocultar el asesor simulado viejo si existe (evita duplicados)
     ['ai-fab', 'ai-panel'].forEach(function (id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
     build();
+    exitIntent();
     // re-traducir etiquetas fijas si cambia idioma antes de abrir
     new MutationObserver(function () {
       if (!started && els.name) { /* labels se recalculan al abrir */ }

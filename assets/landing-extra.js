@@ -201,15 +201,8 @@
       }
       splitTitle(hero.querySelector('.phero-title'));
     }
-    // imágenes de galería: emergen del negro al entrar
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting){ e.target.style.filter = ''; e.target.style.transform = ''; io.unobserve(e.target); }
-    }), {threshold:.2});
-    document.querySelectorAll('.grid img').forEach(im => {
-      im.style.filter = 'brightness(0)'; im.style.transform = 'scale(1.12)';
-      im.style.transition = 'filter 1.4s ease, transform 1.4s cubic-bezier(.16,1,.3,1)';
-      io.observe(im);
-    });
+    // (la entrada de imágenes de galería la maneja tierra-anim.js — un solo
+    // sistema de fade; el efecto inline anterior pisaba la transición de opacidad)
   }
 
   // aplicar idioma inicial DESPUÉS del split del título (para re-splitear traducido)

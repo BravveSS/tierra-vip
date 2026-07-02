@@ -64,10 +64,10 @@
   // Fade-in de imágenes al entrar en pantalla (scroll-triggered → consistente
   // en TODAS las páginas, no solo donde las imágenes cargan lento).
   function fadeImages() {
-    var EXCLUDE = '#hero, .hvw, .phero, .exp-strip, .pcard, .piw, header, footer, .pnav, .pfoot, .tmbar, #wa-fab, #wa-menu, #tadv-panel, #tadv-fab';
+    var EXCLUDE = '#hero, .hvw, .phero, .exp-strip, .pcard, .piw, header, footer, .pnav, .pfoot, .tmbar, #wa-fab, #wa-menu, #tadv-panel, #tadv-fab, #lb, #logo3d, .t-compare';
     var imgs = [];
     document.querySelectorAll('img').forEach(function (img) {
-      if (img.closest(EXCLUDE)) return;                 // no tocar hero/GSAP/nav/asesor
+      if (img.closest(EXCLUDE)) return;                 // no tocar hero/GSAP/nav/asesor/lightbox
       if (img.dataset.tFade) return;
       img.dataset.tFade = '1';
       img.classList.add('t-fade-img');
@@ -76,11 +76,26 @@
     if (!imgs.length) return;
     if (!('IntersectionObserver' in window)) { imgs.forEach(function (i) { i.classList.add('loaded'); }); return; }
     var io = new IntersectionObserver(function (entries) {
+      // cascada: las que entran juntas (misma fila) se revelan escalonadas
+      var n = 0;
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('loaded'); io.unobserve(e.target); }
+        if (!e.isIntersecting) return;
+        var img = e.target;
+        io.unobserve(img);
+        var delay = Math.min(n++ * 90, 360);
+        img.style.transitionDelay = delay + 'ms';
+        img.classList.add('loaded');
+        // limpiar el delay al terminar para no retrasar el hover-zoom
+        setTimeout(function () { img.style.transitionDelay = ''; }, delay + 1000);
       });
     }, { threshold: 0.06, rootMargin: '0px 0px -4% 0px' });
-    imgs.forEach(function (img) { io.observe(img); });
+    // doble rAF: garantiza que el estado inicial (opacity 0) se pinte antes
+    // de observar → el fade también se ve en las imágenes ya en viewport.
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        imgs.forEach(function (img) { io.observe(img); });
+      });
+    });
   }
 
   // Videos de Experiencia: cargar y reproducir solo cuando entran en pantalla
@@ -141,7 +156,23 @@
     update();
   }
 
-  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); }
+  // Badges de disponibilidad: seguir el toggle ES/EN del sitio
+  function badgeLang() {
+    var badges = document.querySelectorAll('.pstatus[data-es][data-en]');
+    if (!badges.length) return;
+    function apply() {
+      var en = isEN();
+      badges.forEach(function (b) {
+        b.textContent = en ? b.getAttribute('data-en') : b.getAttribute('data-es');
+      });
+    }
+    new MutationObserver(apply).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['lang']
+    });
+    apply();
+  }
+
+  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
