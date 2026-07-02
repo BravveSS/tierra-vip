@@ -61,19 +61,26 @@
     els.forEach(function (e) { io.observe(e); });
   }
 
-  // Fade-in de imágenes al cargar (en PC y móvil por igual)
+  // Fade-in de imágenes al entrar en pantalla (scroll-triggered → consistente
+  // en TODAS las páginas, no solo donde las imágenes cargan lento).
   function fadeImages() {
-    var EXCLUDE = '#hero, .hvw, .exp-strip, .pcard, .piw, header, footer, .pnav, .pfoot, .tmbar, #wa-fab, #wa-menu';
+    var EXCLUDE = '#hero, .hvw, .phero, .exp-strip, .pcard, .piw, header, footer, .pnav, .pfoot, .tmbar, #wa-fab, #wa-menu, #tadv-panel, #tadv-fab';
+    var imgs = [];
     document.querySelectorAll('img').forEach(function (img) {
-      if (img.closest(EXCLUDE)) return;                 // no tocar hero/GSAP/nav
+      if (img.closest(EXCLUDE)) return;                 // no tocar hero/GSAP/nav/asesor
       if (img.dataset.tFade) return;
       img.dataset.tFade = '1';
       img.classList.add('t-fade-img');
-      var done = function () { img.classList.add('loaded'); };
-      if (img.complete && img.naturalWidth) done();
-      else { img.addEventListener('load', done, { once: true });
-             img.addEventListener('error', done, { once: true }); }
+      imgs.push(img);
     });
+    if (!imgs.length) return;
+    if (!('IntersectionObserver' in window)) { imgs.forEach(function (i) { i.classList.add('loaded'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('loaded'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -4% 0px' });
+    imgs.forEach(function (img) { io.observe(img); });
   }
 
   // Videos de Experiencia: cargar y reproducir solo cuando entran en pantalla
@@ -89,7 +96,8 @@
       entries.forEach(function (e) {
         var v = e.target;
         if (e.isIntersecting) {
-          if (!v.src && v.dataset.src) v.src = v.dataset.src;
+          v.muted = true; v.setAttribute('muted', '');    // autoplay confiable
+          if (!v.src && v.dataset.src) { v.src = v.dataset.src; v.load(); }
           var p = v.play(); if (p && p.catch) p.catch(function () {});
           v.classList.add('on');
         } else {
@@ -97,7 +105,7 @@
           try { v.pause(); } catch (_) {}
         }
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.15, rootMargin: '0px 0px 15% 0px' });
     vids.forEach(function (v) { io.observe(v); });
   }
 
