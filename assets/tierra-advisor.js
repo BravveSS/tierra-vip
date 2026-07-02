@@ -144,29 +144,15 @@
   }
 
   function aiMaintenance() {
-    botSay(t('Nuestro asistente inteligente está en mantenimiento por unas horas 🔧 Pero no te quedás sin respuesta: un asesor humano te contesta al instante por WhatsApp.',
-             'Our smart assistant is under maintenance for a few hours 🔧 But you\'re not left hanging: a human advisor replies instantly on WhatsApp.'), function () {
+    botSay(t('Nuestro asistente con inteligencia artificial está en mantenimiento por unas horas 🔧 Muy pronto vuelve. Mientras tanto, escribinos por WhatsApp y un asesor te responde al instante 🌿',
+             'Our AI assistant is under maintenance for a few hours 🔧 It\'ll be back soon. Meanwhile, message us on WhatsApp and an advisor will reply instantly 🌿'), function () {
       var cta = document.createElement('a');
       cta.className = 'tadv-wa-cta';
       cta.href = WA + '?text=' + encodeURIComponent(t('Hola, tengo una pregunta sobre los proyectos de Tierra.', 'Hi, I have a question about Tierra\'s projects.'));
       cta.target = '_blank'; cta.rel = 'noopener';
-      cta.textContent = t('Preguntar por WhatsApp', 'Ask on WhatsApp');
+      cta.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35z"/></svg>' +
+        t('Escribir por WhatsApp', 'Message on WhatsApp');
       els.body.appendChild(cta); scroll();
-      botSay(t('O te ayudo yo con el recorrido guiado — en 1 minuto encontramos tu proyecto ideal:', 'Or I can help you with the guided tour — we\'ll find your ideal project in 1 minute:'), function () {
-        options([
-          { v: 'g', label: t('🌿 Recorrido guiado', '🌿 Guided tour') },
-          { v: 'd', label: t('📝 Dejar mis datos', '📝 Leave my details') }
-        ], function (o) {
-          if (o.v === 'g') { botSay(t('¿Qué estás buscando?', 'What are you looking for?'), function () {
-            options([
-              { v: 'Terreno / lote', label: t('🏝️ Un terreno / lote', '🏝️ Land / a lot') },
-              { v: 'Construir mi casa', label: t('🏠 Construir mi casa', '🏠 Build my home') },
-              { v: 'Invertir', label: t('📈 Invertir', '📈 Invest') }
-            ], function (x) { lead.busca = x.v; askProject(); });
-          }); }
-          else { lead.busca = 'Chat'; lead.proyecto = 'No sé aún'; lead.tiempo = 'Explorando opciones'; askData(); }
-        });
-      });
     });
   }
 

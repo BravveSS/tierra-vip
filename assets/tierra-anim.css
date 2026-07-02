@@ -205,30 +205,21 @@
 .phero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, rgba(18,32,25,.35) 0%, rgba(18,32,25,.12) 42%, rgba(18,32,25,.78) 100%); }
 
-/* Fade-in de imágenes al entrar en pantalla (PC y móvil).
-   Selector con clase doble: gana a `.grid figure img` y `.gcard img`, cuyos
-   shorthand `transition: transform ...` pisaban la transición de opacidad
-   (por eso "desaparecía" el fade en las galerías). Se incluye transform en
-   la misma transición para que el hover-zoom siga suave tras la entrada. */
-img.t-fade-img.t-fade-img {
-  opacity: 0;
-  transform: translateY(16px) scale(1.015);
-}
+/* Fade-in de imágenes (PC y móvil) — SOLO OPACIDAD.
+   Antes usaba transform y por eso chocaba con el parallax del hero, el
+   translateY de .reveal y el zoom de hover (el shorthand `transition:
+   transform` de las galerías pisaba la transición → aparecía de golpe).
+   Al ser opacidad pura no pelea con NINGÚN transform: fade limpio siempre.
+   Clase doble = más peso que `.grid figure img` / `.gcard img`. */
+img.t-fade-img.t-fade-img { opacity: 0; }
 /* la transición vive en .loaded: el estado oculto se aplica al instante
    (sin "parpadeo" de ida) y solo la ENTRADA se anima */
 img.t-fade-img.t-fade-img.loaded {
-  opacity: 1; transform: none;
-  transition: opacity .85s ease, transform .95s cubic-bezier(.16, 1, .3, 1);
-}
-/* tras la entrada, el hover-zoom de las cards recupera su transform normal */
-@media (hover: hover) {
-  .grid figure:hover img.t-fade-img.loaded,
-  .gcard:hover img.t-fade-img.loaded,
-  .cs-card:hover img.t-fade-img.loaded,
-  .ptb:hover img.t-fade-img.loaded { transform: scale(1.06); }
+  opacity: 1;
+  transition: opacity .9s ease;
 }
 @media (prefers-reduced-motion: reduce) {
-  img.t-fade-img.t-fade-img { opacity: 1 !important; transform: none !important; }
+  img.t-fade-img.t-fade-img { opacity: 1 !important; }
 }
 
 /* Menos espacio vacío al principio.
