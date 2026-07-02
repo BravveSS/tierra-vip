@@ -118,8 +118,114 @@
           { v: 'Terreno / lote', label: t('🏝️ Un terreno / lote', '🏝️ Land / a lot') },
           { v: 'Construir mi casa', label: t('🏠 Construir mi casa', '🏠 Build my home') },
           { v: 'Invertir', label: t('📈 Invertir', '📈 Invest') },
-          { v: 'Solo estoy mirando', label: t('👀 Solo estoy mirando', '👀 Just browsing') }
-        ], function (o) { lead.busca = o.v; askProject(); });
+          { v: 'ai', label: t('✍️ Tengo una pregunta', '✍️ I have a question') }
+        ], function (o) {
+          if (o.v === 'ai') { aiMode(); return; }
+          lead.busca = o.v; askProject();
+        });
+      });
+    });
+  }
+
+  /* ---------- Modo IA real (Netlify Function + Claude) ----------
+     Si el backend no está desplegado (ej. GitHub Pages), cae con
+     elegancia a WhatsApp + flujo guiado. */
+  var AI_ENDPOINT = '/.netlify/functions/chat';
+  var aiHistory = [];
+  var aiTurns = 0;
+
+  function aiMode() {
+    botSay(t('¡Claro! Escribime tu pregunta y te respondo al instante. 👇',
+             'Sure! Type your question and I\'ll answer right away. 👇'), showAiInput);
+  }
+
+  function showAiInput() {
+    var old = els.body.querySelector('.tadv-ai'); if (old) old.remove();
+    var f = document.createElement('form');
+    f.className = 'tadv-form tadv-ai';
+    f.innerHTML =
+      '<input name="q" type="text" autocomplete="off" placeholder="' + t('Tu pregunta…', 'Your question…') + '">' +
+      '<button type="submit" aria-label="' + t('Enviar', 'Send') + '">→</button>';
+    els.body.appendChild(f); scroll();
+    f.q.focus();
+
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = f.q.value.trim();
+      if (!q) return;
+      f.remove();
+      userSay(q);
+      aiHistory.push({ role: 'user', content: q });
+      aiTurns++;
+
+      var typing = document.createElement('div');
+      typing.className = 'tadv-msg bot tadv-typing';
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      els.body.appendChild(typing); scroll();
+
+      var ctrl = ('AbortController' in window) ? new AbortController() : null;
+      var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 20000);
+
+      fetch(AI_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: aiHistory }),
+        signal: ctrl ? ctrl.signal : undefined
+      })
+        .then(function (r) { clearTimeout(to); if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function (d) {
+          typing.remove();
+          if (!d.reply) throw new Error('empty');
+          aiHistory.push({ role: 'assistant', content: d.reply });
+          var m = document.createElement('div');
+          m.className = 'tadv-msg bot';
+          m.textContent = d.reply;
+          els.body.appendChild(m); scroll();
+          if (aiTurns >= 4) nudgeContact(); else showAiInput();
+        })
+        .catch(function () {
+          clearTimeout(to); typing.remove();
+          aiFallback(q);
+        });
+    });
+  }
+
+  function nudgeContact() {
+    botSay(t('¿Te gustaría que un asesor humano te contacte con precios y disponibilidad? 🌿',
+             'Would you like a human advisor to reach out with prices and availability? 🌿'), function () {
+      options([
+        { v: 'datos', label: t('📝 Sí, dejar mis datos', '📝 Yes, leave my details') },
+        { v: 'seguir', label: t('✍️ Seguir preguntando', '✍️ Keep asking') }
+      ], function (o) {
+        if (o.v === 'datos') { lead.busca = lead.busca || 'Chat IA'; lead.proyecto = lead.proyecto || 'No sé aún'; lead.tiempo = lead.tiempo || 'Explorando opciones'; askData(); }
+        else { aiTurns = 0; showAiInput(); }
+      });
+    });
+  }
+
+  function aiFallback(q) {
+    botSay(t('Justo ahora no puedo responder eso en línea 🙈 pero un asesor humano sí. Te dejo el enlace directo:',
+             'I can\'t answer that online right now 🙈 but a human advisor can. Here\'s the direct link:'), function () {
+      var cta = document.createElement('a');
+      cta.className = 'tadv-wa-cta';
+      cta.href = WA + '?text=' + encodeURIComponent(t('Hola, tengo una pregunta: ', 'Hi, I have a question: ') + q);
+      cta.target = '_blank'; cta.rel = 'noopener';
+      cta.textContent = t('Preguntar por WhatsApp', 'Ask on WhatsApp');
+      els.body.appendChild(cta); scroll();
+      botSay(t('O si preferís, te ayudo con el recorrido guiado:', 'Or if you prefer, I can guide you:'), function () {
+        options([
+          { v: 'g', label: t('🌿 Recorrido guiado', '🌿 Guided tour') },
+          { v: 'd', label: t('📝 Dejar mis datos', '📝 Leave my details') }
+        ], function (o) {
+          if (o.v === 'g') { botSay(t('¿Qué estás buscando?', 'What are you looking for?'), function () {
+            options([
+              { v: 'Terreno / lote', label: t('🏝️ Un terreno / lote', '🏝️ Land / a lot') },
+              { v: 'Construir mi casa', label: t('🏠 Construir mi casa', '🏠 Build my home') },
+              { v: 'Invertir', label: t('📈 Invertir', '📈 Invest') }
+            ], function (x) { lead.busca = x.v; askProject(); });
+          }); }
+          else { lead.busca = 'Chat'; lead.proyecto = 'No sé aún'; lead.tiempo = 'Explorando opciones'; askData(); }
+        });
       });
     });
   }
