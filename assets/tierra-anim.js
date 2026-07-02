@@ -64,7 +64,9 @@
   // Fade-in de imágenes al entrar en pantalla (scroll-triggered → consistente
   // en TODAS las páginas, no solo donde las imágenes cargan lento).
   function fadeImages() {
-    var EXCLUDE = '#hero, .hvw, .phero, .exp-strip, .pcard, .piw, header, footer, .pnav, .pfoot, .tmbar, #wa-fab, #wa-menu, #tadv-panel, #tadv-fab, #lb, #logo3d, .t-compare';
+    // .phero SÍ entra con fade (imagen grande de arriba en páginas de proyecto):
+    // el fade es opacidad pura y no choca con el parallax que le aplica landing-extra.
+    var EXCLUDE = '#hero, .hvw, .exp-strip, .pcard, .piw, header, .pnav, .pfoot, footer, .tmbar, #wa-fab, #wa-menu, #tadv-panel, #tadv-fab, #lb, #logo3d, .t-compare';
     var imgs = [];
     document.querySelectorAll('img').forEach(function (img) {
       if (img.closest(EXCLUDE)) return;                 // no tocar hero/GSAP/nav/asesor/lightbox
