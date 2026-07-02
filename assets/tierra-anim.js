@@ -120,10 +120,28 @@
     if (!v || !v.dataset.src) return;
     var c = navigator.connection || {};
     var slow = c.saveData === true || /(^|\b)(slow-2g|2g|3g)$/.test(c.effectiveType || '');
-    if (window.innerWidth > 1024 && !slow) v.dataset.src = 'assets/video/hero-2k.mp4?v=1';
+    if (window.innerWidth > 1024 && !slow) v.dataset.src = 'assets/video/hero-2k.mp4?v=2';
   }
 
-  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); }
+  // Barra de progreso de lectura (fina, dorada, arriba)
+  function progressBar() {
+    if (document.getElementById('t-progress')) return;
+    var bar = document.createElement('div');
+    bar.id = 't-progress';
+    document.body.appendChild(bar);
+    var ticking = false;
+    function update() {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
+
+  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

@@ -1,0 +1,10 @@
+# Netlify — configuración del sitio Tierra
+# El sitio es estático (publica la raíz). Las funciones dan el backend de IA.
+
+[build]
+  publish = "."
+  command = ""
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
