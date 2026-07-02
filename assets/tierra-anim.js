@@ -113,7 +113,17 @@
     vids.forEach(function (v) { io.observe(v); });
   }
 
-  function init() { buildTicker(); initReveal(); fadeImages(); expVideos(); }
+  // Hero en 2K para pantallas grandes con buena conexión (móvil usa la liviana).
+  // Corre antes del evento load, que es cuando el sitio adjunta el source.
+  function heroQuality() {
+    var v = document.getElementById('hvid');
+    if (!v || !v.dataset.src) return;
+    var c = navigator.connection || {};
+    var slow = c.saveData === true || /(^|\b)(slow-2g|2g|3g)$/.test(c.effectiveType || '');
+    if (window.innerWidth > 1024 && !slow) v.dataset.src = 'assets/video/hero-2k.mp4?v=1';
+  }
+
+  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
