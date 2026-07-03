@@ -25,7 +25,8 @@
   /* Las 5 franjas de "experiencia" eran 60vh c/u = scroll eterno.
      Más bajas y con menos hueco entre título e imagen. */
   #experiencia .exp-strip { height: 44vh !important; min-height: 288px !important; }
-  #experiencia .exp-intro { padding: 40px 22px 26px !important; }
+  #experiencia .exp-intro { padding: 26px 22px 14px !important; }
+  #experiencia { padding-top: 0 !important; }
 }
 
 @media (max-width: 420px) {
@@ -35,7 +36,8 @@
 /* PC: que quede tan ágil como en móvil — menos espacio vacío en desktop.
    (El gran hueco arriba de "El amanecer" era el padding de .exp-intro.) */
 @media (min-width: 769px) {
-  #experiencia .exp-intro { padding-top: 74px !important; padding-bottom: 34px !important; }
+  #experiencia .exp-intro { padding-top: 48px !important; padding-bottom: 22px !important; }
+  #experiencia { padding-top: 0 !important; }
   #manifesto { padding-top: 104px !important; padding-bottom: 104px !important; }
   #construccion, #confianza, #invertir, #proceso {
     padding-top: 96px !important; padding-bottom: 96px !important;
@@ -198,7 +200,7 @@
   border-radius: 6px;
   background: rgba(201, 169, 110, .045);
 }
-.t-ideal .ti-ico { font-size: 22px; margin-bottom: 12px; }
+.t-ideal .ti-ico { font-size: 13px; color: var(--gold, #C9A96E); margin-bottom: 12px; }
 .t-ideal h3 {
   font-family: var(--fh, 'Cormorant Garamond', Georgia, serif);
   font-weight: 400; font-size: 21px;
@@ -266,6 +268,9 @@
   transform: none !important;
 }
 
+/* Anclas (#proceso, #lotes, …): margen para el nav fijo */
+[id] { scroll-margin-top: 78px; }
+
 /* ────────────────────────────────────────────────────────────────
    Accesibilidad
    ──────────────────────────────────────────────────────────────── */
@@ -296,6 +301,7 @@
   pointer-events: none;
 }
 .exp-strip .exp-vid.on { opacity: 1; }
+.exp-strip .exp-vid, .phero-vid, #hvid { touch-action: pan-y; pointer-events: none; }
 .exp-strip::after { z-index: 1; }   /* la viñeta queda sobre el video */
 .exp-strip .exp-txt { z-index: 2; }
 
@@ -317,6 +323,11 @@ img.t-fade-img.t-fade-img.loaded {
   opacity: 1;
   transition: opacity .9s ease;
 }
+/* Las imágenes clave llevan la clase YA en el HTML (fade real al abrir la
+   página, antes de que corra el JS). Red de seguridad: si el JS nunca corre
+   (html sin .t-js), un keyframe CSS las revela solo a los 2.6s. */
+html:not(.t-js) img.t-fade-img.t-fade-img { animation: tfSafe .9s ease 2.6s forwards; }
+@keyframes tfSafe { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   img.t-fade-img.t-fade-img { opacity: 1 !important; }
 }

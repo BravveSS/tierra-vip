@@ -7,6 +7,9 @@
 (function () {
   'use strict';
 
+  // Señal de "JS vivo": desactiva la red de seguridad CSS del fade (tfSafe)
+  document.documentElement.classList.add('t-js');
+
   function isEN() { return window.__LANG === 'en' || document.documentElement.getAttribute('lang') === 'en'; }
 
   var STATS = [
@@ -158,6 +161,20 @@
     update();
   }
 
+  // Dominios de proyecto (centroazimut.com, nabani.mx, aldeatao.com, …):
+  // muestran SU landing en su propio dominio, pero cualquier navegación
+  // interna va al dominio principal. Sin esto, "index.html" en un alias
+  // vuelve a reescribirse a la misma landing (el logo parecía no funcionar).
+  function aliasLinks() {
+    var MAIN = ['tierra.vip', 'www.tierra.vip', 'bravvess.github.io', 'tierra-desarrollos.netlify.app', 'localhost', '127.0.0.1'];
+    if (MAIN.indexOf(location.hostname) !== -1) return;
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (!href || /^(https?:|mailto:|tel:|#|\/\/)/i.test(href)) return;
+      a.setAttribute('href', 'https://tierra.vip/' + href.replace(/^\.?\//, ''));
+    });
+  }
+
   // Red de seguridad GSAP (home): si el CDN de GSAP falla (adblocker, red
   // corporativa, timeout), el bundle muere en la línea 1 → el loader queda
   // tapando la página y el hero/stats quedan invisibles. Este rescate
@@ -203,7 +220,7 @@
     if (isEN()) apply();
   }
 
-  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); gsapRescue(); }
+  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); gsapRescue(); aliasLinks(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
