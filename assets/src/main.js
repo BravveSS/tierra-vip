@@ -87,14 +87,23 @@ if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
     start(){ document.documentElement.style.overflow = ''; },
     scrollTo(t, o){
       const off = (o && typeof o.offset === 'number') ? o.offset : -72;
-      let top;
-      if (typeof t === 'number') { top = t; }
-      else {
+      const resolve = () => {
+        if (typeof t === 'number') return t;
         const el = (typeof t === 'string') ? document.querySelector(t) : t;
-        if (!el || !el.getBoundingClientRect) return;
-        top = window.scrollY + el.getBoundingClientRect().top + off;
-      }
-      window.scrollTo({ top: top, behavior: 'smooth' });
+        if (!el || !el.getBoundingClientRect) return null;
+        return window.scrollY + el.getBoundingClientRect().top + off;
+      };
+      const top = resolve();
+      if (top === null) return;
+      window.scrollTo({ top, behavior: 'smooth' });
+      // corrección post-asentamiento: las imágenes lazy pueden mover el layout
+      // durante el scroll → re-alinear al destino real una vez que terminó
+      setTimeout(() => {
+        const t2 = resolve();
+        if (t2 !== null && Math.abs(window.scrollY - t2) > 24) {
+          window.scrollTo({ top: t2, behavior: 'smooth' });
+        }
+      }, 950);
     }
   };
 }
