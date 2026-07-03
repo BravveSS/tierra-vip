@@ -10,56 +10,97 @@
   node_bundler = "esbuild"
 
 # ─────────────────────────────────────────────────────────────────────────
-# UN DOMINIO POR LANDING
-# Todos los dominios apuntan a ESTE mismo sitio de Netlify (como "alias de
-# dominio"). Estas reglas hacen que la RAÍZ de cada dominio muestre su página,
-# SIN cambiar la URL en el navegador (status = 200 = "rewrite", no redirect).
+# UN DOMINIO POR LANDING (dominios reales de Tierra, todos en GoDaddy)
 #
-# IMPORTANTE:
-#  - Reemplazá cada dominio de ejemplo por tu dominio REAL.
-#  - Solo se reescribe la raíz "/"; los assets (/assets/...) pasan normales.
-#  - Netlify redirige www → dominio principal solo, según lo que elijas en el panel.
-#  - tierra.vip NO necesita regla: es el dominio principal y ya muestra el inicio.
+# Todos apuntan a ESTE mismo sitio de Netlify (como "alias de dominio").
+# - Dominios de PROYECTO → la raíz muestra su página SIN cambiar la URL
+#   (status 200 = rewrite). Ej: nabani.mx sigue diciendo nabani.mx en la
+#   barra pero muestra la página de Nabani. Los assets (/assets/...) pasan
+#   normales porque solo se reescribe la raíz "/".
+# - Dominios de MARCA (grupo-tierra.com/.net) → redirigen a tierra.vip
+#   (301) para concentrar toda la fuerza SEO en el dominio principal.
+#
+#   tierra.vip = dominio PRINCIPAL → muestra el inicio (no necesita regla).
 # ─────────────────────────────────────────────────────────────────────────
 
+# ── Azimut → centroazimut.com
 [[redirects]]
-  from = "https://nabani.com/"
+  from = "https://centroazimut.com/"
+  to = "/azimut.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "https://www.centroazimut.com/"
+  to = "/azimut.html"
+  status = 200
+  force = true
+
+# ── Nabani → nabani.mx
+[[redirects]]
+  from = "https://nabani.mx/"
+  to = "/nabani.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "https://www.nabani.mx/"
   to = "/nabani.html"
   status = 200
   force = true
 
-# [[redirects]]
-#   from = "https://TU-DOMINIO-AZIMUT/"
-#   to = "/azimut.html"
-#   status = 200
-#   force = true
+# ── Aldea Tao → aldeatao.com
+[[redirects]]
+  from = "https://aldeatao.com/"
+  to = "/aldea-tao.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "https://www.aldeatao.com/"
+  to = "/aldea-tao.html"
+  status = 200
+  force = true
 
-# [[redirects]]
-#   from = "https://TU-DOMINIO-ALDEA-TAO/"
-#   to = "/aldea-tao.html"
-#   status = 200
-#   force = true
+# ── Serena → proyectoserena.com
+[[redirects]]
+  from = "https://proyectoserena.com/"
+  to = "/serena.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "https://www.proyectoserena.com/"
+  to = "/serena.html"
+  status = 200
+  force = true
 
-# [[redirects]]
-#   from = "https://TU-DOMINIO-SERENA/"
-#   to = "/serena.html"
-#   status = 200
-#   force = true
+# ── Depas Kora → depaskora.com
+[[redirects]]
+  from = "https://depaskora.com/"
+  to = "/depas-kora.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "https://www.depaskora.com/"
+  to = "/depas-kora.html"
+  status = 200
+  force = true
 
-# [[redirects]]
-#   from = "https://TU-DOMINIO-DEPAS-KORA/"
-#   to = "/depas-kora.html"
-#   status = 200
-#   force = true
-
-# [[redirects]]
-#   from = "https://TU-DOMINIO-CONSTRUCCION/"
-#   to = "/construccion.html"
-#   status = 200
-#   force = true
-
-# [[redirects]]
-#   from = "https://TU-DOMINIO-NOSOTROS/"
-#   to = "/nosotros.html"
-#   status = 200
-#   force = true
+# ── Dominios de marca → tierra.vip (301, concentra SEO en el principal)
+[[redirects]]
+  from = "https://grupo-tierra.com/*"
+  to = "https://tierra.vip/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://www.grupo-tierra.com/*"
+  to = "https://tierra.vip/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://grupotierra.net/*"
+  to = "https://tierra.vip/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://www.grupotierra.net/*"
+  to = "https://tierra.vip/:splat"
+  status = 301
+  force = true
