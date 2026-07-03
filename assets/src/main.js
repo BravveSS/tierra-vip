@@ -67,14 +67,37 @@ requestAnimationFrame(animPtx);
 /* ════════════════════════════════════════
    LENIS
 ═══════════════════════════════════════ */
-const lenis = new Lenis({
-  duration:1.38,
-  easing: t => Math.min(1,1.001-Math.pow(2,-10*t)),
-  smoothWheel:true,
-});
-gsap.ticker.add(t => lenis.raf(t*1000));
+// Lenis (scroll suave) SOLO en escritorio. En móvil el scroll suave pelea
+// con el gesto táctil y produce tirones/lag → usamos scroll NATIVO (fluido)
+// con un shim que mantiene compatible el resto del código (scrollTo/stop/start).
+let lenis;
 gsap.ticker.lagSmoothing(0);
-lenis.on('scroll', ScrollTrigger.update);
+if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
+  lenis = new Lenis({
+    duration:1.38,
+    easing: t => Math.min(1,1.001-Math.pow(2,-10*t)),
+    smoothWheel:true,
+  });
+  gsap.ticker.add(t => lenis.raf(t*1000));
+  lenis.on('scroll', ScrollTrigger.update);
+} else {
+  lenis = {
+    raf(){}, on(){}, destroy(){},
+    stop(){ document.documentElement.style.overflow = 'hidden'; },
+    start(){ document.documentElement.style.overflow = ''; },
+    scrollTo(t, o){
+      const off = (o && typeof o.offset === 'number') ? o.offset : -72;
+      let top;
+      if (typeof t === 'number') { top = t; }
+      else {
+        const el = (typeof t === 'string') ? document.querySelector(t) : t;
+        if (!el || !el.getBoundingClientRect) return;
+        top = window.scrollY + el.getBoundingClientRect().top + off;
+      }
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  };
+}
 
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   if (a.closest('#nav') || a.closest('#mob-menu')) return; // el nav usa sweepTo (transición dorada)
@@ -307,8 +330,9 @@ gsap.to('#mf-ro',{scaleX:1,duration:.85,ease:'power2.inOut',
 gsap.fromTo('#manifesto > p',{opacity:0,y:24},{opacity:1,y:0,duration:.9,ease:'power3.out',
   scrollTrigger:{trigger:'#manifesto > p',start:'top 86%'}});
 
-// Números de sección gigantes: profundidad extra (cada capa a su velocidad)
-if (!window.__REDUCED){
+// Números de sección gigantes: profundidad extra (cada capa a su velocidad).
+// Solo en escritorio: en móvil el scrub por-frame agrega tirones al scroll.
+if (!window.__REDUCED && !window.__PERF_LOW){
   document.querySelectorAll('.pbgn').forEach(el => {
     gsap.fromTo(el, {yPercent:-22}, {yPercent:22, ease:'none',
       scrollTrigger:{trigger:el.parentElement, start:'top bottom', end:'bottom top', scrub:true}});
