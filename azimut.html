@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="assets/img/brand/tierra-logo.png">
 <link rel="stylesheet" href="assets/pages.css?v=11">
 <link rel="stylesheet" href="assets/tierra-mobile.css?v=1">
-<link rel="stylesheet" href="assets/tierra-anim.css?v=8">
+<link rel="stylesheet" href="assets/tierra-anim.css?v=9">
 <link rel="stylesheet" href="assets/tierra-advisor.css?v=2">
 </head>
 <body>
@@ -102,7 +102,7 @@
     <div class="eyebrow reveal" data-es="Ideal para" data-en="Ideal for">Ideal para</div>
     <h2 class="h2 reveal" data-es="¿Es Azimut para ti?" data-en="Is Azimut for you?">¿Es Azimut para ti?</h2>
     <div class="t-ideal reveal d1">
-      <div class="ti-card"><div class="ti-ico" aria-hidden="true">🧘</div><h3 data-es="Bienestar diario" data-en="Everyday wellness">Bienestar diario</h3><p data-es="Vivís dentro de un centro holístico: yoga shala, temazcal y alberca natural a pasos de tu puerta." data-en="You live inside a holistic center: yoga shala, temazcal and a natural pool steps from your door.">Vivís dentro de un centro holístico: yoga shala, temazcal y alberca natural a pasos de tu puerta.</p></div>
+      <div class="ti-card"><div class="ti-ico" aria-hidden="true">🧘</div><h3 data-es="Bienestar diario" data-en="Everyday wellness">Bienestar diario</h3><p data-es="Vives dentro de un centro holístico: yoga shala, temazcal y alberca natural a pasos de tu puerta." data-en="You live inside a holistic center: yoga shala, temazcal and a natural pool steps from your door.">Vives dentro de un centro holístico: yoga shala, temazcal y alberca natural a pasos de tu puerta.</p></div>
       <div class="ti-card"><div class="ti-ico" aria-hidden="true">🌊</div><h3 data-es="Cerca de todo Mazunte" data-en="Close to all of Mazunte">Cerca de todo Mazunte</h3><p data-es="El pueblo, la playa y Punta Cometa quedan caminando; la comunidad, en tu misma ladera." data-en="Town, beach and Punta Cometa are a walk away; the community lives on your same hillside.">El pueblo, la playa y Punta Cometa quedan caminando; la comunidad, en tu misma ladera.</p></div>
       <div class="ti-card"><div class="ti-ico" aria-hidden="true">📈</div><h3 data-es="Inversión con alma" data-en="Investment with soul">Inversión con alma</h3><p data-es="Lotes con servicios y respaldo legal en una de las zonas de mayor plusvalía de la costa." data-en="Serviced lots with legal backing in one of the coast's highest-appreciation areas.">Lotes con servicios y respaldo legal en una de las zonas de mayor plusvalía de la costa.</p></div>
     </div>
@@ -164,8 +164,16 @@
 <script src="assets/tierra-mobile.js?v=2" defer></script>
 <script src="assets/tierra-forms.js?v=2" defer></script>
 <script src="assets/tierra-anim.js?v=9" defer></script>
-<script src="assets/tierra-advisor.js?v=4" defer></script>
-<script src="assets/tierra-analytics.js?v=1" defer></script>
+<script src="assets/tierra-advisor.js?v=5" defer></script>
+<script src="assets/tierra-analytics.js?v=2" defer></script>
 <script src="assets/lotes.js?v=1"></script>
+<script>
+/* Service Worker: resiliencia offline en zonas de señal inestable (ver sw.js) */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 </body>
 </html>

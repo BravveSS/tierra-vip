@@ -53,7 +53,7 @@
 <link rel="stylesheet" href="assets/styles.min.css?v=15">
 <link rel="stylesheet" href="assets/tierra-forms.css?v=1">
 <link rel="stylesheet" href="assets/tierra-mobile.css?v=1">
-<link rel="stylesheet" href="assets/tierra-anim.css?v=8">
+<link rel="stylesheet" href="assets/tierra-anim.css?v=9">
 <link rel="stylesheet" href="assets/tierra-compare.css?v=1">
 <link rel="stylesheet" href="assets/tierra-advisor.css?v=2">
 </head>
@@ -194,6 +194,7 @@
     <div style="overflow:hidden"><span class="hhl" id="hl1">Creamos espacios</span></div>
     <div style="overflow:hidden"><span class="hhl it" id="hl2">donde la tierra habla.</span></div>
     <p class="hsub" id="hsub">Construimos espacios en armonía con la naturaleza.</p>
+    <p class="hsub2 t-reveal" data-es="Terrenos con certeza jurídica · Diseño y construcción llave en mano · Mazunte — Puerto Ángel — La Boquilla" data-en="Land with legal certainty · Turnkey design &amp; construction · Mazunte — Puerto Ángel — La Boquilla">Terrenos con certeza jurídica · Diseño y construcción llave en mano · Mazunte — Puerto Ángel — La Boquilla</p>
     <div class="hctas" id="hctas">
       <a href="#sec-projects" class="btn-go">Explorar proyectos</a>
       <a href="#chat" class="btn-arrow">Hablar con un asesor <span>→</span></a>
@@ -715,8 +716,16 @@
 <script src="assets/tierra-mobile.js?v=2" defer></script>
 <script src="assets/tierra-anim.js?v=9" defer></script>
 <script src="assets/tierra-compare.js?v=1" defer></script>
-<script src="assets/tierra-advisor.js?v=4" defer></script>
-<script src="assets/tierra-analytics.js?v=1" defer></script>
+<script src="assets/tierra-advisor.js?v=5" defer></script>
+<script src="assets/tierra-analytics.js?v=2" defer></script>
+<script>
+/* Service Worker: resiliencia offline en zonas de señal inestable (ver sw.js) */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 </body>
 </html>
 

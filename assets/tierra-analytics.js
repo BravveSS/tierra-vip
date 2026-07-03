@@ -53,7 +53,7 @@
         'background:rgba(18,26,21,.97);border:1px solid rgba(201,169,110,.3);border-radius:14px;padding:16px 18px;' +
         'box-shadow:0 18px 50px rgba(0,0,0,.45);backdrop-filter:blur(12px);font-family:\'DM Sans\',sans-serif;' +
         'animation:tcIn .45s cubic-bezier(.16,1,.3,1) both}' +
-      '@media(min-width:769px){#tierra-consent{left:auto;right:24px;bottom:24px}}' +
+      '@media(min-width:769px){#tierra-consent{left:24px;right:auto;bottom:24px}}' +
       /* en móvil, arriba de la barra fija de contacto */
       '@media(max-width:768px){body.has-tmbar #tierra-consent{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}' +
       '#tierra-consent p{margin:0 0 12px;font-size:13.5px;line-height:1.55;color:#F2EEE4;font-weight:300}' +

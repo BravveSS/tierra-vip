@@ -139,16 +139,16 @@
 
   function aiMode() {
     if (!AI_ENABLED) { aiMaintenance(); return; }
-    botSay(t('¡Claro! Escribime tu pregunta y te respondo al instante. 👇',
+    botSay(t('¡Claro! Escríbeme tu pregunta y te respondo al instante. 👇',
              'Sure! Type your question and I\'ll answer right away. 👇'), showAiInput);
   }
 
   function aiMaintenance() {
-    botSay(t('Nuestro asistente con inteligencia artificial está en mantenimiento por unas horas 🔧 Muy pronto vuelve. Mientras tanto, escribinos por WhatsApp y un asesor te responde al instante 🌿',
-             'Our AI assistant is under maintenance for a few hours 🔧 It\'ll be back soon. Meanwhile, message us on WhatsApp and an advisor will reply instantly 🌿'), function () {
+    botSay(t('Nuestro asistente virtual está temporalmente en mantenimiento 🔧 Mientras tanto, puedes escribirnos por WhatsApp y un asesor de Tierra te atenderá personalmente 🌿',
+             'Our virtual assistant is temporarily under maintenance 🔧 Meanwhile, you can message us on WhatsApp and a Tierra advisor will assist you personally 🌿'), function () {
       var cta = document.createElement('a');
       cta.className = 'tadv-wa-cta';
-      cta.href = WA + '?text=' + encodeURIComponent(t('Hola, tengo una pregunta sobre los proyectos de Tierra.', 'Hi, I have a question about Tierra\'s projects.'));
+      cta.href = WA + '?text=' + encodeURIComponent(t('Hola, quiero recibir información sobre los proyectos de Tierra.', 'Hi, I\'d like information about Tierra\'s projects.'));
       cta.target = '_blank'; cta.rel = 'noopener';
       cta.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35z"/></svg>' +
         t('Escribir por WhatsApp', 'Message on WhatsApp');
@@ -229,7 +229,7 @@
       cta.target = '_blank'; cta.rel = 'noopener';
       cta.textContent = t('Preguntar por WhatsApp', 'Ask on WhatsApp');
       els.body.appendChild(cta); scroll();
-      botSay(t('O si preferís, te ayudo con el recorrido guiado:', 'Or if you prefer, I can guide you:'), function () {
+      botSay(t('O si prefieres, te ayudo con el recorrido guiado:', 'Or if you prefer, I can guide you:'), function () {
         options([
           { v: 'g', label: t('🌿 Recorrido guiado', '🌿 Guided tour') },
           { v: 'd', label: t('📝 Dejar mis datos', '📝 Leave my details') }
@@ -349,7 +349,7 @@
         window.gtag('event', 'exit_intent_shown', { event_category: 'engagement' });
       }
       open(); started = true;                       // flujo propio, no el normal
-      botSay(t('¡Espera! 🌿 Antes de irte: dejame tu WhatsApp y te mando disponibilidad y precios de los proyectos — sin compromiso.',
+      botSay(t('¡Espera! 🌿 Antes de irte: déjame tu WhatsApp y te envío disponibilidad y precios de los proyectos — sin compromiso.',
                'Wait! 🌿 Before you go: leave your WhatsApp and I\'ll send you availability and prices — no strings attached.'), function () {
         options([
           { v: 'd', label: t('📝 Sí, quiero la info', '📝 Yes, send me the info') },
