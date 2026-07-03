@@ -158,23 +158,52 @@
     update();
   }
 
-  // Badges de disponibilidad: seguir el toggle ES/EN del sitio
+  // Red de seguridad GSAP (home): si el CDN de GSAP falla (adblocker, red
+  // corporativa, timeout), el bundle muere en la línea 1 → el loader queda
+  // tapando la página y el hero/stats quedan invisibles. Este rescate
+  // destraba la página y muestra el contenido con los valores reales.
+  function gsapRescue() {
+    function unlock() {
+      document.documentElement.classList.add('t-no-gsap');
+      var l = document.getElementById('loader');
+      if (l && l.parentNode) {
+        l.style.transition = 'opacity .6s ease';
+        l.style.opacity = '0';
+        l.style.pointerEvents = 'none';
+        setTimeout(function () { if (l.parentNode) l.parentNode.removeChild(l); }, 700);
+      }
+    }
+    setTimeout(function () {
+      if (typeof window.gsap === 'undefined' && document.getElementById('loader')) unlock();
+    }, 2600);
+    // último recurso: si a los 9s el loader sigue VISIBLE (el bundle lo
+    // apaga con display:none cuando todo va bien), destrabar igual
+    setTimeout(function () {
+      var l = document.getElementById('loader');
+      if (l && l.parentNode && getComputedStyle(l).display !== 'none' && getComputedStyle(l).opacity !== '0') unlock();
+    }, 9000);
+  }
+
+  // Traducción genérica ES/EN: cualquier elemento con data-es + data-en
+  // (badges, FAQ, "ideal para", etc.). Los formularios se traducen solos
+  // en tierra-forms.js, por eso se excluyen.
   function badgeLang() {
-    var badges = document.querySelectorAll('.pstatus[data-es][data-en]');
-    if (!badges.length) return;
+    var els = document.querySelectorAll('[data-es][data-en]');
+    if (!els.length) return;
     function apply() {
       var en = isEN();
-      badges.forEach(function (b) {
+      els.forEach(function (b) {
+        if (b.closest('.tierra-form')) return;
         b.textContent = en ? b.getAttribute('data-en') : b.getAttribute('data-es');
       });
     }
     new MutationObserver(apply).observe(document.documentElement, {
       attributes: true, attributeFilter: ['lang']
     });
-    apply();
+    if (isEN()) apply();
   }
 
-  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); }
+  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); gsapRescue(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
