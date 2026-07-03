@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="assets/img/brand/tierra-logo.png">
 <link rel="stylesheet" href="assets/pages.css?v=11">
 <link rel="stylesheet" href="assets/tierra-mobile.css?v=1">
-<link rel="stylesheet" href="assets/tierra-anim.css?v=8">
+<link rel="stylesheet" href="assets/tierra-anim.css?v=9">
 <link rel="stylesheet" href="assets/tierra-compare.css?v=1">
 <link rel="stylesheet" href="assets/tierra-advisor.css?v=2">
 </head>
@@ -182,7 +182,15 @@
 <script src="assets/tierra-forms.js?v=2" defer></script>
 <script src="assets/tierra-anim.js?v=9" defer></script>
 <script src="assets/tierra-compare.js?v=1" defer></script>
-<script src="assets/tierra-advisor.js?v=4" defer></script>
-<script src="assets/tierra-analytics.js?v=1" defer></script>
+<script src="assets/tierra-advisor.js?v=5" defer></script>
+<script src="assets/tierra-analytics.js?v=2" defer></script>
+<script>
+/* Service Worker: resiliencia offline en zonas de señal inestable (ver sw.js) */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 </body>
 </html>
