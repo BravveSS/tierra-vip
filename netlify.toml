@@ -83,24 +83,26 @@
   status = 200
   force = true
 
-# ── Dominios de marca → tierra.vip (301, concentra SEO en el principal)
+# ── Nosotros → grupo-tierra.com
 [[redirects]]
-  from = "https://grupo-tierra.com/*"
-  to = "https://tierra.vip/:splat"
-  status = 301
+  from = "https://grupo-tierra.com/"
+  to = "/nosotros.html"
+  status = 200
   force = true
 [[redirects]]
-  from = "https://www.grupo-tierra.com/*"
-  to = "https://tierra.vip/:splat"
-  status = 301
+  from = "https://www.grupo-tierra.com/"
+  to = "/nosotros.html"
+  status = 200
+  force = true
+
+# ── Construcción → grupotierra.net
+[[redirects]]
+  from = "https://grupotierra.net/"
+  to = "/construccion.html"
+  status = 200
   force = true
 [[redirects]]
-  from = "https://grupotierra.net/*"
-  to = "https://tierra.vip/:splat"
-  status = 301
-  force = true
-[[redirects]]
-  from = "https://www.grupotierra.net/*"
-  to = "https://tierra.vip/:splat"
-  status = 301
+  from = "https://www.grupotierra.net/"
+  to = "/construccion.html"
+  status = 200
   force = true
