@@ -8,3 +8,58 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# ─────────────────────────────────────────────────────────────────────────
+# UN DOMINIO POR LANDING
+# Todos los dominios apuntan a ESTE mismo sitio de Netlify (como "alias de
+# dominio"). Estas reglas hacen que la RAÍZ de cada dominio muestre su página,
+# SIN cambiar la URL en el navegador (status = 200 = "rewrite", no redirect).
+#
+# IMPORTANTE:
+#  - Reemplazá cada dominio de ejemplo por tu dominio REAL.
+#  - Solo se reescribe la raíz "/"; los assets (/assets/...) pasan normales.
+#  - Netlify redirige www → dominio principal solo, según lo que elijas en el panel.
+#  - tierra.vip NO necesita regla: es el dominio principal y ya muestra el inicio.
+# ─────────────────────────────────────────────────────────────────────────
+
+[[redirects]]
+  from = "https://nabani.com/"
+  to = "/nabani.html"
+  status = 200
+  force = true
+
+# [[redirects]]
+#   from = "https://TU-DOMINIO-AZIMUT/"
+#   to = "/azimut.html"
+#   status = 200
+#   force = true
+
+# [[redirects]]
+#   from = "https://TU-DOMINIO-ALDEA-TAO/"
+#   to = "/aldea-tao.html"
+#   status = 200
+#   force = true
+
+# [[redirects]]
+#   from = "https://TU-DOMINIO-SERENA/"
+#   to = "/serena.html"
+#   status = 200
+#   force = true
+
+# [[redirects]]
+#   from = "https://TU-DOMINIO-DEPAS-KORA/"
+#   to = "/depas-kora.html"
+#   status = 200
+#   force = true
+
+# [[redirects]]
+#   from = "https://TU-DOMINIO-CONSTRUCCION/"
+#   to = "/construccion.html"
+#   status = 200
+#   force = true
+
+# [[redirects]]
+#   from = "https://TU-DOMINIO-NOSOTROS/"
+#   to = "/nosotros.html"
+#   status = 200
+#   force = true

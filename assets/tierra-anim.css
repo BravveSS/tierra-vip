@@ -168,6 +168,89 @@
 }
 
 /* ────────────────────────────────────────────────────────────────
+   Módulos de proyecto: "Ideal para" + FAQ (accesibles, nativos)
+   ──────────────────────────────────────────────────────────────── */
+.t-ideal {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+.t-ideal .ti-card {
+  padding: 26px 24px;
+  border: 1px solid rgba(201, 169, 110, .2);
+  border-radius: 6px;
+  background: rgba(201, 169, 110, .045);
+}
+.t-ideal .ti-ico { font-size: 22px; margin-bottom: 12px; }
+.t-ideal h3 {
+  font-family: var(--fh, 'Cormorant Garamond', Georgia, serif);
+  font-weight: 400; font-size: 21px;
+  color: var(--cream, #F2EEE4);
+  margin: 0 0 8px;
+}
+.t-ideal p {
+  font-family: var(--fb, 'DM Sans', sans-serif);
+  font-weight: 300; font-size: 14px; line-height: 1.75;
+  color: var(--muted, #8FA396);
+  margin: 0;
+}
+
+.t-faq { max-width: 780px; margin-top: 30px; }
+.t-faq details {
+  border-bottom: 1px solid rgba(201, 169, 110, .16);
+}
+.t-faq summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 19px 2px;
+  font-family: var(--fh, 'Cormorant Garamond', Georgia, serif);
+  font-weight: 400; font-size: clamp(17px, 2.2vw, 21px);
+  color: var(--cream, #F2EEE4);
+  transition: color .3s ease;
+}
+.t-faq summary::-webkit-details-marker { display: none; }
+.t-faq summary::after {
+  content: '+';
+  flex: none;
+  font-family: var(--fb, 'DM Sans', sans-serif);
+  font-size: 20px; font-weight: 300;
+  color: var(--gold, #C9A96E);
+  transition: transform .3s ease;
+}
+.t-faq details[open] summary::after { transform: rotate(45deg); }
+.t-faq summary:hover { color: var(--gold, #C9A96E); }
+.t-faq .fa-a {
+  font-family: var(--fb, 'DM Sans', sans-serif);
+  font-weight: 300; font-size: 14.5px; line-height: 1.8;
+  color: var(--muted, #8FA396);
+  padding: 0 2px 20px;
+  max-width: 680px;
+}
+.t-proc-link {
+  display: inline-block;
+  margin-top: 26px;
+  font-family: var(--fb, 'DM Sans', sans-serif);
+  font-size: 13px; letter-spacing: .06em;
+  color: var(--gold, #C9A96E);
+  border-bottom: 1px solid rgba(201, 169, 110, .5);
+  padding-bottom: 2px;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Red de seguridad GSAP: si el CDN falla, .t-no-gsap muestra todo lo
+   que el bundle dejaba en opacity:0 esperando animación.
+   ──────────────────────────────────────────────────────────────── */
+.t-no-gsap .hpre, .t-no-gsap .hhl, .t-no-gsap .hsub, .t-no-gsap .hctas,
+.t-no-gsap .mfs, .t-no-gsap .tl-step, .t-no-gsap #trust-badge,
+.t-no-gsap .scn, .t-no-gsap .exp-txt .k, .t-no-gsap .sind,
+.t-no-gsap .gcard, .t-no-gsap #logo3d-img {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ────────────────────────────────────────────────────────────────
    Accesibilidad
    ──────────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
