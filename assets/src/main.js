@@ -291,14 +291,19 @@ if (window.matchMedia('(min-width:769px)').matches && !window.__REDUCED){
   .to('.hgrad', { opacity:1.6, ease:'none' }, 0)
   .to('#hbody', { opacity:0, y:-90, filter:'blur(6px)', ease:'none' }, .12)
   .to('#sind',  { opacity:0, ease:'none' }, 0);
-} else {
-  // móvil / reduced: parallax simple sin pin
-  gsap.to('#hvid', { yPercent: 16, ease:'none',
-    scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
-  gsap.to('#hbody', { opacity:0, y:-60, ease:'none',
-    scrollTrigger:{trigger:'#hero',start:'top top',end:'40% top',scrub:true}});
-  gsap.to('#sind', { opacity:0, ease:'none',
-    scrollTrigger:{trigger:'#hero',start:'top top',end:'20% top',scrub:true}});
+}
+// Móvil: SIN parallax ligado al scroll (los scrub por-frame causaban
+// tirones en el táctil). El hero se queda estático y el scroll es nativo,
+// fluido. El indicador de scroll se desvanece con IntersectionObserver
+// (no depende del scroll cada frame).
+else if (!window.__REDUCED) {
+  var sind = document.getElementById('sind');
+  if (sind && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      sind.style.transition = 'opacity .4s ease';
+      sind.style.opacity = es[0].isIntersecting ? '1' : '0';
+    }, { threshold: 0.9 }).observe(document.getElementById('hero'));
+  }
 }
 
 /* ════════════════════════════════════════

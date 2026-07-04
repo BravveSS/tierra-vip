@@ -3,9 +3,12 @@
   'use strict';
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── Parallax suave en la imagen del hero ── */
+  /* ── Parallax suave en la imagen del hero — SOLO escritorio ──
+     En móvil, transformar el hero en cada frame de scroll producía
+     tirones al empezar a scrollear. En táctil se deja estático (fluido). */
   const heroImg = document.querySelector('.phero-img');
-  if (heroImg && !reduced){
+  const isDesktop = window.matchMedia('(min-width:769px)').matches;
+  if (heroImg && !reduced && isDesktop){
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (ticking) return; ticking = true;
