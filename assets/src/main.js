@@ -2,6 +2,10 @@
 (function(){
 'use strict';
 gsap.registerPlugin(ScrollTrigger);
+// Ignorar el resize que dispara la barra de direcciones del navegador móvil
+// al esconderse/mostrarse en el scroll: sin esto GSAP recalcula posiciones
+// y la página "salta" (el bug de scroll en móvil que reportaba el usuario).
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* Flags globales — definidos PRIMERO porque varios bloques los leen */
 window.__REDUCED  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

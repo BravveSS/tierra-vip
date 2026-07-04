@@ -356,3 +356,13 @@ html, body { overscroll-behavior-y: none; }
 /* Al scrollear tocando una imagen/galería no debe capturarse el gesto:
    el navegador hace scroll vertical, no arrastre. */
 .grid figure img, .gcard img, .ptb img, .exp-strip, .phero-img, .t-fade-img { touch-action: pan-y; }
+
+/* ────────────────────────────────────────────────────────────────
+   Altura estable en móvil (arregla el "salto" por la barra de Chrome).
+   svh = altura con la barra visible → el hero NO se redimensiona cuando
+   la barra se esconde al scrollear. vh se mantiene como fallback.
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #hero { height: 100svh !important; }
+  .phero { height: 88svh !important; }
+}
