@@ -54,12 +54,23 @@
       }
     }
 
+    // En táctil NO capturamos el puntero en pointerdown: dejamos que
+    // touch-action:pan-y decida — gesto vertical = scroll de página,
+    // horizontal = mover el comparador. Solo el mouse arrastra directo.
     c.addEventListener('pointerdown', function (e) {
-      dragging = true; mark();
-      if (c.setPointerCapture) { try { c.setPointerCapture(e.pointerId); } catch (_) {} }
-      set(fromEvent(e));
+      if (e.pointerType === 'mouse') {
+        dragging = true; mark();
+        if (c.setPointerCapture) { try { c.setPointerCapture(e.pointerId); } catch (_) {} }
+        set(fromEvent(e));
+      }
     });
-    c.addEventListener('pointermove', function (e) { if (dragging) set(fromEvent(e)); });
+    c.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') {
+        // táctil: el navegador solo nos manda estos eventos si el gesto es
+        // horizontal (pan-y absorbe el vertical) → mover sin bloquear scroll
+        mark(); set(fromEvent(e));
+      } else if (dragging) { set(fromEvent(e)); }
+    });
     ['pointerup', 'pointercancel'].forEach(function (ev) {
       c.addEventListener(ev, function () { dragging = false; });
     });

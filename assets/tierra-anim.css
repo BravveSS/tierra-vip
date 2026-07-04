@@ -342,3 +342,17 @@ html:not(.t-js) img.t-fade-img.t-fade-img { animation: tfSafe .9s ease 2.6s forw
   /* el indicador de scroll no debe pelear con el texto reubicado */
   #sind { bottom: 14px !important; }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   FIXES MÓVIL — scroll fluido, menú e interacción
+   ──────────────────────────────────────────────────────────────── */
+/* El botón del asesor tapaba el selector de idioma dentro del menú de las
+   3 rayas (la regla vieja ocultaba #ai-fab, el asesor ahora es #tadv-fab). */
+body.menu-open #tadv-fab { opacity: 0 !important; pointer-events: none !important; visibility: hidden !important; }
+
+/* Cortar el "rebote" de scroll al llegar al fondo (glitch de cámara). */
+html, body { overscroll-behavior-y: none; }
+
+/* Al scrollear tocando una imagen/galería no debe capturarse el gesto:
+   el navegador hace scroll vertical, no arrastre. */
+.grid figure img, .gcard img, .ptb img, .exp-strip, .phero-img, .t-fade-img { touch-action: pan-y; }
