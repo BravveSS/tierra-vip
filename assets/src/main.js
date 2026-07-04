@@ -47,7 +47,11 @@ for(let i=0;i<90;i++){
 let pt0 = null, ptxRun = true;
 document.addEventListener('visibilitychange', ()=>{ ptxRun = !document.hidden; });
 window.addEventListener('scroll', ()=>{ ptxRun = !document.hidden && window.scrollY < window.innerHeight * 1.6; }, {passive:true});
+// En móvil el canvas de partículas dibuja en cada frame y le roba fluidez
+// al scroll cerca del hero → se apaga (es puramente decorativo).
+if (window.__PERF_LOW) { ptx.style.display = 'none'; }
 function animPtx(ts){
+  if(window.__PERF_LOW){ return; }               // móvil: sin partículas, scroll perfecto
   if(!ptxRun || window.__REDUCED){ requestAnimationFrame(animPtx); return; }
   if(!pt0) pt0 = ts;
   const t = (ts-pt0)/1000;
