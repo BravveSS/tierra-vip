@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* Flags globales — definidos PRIMERO porque varios bloques los leen */
-window.__REDUCED  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+window.__REDUCED  = false; // decisión del dueño: animaciones SIEMPRE (el reduce-motion del SO dejaba el home estático)
 window.__PERF_LOW = (navigator.hardwareConcurrency || 8) < 4 || window.matchMedia('(max-width:768px)').matches;
 
 /* ════════════════════════════════════════

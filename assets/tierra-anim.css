@@ -156,7 +156,7 @@
 @media (max-width: 640px) {
   .pstatus { display: inline-flex; margin-left: 8px; padding: 4px 10px; }
 }
-@media (prefers-reduced-motion: reduce) { .pstatus::before { animation: none; } }
+
 
 /* ────────────────────────────────────────────────────────────────
    Barra de progreso de lectura
@@ -274,11 +274,7 @@
 /* ────────────────────────────────────────────────────────────────
    Accesibilidad
    ──────────────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .t-ticker-track { animation: none; }
-  .pcard .piw img, .gcard img, .cs-card img, .ptb img { transition: none; }
-  .t-reveal { opacity: 1; transform: none; }
-}
+/* (reduce-motion no apaga ticker/reveals: web inmersiva por decisión del dueño) */
 
 /* ────────────────────────────────────────────────────────────────
    5) AJUSTES DE FEEDBACK
@@ -319,7 +315,7 @@
 img.t-fade-img.t-fade-img { opacity: 0; }
 /* Movimiento sutil hacia arriba = fade MUCHO más visible (PC y móvil).
    El hero (.phero-img) queda solo-opacidad para no chocar con su parallax. */
-img.t-fade-img.t-fade-img:not(.phero-img) { transform: translateY(34px); }
+img.t-fade-img.t-fade-img:not(.phero-img) { transform: translateY(34px) scale(1.04); }
 /* la transición vive en .loaded: el estado oculto se aplica al instante
    (sin "parpadeo" de ida) y solo la ENTRADA se anima */
 img.t-fade-img.t-fade-img.loaded {
@@ -332,9 +328,7 @@ img.t-fade-img.t-fade-img.loaded {
    (html sin .t-js), un keyframe CSS las revela solo a los 2.6s. */
 html:not(.t-js) img.t-fade-img.t-fade-img { animation: tfSafe .9s ease 2.6s forwards; }
 @keyframes tfSafe { to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  img.t-fade-img.t-fade-img { opacity: 1 !important; }
-}
+/* (reduce-motion NO apaga el fade: decisión del dueño — web inmersiva) */
 
 /* Menos espacio vacío al principio.
    En móvil el hero ancla el texto en el tercio inferior (la costa llena
@@ -369,4 +363,18 @@ html, body { overscroll-behavior-y: none; }
 @media (max-width: 768px) {
   #hero { height: 100svh !important; }
   .phero { height: 88svh !important; }
+}
+
+
+/* ────────────────────────────────────────────────────────────────
+   KEN BURNS — el hero de cada proyecto respira (zoom lento, siempre)
+   Movimiento garantizado en PC y móvil, sin depender del scroll.
+   ──────────────────────────────────────────────────────────────── */
+.phero-img {
+  animation: tKenBurns 16s cubic-bezier(.25, .1, .25, 1) .2s forwards;
+  will-change: transform;
+}
+@keyframes tKenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.1) translateY(-1.5%); }
 }

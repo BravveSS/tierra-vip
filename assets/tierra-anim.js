@@ -107,10 +107,9 @@
   function expVideos() {
     var vids = document.querySelectorAll('.exp-vid');
     if (!vids.length) return;
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var c = navigator.connection || {};
     var save = c.saveData === true || /(^|\b)(slow-2g|2g)$/.test(c.effectiveType || '');
-    if (reduce || save) return;                 // queda la foto real
+    if (save) return;                           // solo ahorro de datos apaga el video
     if (!('IntersectionObserver' in window)) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
