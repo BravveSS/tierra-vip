@@ -142,6 +142,22 @@
     if (window.innerWidth > 1024 && !slow) v.dataset.src = 'assets/video/hero-2k.mp4?v=2';
   }
 
+  // Respaldo del video del hero: si a los 2.5s el bundle aún no adjuntó el
+  // source (red lenta, GSAP caído, carrera con el load), lo adjunta este
+  // código y lo reproduce → el video del hero carga SIEMPRE.
+  function heroVideoRescue() {
+    var v = document.getElementById('hvid');
+    if (!v) return;
+    setTimeout(function () {
+      if (!v.src && v.dataset.src) { v.src = v.dataset.src; v.load(); }
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    }, 2500);
+    // reintento al volver a la pestaña (autoplay bloqueado en background)
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    });
+  }
+
   // Barra de progreso de lectura (fina, dorada, arriba)
   function progressBar() {
     if (document.getElementById('t-progress')) return;
@@ -164,6 +180,12 @@
   // muestran SU landing en su propio dominio, pero cualquier navegación
   // interna va al dominio principal. Sin esto, "index.html" en un alias
   // vuelve a reescribirse a la misma landing (el logo parecía no funcionar).
+  // El preview viejo (bravvess.github.io) quedó congelado y confundía:
+  // ahora redirige SIEMPRE al sitio real para que nadie vea versiones viejas.
+  if (location.hostname === 'bravvess.github.io') {
+    location.replace('https://tierra.vip' + location.pathname.replace(/^\/tierra-vip/, '') + location.search + location.hash);
+  }
+
   function aliasLinks() {
     var MAIN = ['tierra.vip', 'www.tierra.vip', 'bravvess.github.io', 'tierra-desarrollos.netlify.app', 'localhost', '127.0.0.1'];
     if (MAIN.indexOf(location.hostname) !== -1) return;
@@ -219,7 +241,7 @@
     if (isEN()) apply();
   }
 
-  function init() { heroQuality(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); gsapRescue(); aliasLinks(); }
+  function init() { heroQuality(); heroVideoRescue(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); gsapRescue(); aliasLinks(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
