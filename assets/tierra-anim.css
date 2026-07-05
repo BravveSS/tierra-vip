@@ -22,6 +22,11 @@
     padding-top: 58px !important; padding-bottom: 58px !important;
   }
 
+  /* Menos aire entre las cards de proyecto: el cierre de cada card y la
+     onda divisoria sumaban ~130px de verde vacío antes de la siguiente foto */
+  .pcard .pcw { padding-bottom: 26px !important; }
+  .wd svg { height: 44px !important; }
+
   /* Las 5 franjas de "experiencia" eran 60vh c/u = scroll eterno.
      Más bajas y con menos hueco entre título e imagen. */
   #experiencia .exp-strip { height: 44vh !important; min-height: 288px !important; }
