@@ -1,25 +1,10 @@
 /* TIERRA — extra compartido de landings: idioma ES/EN completo + atmósfera + animaciones */
 (function(){
   'use strict';
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = false; // decisión del dueño: animaciones SIEMPRE (el reduce-motion del SO las apagaba)
 
-  /* ── Parallax suave en la imagen del hero — SOLO escritorio ──
-     En móvil, transformar el hero en cada frame de scroll producía
-     tirones al empezar a scrollear. En táctil se deja estático (fluido). */
-  const heroImg = document.querySelector('.phero-img');
-  const isDesktop = window.matchMedia('(min-width:769px)').matches;
-  if (heroImg && !reduced && isDesktop){
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (ticking) return; ticking = true;
-      requestAnimationFrame(() => {
-        const y = Math.min(window.scrollY, window.innerHeight);
-        heroImg.style.transform = 'scale(1.08) translateY(' + (y * .18) + 'px)';
-        ticking = false;
-      });
-    }, {passive:true});
-  }
-
+  /* ── El movimiento del hero ahora es Ken Burns puro en CSS (tierra-anim.css):
+     zoom cinematográfico garantizado en PC y móvil, sin listener de scroll. ── */
   /* ── Entrada del contenido del hero ── */
   document.querySelectorAll('.phero-body > *').forEach((el, i) => {
     if (reduced) return;
@@ -215,7 +200,7 @@
 /* ── PORTADO: calculadora, visitas, comparador y timeline (con guards) ── */
 (function(){
   'use strict';
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = false; // decisión del dueño: animaciones SIEMPRE (el reduce-motion del SO las apagaba)
   const P = document.getElementById('calc-p'), E = document.getElementById('calc-e'), M = document.getElementById('calc-m');
   if (P){
     const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');

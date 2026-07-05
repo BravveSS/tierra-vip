@@ -154,10 +154,7 @@ section{position:relative}
 .lang-sw button.on{background:var(--gold);color:var(--black)}
 
 /* ── REDUCED MOTION ── */
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .reveal{opacity:1!important;transform:none!important}
-}
+/* (bloque reduce-motion eliminado: el dueño exige la web animada para todos) */
 
 /* ── MOBILE ── */
 @media(max-width:860px){
