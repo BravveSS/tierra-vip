@@ -317,11 +317,15 @@
    Al ser opacidad pura no pelea con NINGÚN transform: fade limpio siempre.
    Clase doble = más peso que `.grid figure img` / `.gcard img`. */
 img.t-fade-img.t-fade-img { opacity: 0; }
+/* Movimiento sutil hacia arriba = fade MUCHO más visible (PC y móvil).
+   El hero (.phero-img) queda solo-opacidad para no chocar con su parallax. */
+img.t-fade-img.t-fade-img:not(.phero-img) { transform: translateY(34px); }
 /* la transición vive en .loaded: el estado oculto se aplica al instante
    (sin "parpadeo" de ida) y solo la ENTRADA se anima */
 img.t-fade-img.t-fade-img.loaded {
   opacity: 1;
-  transition: opacity .9s ease;
+  transform: none;
+  transition: opacity .85s ease, transform .9s cubic-bezier(.16, 1, .3, 1);
 }
 /* Las imágenes clave llevan la clase YA en el HTML (fade real al abrir la
    página, antes de que corra el JS). Red de seguridad: si el JS nunca corre

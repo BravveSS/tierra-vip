@@ -9,6 +9,18 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# El HTML SIEMPRE se revalida → el navegador nunca sirve una página vieja que
+# apunte a assets viejos (causa de "sigo viendo la versión anterior"). Los
+# assets llevan ?v=N para cache-busting, así que ellos sí pueden cachearse.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # ─────────────────────────────────────────────────────────────────────────
 # UN DOMINIO POR LANDING (dominios reales de Tierra, todos en GoDaddy)
 #
