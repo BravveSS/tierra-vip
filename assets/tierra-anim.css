@@ -383,3 +383,24 @@ html, body { overscroll-behavior-y: none; }
   from { transform: scale(1); }
   to   { transform: scale(1.1) translateY(-1.5%); }
 }
+
+
+/* ────────────────────────────────────────────────────────────────
+   Botón "volver arriba" (aparece tras 2 pantallas)
+   ──────────────────────────────────────────────────────────────── */
+#t-top {
+  position: fixed; left: 18px; bottom: 20px; z-index: 800;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(18, 32, 25, .72);
+  border: 1px solid rgba(201, 169, 110, .55);
+  color: var(--gold, #C9A96E);
+  font-size: 18px; line-height: 1;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  opacity: 0; transform: translateY(14px); pointer-events: none;
+  transition: opacity .4s ease, transform .4s ease;
+}
+#t-top.on { opacity: 1; transform: none; pointer-events: auto; }
+#t-top:hover { background: rgba(201, 169, 110, .25); }
+@media (max-width: 768px) {
+  #t-top { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); left: 14px; }
+}
