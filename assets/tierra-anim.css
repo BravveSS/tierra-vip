@@ -368,12 +368,10 @@ html, body { overscroll-behavior-y: none; }
 @media (max-width: 768px) {
   #hero { height: 100svh !important; }
   .phero { height: 88svh !important; }
-  /* Las cards de proyecto y las franjas de experiencia también median en vh:
-     cada aparición/ocultamiento de la barra re-calculaba TODO el documento
-     (≈ +500px de altura) y el scroll "saltaba". Con svh la altura es fija. */
-  .pcard { height: 100svh !important; }
+  /* OJO: en móvil las .pcard son height:auto por diseño (columna) — NO
+     forzarles altura. La única card con altura de viewport es .pc3 (85vh
+     en el diseño); se pasa a svh para que la barra de Chrome no la mueva. */
   .pc3 { height: 85svh !important; }
-  .exp-strip { height: 76svh !important; }
   /* Paneles fijos a pantalla completa: dvh sigue a la barra de Chrome,
      así el input del chat nunca queda cortado detrás de ella. */
   #tadv-panel, #ai-panel { height: 100dvh !important; }
