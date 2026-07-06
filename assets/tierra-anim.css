@@ -29,13 +29,13 @@
 
   /* Las 5 franjas de "experiencia" eran 60vh c/u = scroll eterno.
      Más bajas y con menos hueco entre título e imagen. */
-  #experiencia .exp-strip { height: 44vh !important; min-height: 288px !important; }
+  #experiencia .exp-strip { height: 44svh !important; min-height: 288px !important; }
   #experiencia .exp-intro { padding: 26px 22px 14px !important; }
   #experiencia { padding-top: 0 !important; }
 }
 
 @media (max-width: 420px) {
-  #experiencia .exp-strip { height: 40vh !important; min-height: 260px !important; }
+  #experiencia .exp-strip { height: 40svh !important; min-height: 260px !important; }
 }
 
 /* PC: que quede tan ágil como en móvil — menos espacio vacío en desktop.
@@ -340,7 +340,7 @@ html:not(.t-js) img.t-fade-img.t-fade-img { animation: tfSafe .9s ease 2.6s forw
    arriba) → composición editorial moderna, sin hueco muerto al entrar. */
 @media (max-width: 768px) {
   #hero { align-items: flex-end !important; }
-  #hbody { padding-bottom: 13vh; }
+  #hbody { padding-bottom: 13svh; }
   #manifesto { padding-top: 50px !important; }
   /* el indicador de scroll no debe pelear con el texto reubicado */
   #sind { bottom: 14px !important; }
@@ -368,6 +368,15 @@ html, body { overscroll-behavior-y: none; }
 @media (max-width: 768px) {
   #hero { height: 100svh !important; }
   .phero { height: 88svh !important; }
+  /* Las cards de proyecto y las franjas de experiencia también median en vh:
+     cada aparición/ocultamiento de la barra re-calculaba TODO el documento
+     (≈ +500px de altura) y el scroll "saltaba". Con svh la altura es fija. */
+  .pcard { height: 100svh !important; }
+  .pc3 { height: 85svh !important; }
+  .exp-strip { height: 76svh !important; }
+  /* Paneles fijos a pantalla completa: dvh sigue a la barra de Chrome,
+     así el input del chat nunca queda cortado detrás de ella. */
+  #tadv-panel, #ai-panel { height: 100dvh !important; }
 }
 
 

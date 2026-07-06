@@ -82,8 +82,11 @@
 
     // Mostrar tras un pequeño scroll para no tapar el hero al entrar
     var reveal = function () {
-      if (window.scrollY > 40) bar.classList.add('show');
-      else bar.classList.remove('show');
+      // histéresis: aparece pasado 72px y solo se esconde por debajo de 16px
+      // → sin parpadeo cuando la barra de URL del navegador anima el viewport
+      var y = window.scrollY;
+      if (y > 72) bar.classList.add('show');
+      else if (y < 16) bar.classList.remove('show');
     };
     reveal();
     window.addEventListener('scroll', reveal, { passive: true });

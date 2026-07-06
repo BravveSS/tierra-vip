@@ -23,7 +23,14 @@ function resizePtx(){
   ph = ptx.height = window.innerHeight;
 }
 resizePtx();
-window.addEventListener('resize', resizePtx);
+// La barra de URL del navegador móvil dispara 'resize' al esconderse/mostrarse
+// (solo cambia la ALTURA). Hacer trabajo de layout en pleno scroll causaba
+// micro-tirones → los handlers de resize solo corren si cambió el ANCHO.
+function onWidthResize(fn){
+  let w = window.innerWidth;
+  return () => { if (window.innerWidth === w) return; w = window.innerWidth; fn(); };
+}
+window.addEventListener('resize', onWidthResize(resizePtx));
 
 function pnoise(x, y, t){
   return (Math.sin(x*1.1+t*.8)*Math.cos(y*.9+t*.6)*.55
@@ -1334,7 +1341,7 @@ if (window.__PERF_LOW) {
     });
   }
   placePins();
-  window.addEventListener('resize', placePins);
+  window.addEventListener('resize', onWidthResize(placePins));
   // tarjeta hover + navegación
   pins.forEach(pin => {
     const show = () => {
