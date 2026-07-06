@@ -49,6 +49,24 @@
       document.documentElement, { attributes: true, attributeFilter: ['lang', 'data-lang'] });
   }
 
+  // Red de seguridad para .scn: el bundle solo revela una lista fija de
+  // secciones y .exp-intro ("No vendemos terrenos…", arriba de "Despierta
+  // frente al Pacífico") quedaba invisible → espacio en blanco. Este
+  // observador revela CUALQUIER .scn al entrar en pantalla (idempotente).
+  function scnSafety() {
+    var els = document.querySelectorAll('.scn:not(.in)');
+    if (!els.length || !('IntersectionObserver' in window)) {
+      els.forEach(function (e) { e.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  }
+
   function initReveal() {
     var els = document.querySelectorAll('.t-reveal');
     if (!els.length) return;
@@ -262,7 +280,7 @@
     if (isEN()) apply();
   }
 
-  function init() { heroQuality(); heroVideoRescue(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); topButton(); badgeLang(); gsapRescue(); aliasLinks(); }
+  function init() { heroQuality(); heroVideoRescue(); buildTicker(); scnSafety(); initReveal(); fadeImages(); expVideos(); progressBar(); topButton(); badgeLang(); gsapRescue(); aliasLinks(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
