@@ -21,6 +21,15 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# Los assets van versionados (?v=N en css/js; imágenes/videos cambian de
+# nombre cuando cambian) → caché larga en el navegador. Recorta MUCHO el
+# ancho de banda del hosting: las visitas repetidas no vuelven a descargar
+# ni a revalidar nada.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, immutable"
+
 # ─────────────────────────────────────────────────────────────────────────
 # UN DOMINIO POR LANDING (dominios reales de Tierra, todos en GoDaddy)
 #
