@@ -1,7 +1,8 @@
 /* ============================================================================
-   TIERRA — Google Analytics 4 con consentimiento (GDPR-friendly)
-   Muestra un banner discreto; GA4 solo se carga si el visitante acepta.
-   La elección se recuerda en localStorage. Bilingüe ES/EN.
+   TIERRA — Google Analytics 4 con Consent Mode v2 (recomendación de Google)
+   gtag carga SIEMPRE: sin consentimiento mide con pings sin cookies
+   (anónimo, cuenta la visita); al aceptar pasa a medición completa.
+   Así no se pierde tráfico y sigue siendo GDPR-friendly. Bilingüe ES/EN.
    ========================================================================== */
 (function () {
   'use strict';
@@ -11,13 +12,21 @@
 
   function isEN() { return window.__LANG === 'en' || document.documentElement.getAttribute('lang') === 'en'; }
 
-  function loadGA() {
-    if (window.__gaLoaded) return;
+  function loadGA(granted) {
+    if (window.__gaLoaded) { if (granted) grant(); return; }
     window.__gaLoaded = true;
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { dataLayer.push(arguments); };
+    // Consent Mode v2: por defecto denegado → GA mide con pings sin cookies
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
     gtag('js', new Date());
     gtag('config', GA_ID, { anonymize_ip: true });
+    if (granted) grant();
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
@@ -34,6 +43,12 @@
         gtag('event', 'lead_form_submit', { origen: f.getAttribute('data-origen') || 'asesor', location: location.pathname });
       }
     }, true);
+  }
+
+  function grant() {
+    if (window.__gaGranted) return;
+    window.__gaGranted = true;
+    window.gtag && gtag('consent', 'update', { analytics_storage: 'granted' });
   }
 
   function banner() {
@@ -67,7 +82,7 @@
     document.head.appendChild(css);
     document.body.appendChild(b);
     b.querySelector('.tc-ok').addEventListener('click', function () {
-      localStorage.setItem(KEY, 'yes'); b.remove(); loadGA();
+      localStorage.setItem(KEY, 'yes'); b.remove(); grant();
     });
     b.querySelector('.tc-no').addEventListener('click', function () {
       localStorage.setItem(KEY, 'no'); b.remove();
@@ -77,8 +92,8 @@
   function init() {
     var c = null;
     try { c = localStorage.getItem(KEY); } catch (_) {}
-    if (c === 'yes') loadGA();
-    else if (c !== 'no') setTimeout(banner, 1800);   // banner tras un momento, no de golpe
+    loadGA(c === 'yes');                              // GA siempre (pings anónimos si no aceptó)
+    if (c !== 'yes' && c !== 'no') setTimeout(banner, 1800);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
