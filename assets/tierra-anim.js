@@ -158,6 +158,27 @@
     });
   }
 
+  // Botón "volver arriba": aparece tras 2 pantallas de scroll. Útil en
+  // páginas largas (galerías) — vuelve al inicio con scroll suave.
+  function topButton() {
+    if (document.getElementById('t-top')) return;
+    var b = document.createElement('button');
+    b.id = 't-top';
+    b.setAttribute('aria-label', isEN() ? 'Back to top' : 'Volver arriba');
+    b.innerHTML = '&#8593;';
+    document.body.appendChild(b);
+    b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    var vis = false, ticking = false;
+    function chk() {
+      var show = window.scrollY > window.innerHeight * 2;
+      if (show !== vis) { vis = show; b.classList.toggle('on', show); }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(chk); }
+    }, { passive: true });
+  }
+
   // Barra de progreso de lectura (fina, dorada, arriba)
   function progressBar() {
     if (document.getElementById('t-progress')) return;
@@ -241,7 +262,7 @@
     if (isEN()) apply();
   }
 
-  function init() { heroQuality(); heroVideoRescue(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); badgeLang(); gsapRescue(); aliasLinks(); }
+  function init() { heroQuality(); heroVideoRescue(); buildTicker(); initReveal(); fadeImages(); expVideos(); progressBar(); topButton(); badgeLang(); gsapRescue(); aliasLinks(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
