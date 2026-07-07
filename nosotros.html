@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="assets/img/brand/tierra-logo.png">
 <link rel="stylesheet" href="assets/pages.css?v=12">
 <link rel="stylesheet" href="assets/tierra-mobile.css?v=1">
-<link rel="stylesheet" href="assets/tierra-anim.css?v=18">
+<link rel="stylesheet" href="assets/tierra-anim.css?v=19">
 <link rel="stylesheet" href="assets/tierra-advisor.css?v=2">
 </head>
 <body>
@@ -37,8 +37,12 @@
   </ul>
 </nav>
 
+<!-- hero con video: la costa en movimiento (mismo video del inicio → ya cacheado) -->
 <section class="phero">
-  <img class="phero-img t-fade-img" src="assets/img/aldea-tao/dronaldeatao.webp" alt="Costa de Oaxaca" style="filter:brightness(.45)">
+  <video class="phero-vid" autoplay muted loop playsinline preload="auto" poster="assets/img/aldea-tao/dronaldeatao.webp" style="filter:brightness(.55)">
+    <source src="assets/video/hero.mp4?v=6" type="video/mp4">
+  </video>
+  <div class="phero-scrim"></div>
   <div class="phero-body">
     <div class="phero-eyebrow">Nosotros</div>
     <h1 class="sr-only">Tierra — Desarrollo y Construcción en la Costa de Oaxaca</h1>
