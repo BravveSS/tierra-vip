@@ -1,9 +1,37 @@
-# Cloudflare Pages — cabeceras (equivalente a las de netlify.toml)
-# El HTML siempre se revalida (nunca una página vieja tras un deploy);
-# los assets van versionados con ?v=N → caché larga.
-
-/*
-  Cache-Control: public, max-age=0, must-revalidate
+# Cloudflare Pages — cabeceras de caché
+# OJO: en Pages las reglas que coinciden se SUMAN (no se reemplazan), así
+# que el HTML se lista explícito en vez de usar /* (que contaminaba /assets).
+# El HTML siempre se revalida; los assets van versionados con ?v=N → caché larga.
 
 /assets/*
   Cache-Control: public, max-age=2592000, immutable
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/azimut
+  Cache-Control: public, max-age=0, must-revalidate
+
+/nabani
+  Cache-Control: public, max-age=0, must-revalidate
+
+/aldea-tao
+  Cache-Control: public, max-age=0, must-revalidate
+
+/serena
+  Cache-Control: public, max-age=0, must-revalidate
+
+/depas-kora
+  Cache-Control: public, max-age=0, must-revalidate
+
+/nosotros
+  Cache-Control: public, max-age=0, must-revalidate
+
+/construccion
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
