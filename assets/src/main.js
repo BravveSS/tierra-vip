@@ -210,7 +210,7 @@ const ldTl = gsap.timeline({
 // Momento de misterio: la frase aparece letra a letra antes del logo
 (function(){
   const ph = document.getElementById('ld-phrase');
-  const PHRASE = window.__LANG === 'en' ? 'Where the jungle meets the sea, Tierra begins.' : 'Donde la selva se encuentra con el mar, comienza la Tierra.';
+  const PHRASE = window.__LANG === 'en' ? 'Tierra. Your place begins here.' : 'Tierra. Tu lugar empieza aquí.';
   if (!ph || window.__REDUCED){ if (ph) ph.textContent = PHRASE; return; }
   let i = 0;
   const iv = setInterval(() => {
@@ -462,9 +462,9 @@ if(window.matchMedia('(min-width:769px)').matches){
    LIGHTBOX
 ═══════════════════════════════════════ */
 const lbSets = {
-  az:['assets/img/azimut/dronazimut.webp','assets/img/azimut/vistaazimut.webp',
+  az:['assets/img/azimut/g-alberca.webp','assets/img/azimut/vistaazimut.webp',
       'assets/img/azimut/fotorealazimut.webp','assets/img/azimut/fotorealazimut2.webp',
-      'assets/img/azimut/renderazimutyogashala.webp'],
+      'assets/img/azimut/g-yoga.webp'],
   nb:['assets/img/nabani/dronnabani.webp','assets/img/nabani/fotorealnabani.webp',
       'assets/img/nabani/fotorealnabaniplayaaguete.webp','assets/img/nabani/vistanabani.webp',
       'assets/img/nabani/rendernabani.webp','assets/img/nabani/rendernabani2.webp'],
@@ -515,40 +515,32 @@ document.querySelectorAll('.ptb').forEach(tb=>{
 const gdata = [
   // ── ALDEA TAO ──
   {src:'assets/img/aldea-tao/dronaldeatao.webp',       lbl:'Aldea Tao · Vista aérea',          tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/fotorealaldeatao.webp',   lbl:'Aldea Tao · Acantilados del Pacífico', tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/fotorealaldeatao2.webp',  lbl:'Aldea Tao · Costa salvaje',        tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/vistaaldeatao.webp',      lbl:'Aldea Tao · Vista al mar',         tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/renderaldeatao.webp',     lbl:'Aldea Tao · Render del proyecto',  tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/renderaldeatao2png.webp', lbl:'Aldea Tao · Diseño en acantilado', tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/g-cala.webp',             lbl:'Aldea Tao · Cala privada',         tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/fotorealaldeatao.webp',   lbl:'Aldea Tao · Acantilados del Pacífico', tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/g-aire.webp',             lbl:'Aldea Tao · La Boquilla desde el aire', tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/vistaaldeatao.webp',      lbl:'Aldea Tao · Vista al mar',         tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/renderaldeatao.webp',     lbl:'Aldea Tao · Render del proyecto',  tag:'Aldea Tao'},
   // ── AZIMUT ──
-  {src:'assets/img/azimut/dronazimut.webp',            lbl:'Azimut · Mazunte desde el aire',   tag:'Azimut'},
-  {src:'assets/img/azimut/fotorealazimut.webp',        lbl:'Azimut · Selva nativa',            tag:'Azimut'},
-  {src:'assets/img/azimut/fotorealazimut2.webp',       lbl:'Azimut · El terreno',              tag:'Azimut'},
-  {src:'assets/img/azimut/vistaazimut.webp',           lbl:'Azimut · Vista al Pacífico',       tag:'Azimut'},
-  {src:'assets/img/azimut/renderazimutyogashala.webp', lbl:'Azimut · Yoga Shala (render)',     tag:'Azimut'},
-  {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut'},
-  {src:'assets/img/azimut/g-render.webp',              lbl:'Azimut · Residencia en la selva',  tag:'Azimut'},
-  {src:'assets/img/azimut/g-temazcal.webp',            lbl:'Azimut · Temazcal tradicional',    tag:'Azimut'},
+  {src:'assets/img/azimut/g-alberca.webp',             lbl:'Azimut · Alberca natural',         tag:'Azimut'},
+  {src:'assets/img/azimut/g-costa.webp',               lbl:'Azimut · Costa de Mazunte',        tag:'Azimut'},
   {src:'assets/img/azimut/g-yoga.webp',                lbl:'Azimut · Deck de yoga',            tag:'Azimut'},
+  {src:'assets/img/azimut/g-temazcal.webp',            lbl:'Azimut · Temazcal tradicional',    tag:'Azimut'},
+  {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut'},
+  {src:'assets/img/azimut/fotorealazimut.webp',        lbl:'Azimut · Entrada peatonal',        tag:'Azimut'},
+  {src:'assets/img/azimut/vistaazimut.webp',           lbl:'Azimut · Vista al Pacífico',       tag:'Azimut'},
   // ── NABANI ──
   {src:'assets/img/nabani/dronnabani.webp',                 lbl:'Nabani · Frente al mar desde el aire', tag:'Nabani'},
-  {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Terreno frente al mar',   tag:'Nabani'},
-  {src:'assets/img/nabani/fotorealnabaniplayaaguete.webp',  lbl:'Nabani · Playa Aguete',            tag:'Nabani'},
-  {src:'assets/img/nabani/vistanabani.webp',                lbl:'Nabani · Vista al Pacífico',       tag:'Nabani'},
-  {src:'assets/img/nabani/rendernabani.webp',               lbl:'Nabani · Render de residencia',    tag:'Nabani'},
-  {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Diseño de autor',         tag:'Nabani'},
-  {src:'assets/img/nabani/g-villa.webp',                    lbl:'Nabani · Residencia con alberca',  tag:'Nabani'},
-  {src:'assets/img/nabani/g-terraza.webp',                  lbl:'Nabani · Terraza con vista',       tag:'Nabani'},
-  {src:'assets/img/nabani/g-punto.webp',                    lbl:'Nabani · El punto sobre el Pacífico', tag:'Nabani'},
   {src:'assets/img/nabani/g-playa.webp',                    lbl:'Nabani · Playa a pasos del terreno', tag:'Nabani'},
-  {src:'assets/img/nabani/g-escalinata.webp',               lbl:'Nabani · Sendero de piedra a la selva', tag:'Nabani'},
+  {src:'assets/img/nabani/fotorealnabaniplayaaguete.webp',  lbl:'Nabani · Playa Aguete',            tag:'Nabani'},
+  {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Beach club (render)',     tag:'Nabani'},
+  {src:'assets/img/nabani/rendernabani.webp',               lbl:'Nabani · Entrada del proyecto (render)', tag:'Nabani'},
+  {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Áreas comunes',           tag:'Nabani'},
+  {src:'assets/img/nabani/vistanabani.webp',                lbl:'Nabani · Vista al Pacífico',       tag:'Nabani'},
   // ── DEPAS KORA ──
-  {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Diseño contemporáneo', tag:'Depas Kora'},
-  {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Vista al mar',          tag:'Depas Kora'},
-  {src:'assets/img/kora/rs-w-719-h-836.webp',    lbl:'Depas Kora · Departamentos',         tag:'Depas Kora'},
+  {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Departamentos',         tag:'Depas Kora'},
+  {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Diseño contemporáneo',  tag:'Depas Kora'},
+  {src:'assets/img/kora/rs-w-719-h-836.webp',    lbl:'Depas Kora · Acceso al conjunto',    tag:'Depas Kora'},
   // ── SERENA ──
   {src:'assets/img/serena/renderserena-2.webp', lbl:'Serena · Render del proyecto', tag:'Serena'},
   {src:'assets/img/serena/renderserena-3.webp', lbl:'Serena · Comunidad eco',       tag:'Serena'},
@@ -1314,7 +1306,7 @@ if (window.__PERF_LOW) {
     azimut:{n:'Azimut', l:'Mazunte · Oaxaca', l_en:'Mazunte · Oaxaca', img:'assets/img/azimut/renderazimutyogashala.webp'},
     serena:{n:'Serena', l:'Mazunte · Próximamente', l_en:'Mazunte · Coming soon', img:'assets/img/serena/renderserena-2.webp'},
     nabani:{n:'Nabani', l:'Puerto Ángel', l_en:'Puerto Ángel', img:'assets/img/nabani/dronnabani.webp'},
-    kora:  {n:'Depas Kora', l:'Puerto Ángel · Próximamente', l_en:'Puerto Ángel · Coming soon', img:'assets/img/kora/rs-w-719-h-836.webp'},
+    kora:  {n:'Depas Kora', l:'Puerto Ángel · Próximamente', l_en:'Puerto Ángel · Coming soon', img:'assets/img/kora/rs-w-719-h-1079-1.webp'},
     aldea: {n:'Aldea Tao', l:'La Boquilla', l_en:'La Boquilla', img:'assets/img/aldea-tao/dronaldeatao.webp'},
   };
   // ── POSICIONAMIENTO MATEMÁTICO: cada pin se ancla a la curva con getPointAtLength ──
@@ -1849,17 +1841,17 @@ const CHAT_EN = new Map([
   // [selector, EN, modo] — modo: 't'=textContent (def) · 'h'=innerHTML · 'p'=placeholder · 'f'=primer nodo de texto
   const TRX = [
     // hero
-    ['#hl1','We create spaces'],['#hl2','where the land speaks.'],['#hsub','Architecture in harmony with nature'],
+    ['#hl1','We create spaces'],['#hl2','where the land speaks.'],['#hsub','We create, develop and build in harmony with nature.'],
     ['#hctas a:nth-child(1)','Explore projects'],['#hctas a:nth-child(2)','Talk to an advisor <span>→</span>','h'],
     // manifesto
-    ['#mfl1','There are many ways'],['#mfl2','to own the land.'],['#mfl3','We choose to care for it.'],
-    ['#manifesto > p',"Tierra Desarrollos builds homes where the ocean is still wild, the jungle hasn't given way and silence still has value. Every project we build is a promise that this place will go on existing."],
+    ['#mfl1','There are many ways'],['#mfl2','to transform the land.'],['#mfl3','We choose to do it with respect.'],
+    ['#manifesto > p',"At Tierra we develop and build in places where the ocean, the jungle and the landscape still define the way of living. Each project seeks to blend into its surroundings, preserve their essence and create value without erasing what makes them unique."],
     // hero pre + ubicaciones de proyecto
     ['#hpre','Tierra  ·  Development & Construction'],
     ['#pco-nb .ploc','Puerto Ángel'],['#pco-at .ploc','Oaxacan Coast'],
     // features de los 3 proyectos (mismo orden del DOM)
-    ['#pco-az .pfeat:nth-of-type(1)','◆ Open-air Yoga Shala','h'],['#pco-az .pfeat:nth-of-type(2)','◆ Traditional temazcal','h'],['#pco-az .pfeat:nth-of-type(3)','◆ Natural rock pool','h'],['#pco-az .pfeat:nth-of-type(4)','◆ Trails to the beach','h'],['#pco-az .pfeat:nth-of-type(5)','◆ Bicycle trail','h'],['#pco-az .pfeat:nth-of-type(6)','◆ Water & power services','h'],['#pco-az .pfeat:nth-of-type(7)','◆ Full legal backing','h'],
-    ['#pco-nb .pfeat:nth-of-type(1)','◆ Ocean view','h'],['#pco-nb .pfeat:nth-of-type(2)','◆ Beaches on foot: Estacahuite, Aguete & Puerto Ángel','h'],['#pco-nb .pfeat:nth-of-type(3)','◆ Minimalist signature architecture','h'],['#pco-nb .pfeat:nth-of-type(4)','◆ Hammock area','h'],['#pco-nb .pfeat:nth-of-type(5)','◆ Beach Club with private pool','h'],['#pco-nb .pfeat:nth-of-type(6)','◆ Tropical gardens','h'],['#pco-nb .pfeat:nth-of-type(7)','◆ Treatment area','h'],['#pco-nb .pfeat:nth-of-type(8)','◆ Water & power services','h'],
+    ['#pco-az .pfeat:nth-of-type(1)','◆ Open-air Yoga Shala','h'],['#pco-az .pfeat:nth-of-type(2)','◆ Traditional temazcal','h'],['#pco-az .pfeat:nth-of-type(3)','◆ Natural pool','h'],['#pco-az .pfeat:nth-of-type(4)','◆ Trails to the beach','h'],['#pco-az .pfeat:nth-of-type(5)','◆ Bicycle trail','h'],['#pco-az .pfeat:nth-of-type(6)','◆ Water & power services','h'],['#pco-az .pfeat:nth-of-type(7)','◆ Full legal backing','h'],
+    ['#pco-nb .pfeat:nth-of-type(1)','◆ Ocean view','h'],['#pco-nb .pfeat:nth-of-type(2)','◆ Beaches on foot: Estacahuite, Aguete & Puerto Ángel','h'],['#pco-nb .pfeat:nth-of-type(3)','◆ Minimalist signature architecture','h'],['#pco-nb .pfeat:nth-of-type(4)','◆ Hammock area','h'],['#pco-nb .pfeat:nth-of-type(5)','◆ Beach Club with private pool','h'],['#pco-nb .pfeat:nth-of-type(6)','◆ Tropical gardens','h'],['#pco-nb .pfeat:nth-of-type(7)','◆ Water & power services','h'],
     ['#pco-at .pfeat:nth-of-type(1)','◆ Access to Tololote Beach','h'],['#pco-at .pfeat:nth-of-type(2)','◆ Access to La Boquilla Beach','h'],['#pco-at .pfeat:nth-of-type(3)','◆ Panoramic Pacific views','h'],['#pco-at .pfeat:nth-of-type(4)','◆ Cliffs over the ocean','h'],['#pco-at .pfeat:nth-of-type(5)','◆ Exclusive limited project','h'],['#pco-at .pfeat:nth-of-type(6)','◆ Guaranteed deeds','h'],
     // próximamente: badges y descripciones
     ['.cs-card:nth-of-type(1) .cs-badge','Coming soon'],['.cs-card:nth-of-type(2) .cs-badge','Pre-sale'],
@@ -1874,8 +1866,8 @@ const CHAT_EN = new Map([
     // masterplan
     ['#masterplan h2','The Oaxaca Coast, <em style="color:var(--gold)">project by project.</em>','h'],
     // proyectos
-    ['#pco-az .pdesc','Build your home inside a holistic wellness center, steps from the heart of Mazunte. Private jungle hillside lots with a yoga shala, temazcal and natural pool at the center of the community. Some lots have Pacific views; all come with full utilities and legal backing from day one.'],
-    ['#pco-nb .pdesc','Nabani —life, in Zapotec— is a project of oceanfront land, with ocean views and walking access to several beaches of Puerto Ángel within minutes. Oceanfront land where life takes root.'],
+    ['#pco-az .pdesc','Build your home inside a holistic wellness center, steps from the heart of Mazunte. Private jungle hillside lots with a yoga shala, temazcal and natural pool at the center of the community. Some lots have Pacific views; all come with utilities and legal backing.'],
+    ['#pco-nb .pdesc','Nabani is a project of oceanfront land, with ocean views and walking access to several beaches of Puerto Ángel within minutes. Land where life takes root.'],
     ['#pco-at .pdesc','On the Pacific cliffs, where the ocean strikes volcanic rock and the horizon never ends, a unique community is born. Build your house facing the sea, with access to Tololote and La Boquilla — wild coves that appear on no map.'],
     ['#pco-az .pcta','Discover Azimut →'],['#pco-nb .pcta','Discover Nabani →'],['#pco-at .pcta','Discover Aldea Tao →'],
     // coming soon + newsletter
@@ -1942,7 +1934,7 @@ const CHAT_EN = new Map([
   const DICT_EN = { nav_proyectos:'Projects', nav_construccion:'Construction', nav_nosotros:'About us', nav_galeria:'Gallery', nav_confianza:'Trust', nav_contacto:'Contact',
     mp_tag:'Masterplan', mp_sub:'Explore the map: every dot is a Tierra development. Tap a pin to discover it.', mp_3d:'Explore the coast in 3D →',
     sold_tag:'Track record', sold_sub:'When a Tierra project sells out, it becomes a community. This is our history — and the best proof of what comes next.', sold_badge:'Sold out', sold_loc:'Oaxaca Coast · 100% sold out',
-    lg_label:'Tierra Desarrollos · Est. Mexico', lg_sub:'Architecture in harmony with nature', lg_body:'Every project is born from listening to the land: understanding its topography, its history, its light. We do not build on top of nature — we build with it.' };
+    lg_label:'Tierra Desarrollos · Est. Mexico', lg_sub:'Architecture in harmony with nature', lg_body:'Every project starts from understanding the place: its topography, its landscape and the way it is lived in. We build respecting the environment and working with the qualities that make it unique.' };
   const DICT_ES = {};   // se captura del DOM
   document.querySelectorAll('[data-i18n]').forEach(el => { if (!(el.dataset.i18n in DICT_ES)) DICT_ES[el.dataset.i18n] = el.textContent; });
 

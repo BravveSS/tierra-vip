@@ -124,5 +124,8 @@
     bDisp.addEventListener('click', () => apply(true));
 
     host.appendChild(wrap);
+    // El host nace vacío (altura 0) y el IntersectionObserver de .reveal nunca
+    // dispara sobre elementos sin área → el mapa quedaba invisible. Se revela solo.
+    host.classList.add('in');
   });
 })();
