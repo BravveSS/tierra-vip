@@ -1,0 +1,9 @@
+# Cloudflare Pages — cabeceras (equivalente a las de netlify.toml)
+# El HTML siempre se revalida (nunca una página vieja tras un deploy);
+# los assets van versionados con ?v=N → caché larga.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=2592000, immutable
