@@ -462,12 +462,12 @@ if(window.matchMedia('(min-width:769px)').matches){
    LIGHTBOX
 ═══════════════════════════════════════ */
 const lbSets = {
-  az:['assets/img/azimut/g-alberca.webp','assets/img/azimut/vistaazimut.webp',
-      'assets/img/azimut/fotorealazimut.webp','assets/img/azimut/fotorealazimut2.webp',
+  az:['assets/img/azimut/g-alberca.webp','assets/img/azimut/az-vista-aerea.webp',
+      'assets/img/azimut/az-entrada-grande.webp','assets/img/azimut/az-calle.webp',
       'assets/img/azimut/g-yoga.webp'],
   nb:['assets/img/nabani/dronnabani.webp','assets/img/nabani/fotorealnabani.webp',
       'assets/img/nabani/fotorealnabaniplayaaguete.webp','assets/img/nabani/vistanabani.webp',
-      'assets/img/nabani/rendernabani.webp','assets/img/nabani/rendernabani2.webp'],
+      'assets/img/nabani/nb-entrada-real.webp','assets/img/nabani/rendernabani2.webp'],
   at:['assets/img/aldea-tao/dronaldeatao.webp','assets/img/aldea-tao/fotorealaldeatao.webp',
       'assets/img/aldea-tao/fotorealaldeatao2.webp','assets/img/aldea-tao/vistaaldeatao.webp',
       'assets/img/aldea-tao/renderaldeatao.webp','assets/img/aldea-tao/renderaldeatao2png.webp'],
@@ -520,21 +520,21 @@ const gdata = [
   {src:'assets/img/aldea-tao/g-aire.webp',             lbl:'Aldea Tao · La Boquilla desde el aire', tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/vistaaldeatao.webp',      lbl:'Aldea Tao · Vista al mar',         tag:'Aldea Tao'},
   {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/renderaldeatao.webp',     lbl:'Aldea Tao · Render del proyecto',  tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/at-costa-dron.webp',      lbl:'Aldea Tao · La costa desde el aire', tag:'Aldea Tao'},
   // ── AZIMUT ──
   {src:'assets/img/azimut/g-alberca.webp',             lbl:'Azimut · Alberca natural',         tag:'Azimut'},
   {src:'assets/img/azimut/g-costa.webp',               lbl:'Azimut · Costa de Mazunte',        tag:'Azimut'},
   {src:'assets/img/azimut/g-yoga.webp',                lbl:'Azimut · Deck de yoga',            tag:'Azimut'},
   {src:'assets/img/azimut/g-temazcal.webp',            lbl:'Azimut · Temazcal tradicional',    tag:'Azimut'},
   {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut'},
-  {src:'assets/img/azimut/fotorealazimut.webp',        lbl:'Azimut · Entrada peatonal',        tag:'Azimut'},
-  {src:'assets/img/azimut/vistaazimut.webp',           lbl:'Azimut · Vista al Pacífico',       tag:'Azimut'},
+  {src:'assets/img/azimut/az-entrada-grande.webp',     lbl:'Azimut · Entrada peatonal',        tag:'Azimut'},
+  {src:'assets/img/azimut/az-mazunte.webp',            lbl:'Azimut · Mazunte desde el aire',   tag:'Azimut'},
   // ── NABANI ──
   {src:'assets/img/nabani/dronnabani.webp',                 lbl:'Nabani · Frente al mar desde el aire', tag:'Nabani'},
   {src:'assets/img/nabani/g-playa.webp',                    lbl:'Nabani · Playa a pasos del terreno', tag:'Nabani'},
   {src:'assets/img/nabani/fotorealnabaniplayaaguete.webp',  lbl:'Nabani · Playa Aguete',            tag:'Nabani'},
   {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Beach club (render)',     tag:'Nabani'},
-  {src:'assets/img/nabani/rendernabani.webp',               lbl:'Nabani · Entrada del proyecto (render)', tag:'Nabani'},
+  {src:'assets/img/nabani/nb-entrada-real.webp',            lbl:'Nabani · Entrada del proyecto',    tag:'Nabani'},
   {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Áreas comunes',           tag:'Nabani'},
   {src:'assets/img/nabani/vistanabani.webp',                lbl:'Nabani · Vista al Pacífico',       tag:'Nabani'},
   // ── DEPAS KORA ──
@@ -542,9 +542,9 @@ const gdata = [
   {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Diseño contemporáneo',  tag:'Depas Kora'},
   {src:'assets/img/kora/rs-w-719-h-836.webp',    lbl:'Depas Kora · Acceso al conjunto',    tag:'Depas Kora'},
   // ── SERENA ──
-  {src:'assets/img/serena/renderserena-2.webp', lbl:'Serena · Render del proyecto', tag:'Serena'},
-  {src:'assets/img/serena/renderserena-3.webp', lbl:'Serena · Comunidad eco',       tag:'Serena'},
-  {src:'assets/img/serena/renderserena.webp',   lbl:'Serena · Vida en comunidad',   tag:'Serena'},
+  {src:'assets/img/serena/se-costa.webp',   lbl:'Serena · La costa de Zapotal',       tag:'Serena'},
+  {src:'assets/img/serena/se-cabana.webp',  lbl:'Serena · Cabaña en la selva (render)', tag:'Serena'},
+  {src:'assets/img/serena/se-terraza.webp', lbl:'Serena · Terraza al atardecer (render)', tag:'Serena'},
 ];
 
 const gstage  = document.getElementById('g3d-stage');
