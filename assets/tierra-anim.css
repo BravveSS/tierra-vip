@@ -478,3 +478,26 @@ html:not(.t-js) .grid figure::before { display: none; }
   transition: background .35s ease;
 }
 .ptb-more:hover span { background: rgba(201, 169, 110, .38); }
+
+/* ────────────────────────────────────────────────────────────────
+   IMAGEN PRINCIPAL DE LAS CARDS DE PROYECTO (home) — fade real:
+   entra suave cuando YA cargó, con micro-zoom de asentamiento.
+   La transición incluye transform para no matar el zoom de hover.
+   ──────────────────────────────────────────────────────────────── */
+.pcard .piw img.t-card-fade {
+  opacity: 0; transform: scale(1.06);
+  transition: opacity 1.1s ease, transform 1.5s cubic-bezier(.16, 1, .3, 1), filter .5s ease;
+}
+.pcard .piw img.t-card-fade.loaded { opacity: 1; transform: none; }
+.pcard:hover .piw img.t-card-fade.loaded { transform: scale(1.1); }
+html:not(.t-js) .pcard .piw img { opacity: 1 !important; }
+
+/* "+N fotos": destello que barre la miniatura + borde dorado vivo */
+.ptb-more span { overflow: hidden; border: 1px solid rgba(201, 169, 110, .4); }
+.ptb-more span::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 32%, rgba(242, 238, 228, .28) 50%, transparent 68%);
+  transform: translateX(-100%);
+  animation: tShine 3.2s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+@keyframes tShine { 55% { transform: translateX(100%); } 100% { transform: translateX(100%); } }
