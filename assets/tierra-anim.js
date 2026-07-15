@@ -106,10 +106,20 @@
         var img = e.target;
         io.unobserve(img);
         var delay = Math.min(n++ * 90, 360);
-        img.style.transitionDelay = delay + 'ms';
-        img.classList.add('loaded');
-        // limpiar el delay al terminar para no retrasar el hover-zoom
-        setTimeout(function () { img.style.transitionDelay = ''; }, delay + 1000);
+        // El fade solo arranca cuando la imagen YA cargó sus bytes: si no,
+        // la transición corre sobre un hueco vacío y el JPEG aparece de
+        // golpe al decodificarse (el bug de "salen de sopetón" en PC).
+        var reveal = function () {
+          img.style.transitionDelay = delay + 'ms';
+          img.classList.add('loaded');
+          // limpiar el delay al terminar para no retrasar el hover-zoom
+          setTimeout(function () { img.style.transitionDelay = ''; }, delay + 1000);
+        };
+        if (img.complete && img.naturalWidth > 0) reveal();
+        else {
+          img.addEventListener('load', reveal, { once: true });
+          img.addEventListener('error', reveal, { once: true }); // nunca dejarla invisible
+        }
       });
     }, { threshold: 0.06, rootMargin: '0px 0px -4% 0px' });
     // doble rAF: garantiza que el estado inicial (opacity 0) se pinte antes

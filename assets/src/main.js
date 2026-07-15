@@ -464,13 +464,27 @@ if(window.matchMedia('(min-width:769px)').matches){
 const lbSets = {
   az:['assets/img/azimut/g-alberca.webp','assets/img/azimut/az-vista-aerea.webp',
       'assets/img/azimut/az-entrada-grande.webp','assets/img/azimut/az-calle.webp',
-      'assets/img/azimut/g-yoga.webp'],
+      'assets/img/azimut/g-yoga.webp','assets/img/azimut/az-mazunte.webp',
+      'assets/img/azimut/g-temazcal.webp','assets/img/azimut/g-casa.webp',
+      'assets/img/azimut/g-render.webp','assets/img/azimut/g-hamaca.webp',
+      'assets/img/azimut/g-costa.webp','assets/img/azimut/az-lote11.webp',
+      'assets/img/azimut/g-comun.webp','assets/img/azimut/hero-azimut.webp'],
   nb:['assets/img/nabani/dronnabani.webp','assets/img/nabani/fotorealnabani.webp',
       'assets/img/nabani/fotorealnabaniplayaaguete.webp','assets/img/nabani/vistanabani.webp',
-      'assets/img/nabani/nb-entrada-real.webp','assets/img/nabani/rendernabani2.webp'],
+      'assets/img/nabani/nb-entrada-real.webp','assets/img/nabani/rendernabani2.webp',
+      'assets/img/nabani/hero-costa.webp','assets/img/nabani/g-punto.webp',
+      'assets/img/nabani/g-costa2.webp','assets/img/nabani/g-playa.webp',
+      'assets/img/nabani/g-playa2.webp','assets/img/nabani/nb-escaleras-real.webp',
+      'assets/img/nabani/g-alberca.webp','assets/img/nabani/g-piscina.webp',
+      'assets/img/nabani/g-costa.webp','assets/img/nabani/nb-vista-real.webp',
+      'assets/img/nabani/nb-barda.webp','assets/img/nabani/nb-sendero-real.webp'],
   at:['assets/img/aldea-tao/dronaldeatao.webp','assets/img/aldea-tao/fotorealaldeatao.webp',
       'assets/img/aldea-tao/fotorealaldeatao2.webp','assets/img/aldea-tao/vistaaldeatao.webp',
-      'assets/img/aldea-tao/renderaldeatao.webp','assets/img/aldea-tao/renderaldeatao2png.webp'],
+      'assets/img/aldea-tao/renderaldeatao.webp','assets/img/aldea-tao/renderaldeatao2png.webp',
+      'assets/img/aldea-tao/g-cala.webp','assets/img/aldea-tao/g-entrada.webp',
+      'assets/img/aldea-tao/g-aire.webp','assets/img/aldea-tao/g-acantilado.webp',
+      'assets/img/aldea-tao/g-sendero.webp','assets/img/aldea-tao/g-vista2.webp',
+      'assets/img/aldea-tao/at-costa-dron.webp','assets/img/aldea-tao/at-acantilados.webp'],
 };
 let lbSet=[], lbIdx=0;
 const lbEl   = document.getElementById('lb');
@@ -514,37 +528,37 @@ document.querySelectorAll('.ptb').forEach(tb=>{
 ═══════════════════════════════════════ */
 const gdata = [
   // ── ALDEA TAO ──
-  {src:'assets/img/aldea-tao/dronaldeatao.webp',       lbl:'Aldea Tao · Vista aérea',          tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/g-cala.webp',             lbl:'Aldea Tao · Cala privada',         tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/fotorealaldeatao.webp',   lbl:'Aldea Tao · Acantilados del Pacífico', tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/g-aire.webp',             lbl:'Aldea Tao · La Boquilla desde el aire', tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/vistaaldeatao.webp',      lbl:'Aldea Tao · Vista al mar',         tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao'},
-  {src:'assets/img/aldea-tao/at-costa-dron.webp',      lbl:'Aldea Tao · La costa desde el aire', tag:'Aldea Tao'},
+  {src:'assets/img/aldea-tao/dronaldeatao.webp',       lbl:'Aldea Tao · Vista aérea',          tag:'Aldea Tao', en:'Aldea Tao · Aerial view'},
+  {src:'assets/img/aldea-tao/g-cala.webp',             lbl:'Aldea Tao · Cala privada',         tag:'Aldea Tao', en:'Aldea Tao · Private cove'},
+  {src:'assets/img/aldea-tao/fotorealaldeatao.webp',   lbl:'Aldea Tao · Acantilados del Pacífico', tag:'Aldea Tao', en:'Aldea Tao · Pacific cliffs'},
+  {src:'assets/img/aldea-tao/g-aire.webp',             lbl:'Aldea Tao · La Boquilla desde el aire', tag:'Aldea Tao', en:'Aldea Tao · La Boquilla from above'},
+  {src:'assets/img/aldea-tao/vistaaldeatao.webp',      lbl:'Aldea Tao · Vista al mar',         tag:'Aldea Tao', en:'Aldea Tao · Ocean view'},
+  {src:'assets/img/aldea-tao/g-entrada.webp',          lbl:'Aldea Tao · Acceso al desarrollo', tag:'Aldea Tao', en:'Aldea Tao · Development entrance'},
+  {src:'assets/img/aldea-tao/at-costa-dron.webp',      lbl:'Aldea Tao · La costa desde el aire', tag:'Aldea Tao', en:'Aldea Tao · The coast from above'},
   // ── AZIMUT ──
-  {src:'assets/img/azimut/g-alberca.webp',             lbl:'Azimut · Alberca natural',         tag:'Azimut'},
-  {src:'assets/img/azimut/g-costa.webp',               lbl:'Azimut · Costa de Mazunte',        tag:'Azimut'},
-  {src:'assets/img/azimut/g-yoga.webp',                lbl:'Azimut · Deck de yoga',            tag:'Azimut'},
-  {src:'assets/img/azimut/g-temazcal.webp',            lbl:'Azimut · Temazcal tradicional',    tag:'Azimut'},
-  {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut'},
-  {src:'assets/img/azimut/az-entrada-grande.webp',     lbl:'Azimut · Entrada peatonal',        tag:'Azimut'},
-  {src:'assets/img/azimut/az-mazunte.webp',            lbl:'Azimut · Mazunte desde el aire',   tag:'Azimut'},
+  {src:'assets/img/azimut/g-alberca.webp',             lbl:'Azimut · Alberca natural',         tag:'Azimut', en:'Azimut · Natural pool'},
+  {src:'assets/img/azimut/g-costa.webp',               lbl:'Azimut · Costa de Mazunte',        tag:'Azimut', en:'Azimut · Mazunte coast'},
+  {src:'assets/img/azimut/g-yoga.webp',                lbl:'Azimut · Deck de yoga',            tag:'Azimut', en:'Azimut · Yoga deck'},
+  {src:'assets/img/azimut/g-temazcal.webp',            lbl:'Azimut · Temazcal tradicional',    tag:'Azimut', en:'Azimut · Traditional temazcal'},
+  {src:'assets/img/azimut/g-casa.webp',                lbl:'Azimut · Casa de autor (render)',  tag:'Azimut', en:'Azimut · Signature home (render)'},
+  {src:'assets/img/azimut/az-entrada-grande.webp',     lbl:'Azimut · Entrada peatonal',        tag:'Azimut', en:'Azimut · Pedestrian entrance'},
+  {src:'assets/img/azimut/az-mazunte.webp',            lbl:'Azimut · Mazunte desde el aire',   tag:'Azimut', en:'Azimut · Mazunte from above'},
   // ── NABANI ──
-  {src:'assets/img/nabani/dronnabani.webp',                 lbl:'Nabani · Frente al mar desde el aire', tag:'Nabani'},
-  {src:'assets/img/nabani/g-playa.webp',                    lbl:'Nabani · Playa a pasos del terreno', tag:'Nabani'},
-  {src:'assets/img/nabani/fotorealnabaniplayaaguete.webp',  lbl:'Nabani · Playa Aguete',            tag:'Nabani'},
-  {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Beach club (render)',     tag:'Nabani'},
-  {src:'assets/img/nabani/nb-entrada-real.webp',            lbl:'Nabani · Entrada del proyecto',    tag:'Nabani'},
-  {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Áreas comunes',           tag:'Nabani'},
-  {src:'assets/img/nabani/vistanabani.webp',                lbl:'Nabani · Vista al Pacífico',       tag:'Nabani'},
+  {src:'assets/img/nabani/dronnabani.webp',                 lbl:'Nabani · Frente al mar desde el aire', tag:'Nabani', en:'Nabani · Oceanfront from above'},
+  {src:'assets/img/nabani/g-playa.webp',                    lbl:'Nabani · Playa a pasos del terreno', tag:'Nabani', en:'Nabani · Beach steps away'},
+  {src:'assets/img/nabani/fotorealnabaniplayaaguete.webp',  lbl:'Nabani · Playa Aguete',            tag:'Nabani', en:'Nabani · Aguete Beach'},
+  {src:'assets/img/nabani/rendernabani2.webp',              lbl:'Nabani · Beach club (render)',     tag:'Nabani', en:'Nabani · Beach club (render)'},
+  {src:'assets/img/nabani/nb-entrada-real.webp',            lbl:'Nabani · Entrada del proyecto',    tag:'Nabani', en:'Nabani · Project entrance'},
+  {src:'assets/img/nabani/fotorealnabani.webp',             lbl:'Nabani · Áreas comunes',           tag:'Nabani', en:'Nabani · Common areas'},
+  {src:'assets/img/nabani/vistanabani.webp',                lbl:'Nabani · Vista al Pacífico',       tag:'Nabani', en:'Nabani · Pacific view'},
   // ── DEPAS KORA ──
-  {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Departamentos',         tag:'Depas Kora'},
-  {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Diseño contemporáneo',  tag:'Depas Kora'},
-  {src:'assets/img/kora/rs-w-719-h-836.webp',    lbl:'Depas Kora · Acceso al conjunto',    tag:'Depas Kora'},
+  {src:'assets/img/kora/rs-w-719-h-1079-1.webp', lbl:'Depas Kora · Departamentos',         tag:'Depas Kora', en:'Depas Kora · Apartments'},
+  {src:'assets/img/kora/rs-w-719-h-1079.webp',   lbl:'Depas Kora · Diseño contemporáneo',  tag:'Depas Kora', en:'Depas Kora · Contemporary design'},
+  {src:'assets/img/kora/rs-w-719-h-836.webp',    lbl:'Depas Kora · Acceso al conjunto',    tag:'Depas Kora', en:'Depas Kora · Access to the complex'},
   // ── SERENA ──
-  {src:'assets/img/serena/se-costa.webp',   lbl:'Serena · La costa de Zapotal',       tag:'Serena'},
-  {src:'assets/img/serena/se-cabana.webp',  lbl:'Serena · Cabaña en la selva (render)', tag:'Serena'},
-  {src:'assets/img/serena/se-terraza.webp', lbl:'Serena · Terraza al atardecer (render)', tag:'Serena'},
+  {src:'assets/img/serena/se-jacuzzi.webp', lbl:'Serena · Jacuzzi al aire libre (render)', tag:'Serena', en:'Serena · Open-air hot tub (render)'},
+  {src:'assets/img/serena/se-cabana.webp',  lbl:'Serena · Cabaña en la selva (render)', tag:'Serena', en:'Serena · Jungle cabin (render)'},
+  {src:'assets/img/serena/se-camino.webp',  lbl:'Serena · El camino entre la selva', tag:'Serena', en:'Serena · The path through the jungle'},
 ];
 
 const gstage  = document.getElementById('g3d-stage');
@@ -559,7 +573,7 @@ gdata.forEach((d)=>{
   const c = document.createElement('div');
   c.className='gcard';
   c.innerHTML=`<img src="${d.src}" alt="${d.lbl}" loading="lazy">
-    <div class="gcard-lbl"><div class="gcard-name">${d.lbl}</div></div>`;
+    <div class="gcard-lbl"><div class="gcard-name" data-es="${d.lbl}" data-en="${d.en||d.lbl}">${d.lbl}</div></div>`;
   gcards.appendChild(c);
   cards.push(c);
 
