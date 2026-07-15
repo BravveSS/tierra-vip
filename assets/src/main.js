@@ -165,7 +165,7 @@ const vid = document.getElementById('hvid');
 (function preloadAll() {
   const imgs = [
     // Imágenes principales de cada proyecto (lo que se ve al hacer scroll)
-    'assets/img/azimut/renderazimutyogashala.webp',
+    'assets/img/azimut/hero-mazunte.webp',
     'assets/img/nabani/dronnabani.webp',
     'assets/img/aldea-tao/dronaldeatao.webp',
     'assets/img/serena/renderserena-2.webp',
@@ -1317,7 +1317,7 @@ if (window.__PERF_LOW) {
   const card = document.getElementById('mp-card'), ci = document.getElementById('mp-card-img'),
         cn = document.getElementById('mp-card-n'), cl = document.getElementById('mp-card-l');
   const DATA = {
-    azimut:{n:'Azimut', l:'Mazunte · Oaxaca', l_en:'Mazunte · Oaxaca', img:'assets/img/azimut/renderazimutyogashala.webp'},
+    azimut:{n:'Azimut', l:'Mazunte · Oaxaca', l_en:'Mazunte · Oaxaca', img:'assets/img/azimut/g-alberca.webp'},
     serena:{n:'Serena', l:'Mazunte · Próximamente', l_en:'Mazunte · Coming soon', img:'assets/img/serena/renderserena-2.webp'},
     nabani:{n:'Nabani', l:'Puerto Ángel', l_en:'Puerto Ángel', img:'assets/img/nabani/dronnabani.webp'},
     kora:  {n:'Depas Kora', l:'Puerto Ángel · Próximamente', l_en:'Puerto Ángel · Coming soon', img:'assets/img/kora/rs-w-719-h-1079-1.webp'},

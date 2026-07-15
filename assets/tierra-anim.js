@@ -131,6 +131,30 @@
     });
   }
 
+  // Imagen principal de cada card de proyecto del home: entra con fade suave
+  // cuando YA cargó (estaba excluida del fade general por su zoom de hover,
+  // así que aparecía de golpe — el bug de "sale de una").
+  function cardFade() {
+    var imgs = document.querySelectorAll('.pcard .piw img');
+    if (!imgs.length) return;
+    imgs.forEach(function (img) { img.classList.add('t-card-fade'); });
+    if (!('IntersectionObserver' in window)) { imgs.forEach(function (i) { i.classList.add('loaded'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var img = e.target; io.unobserve(img);
+        var go = function () { img.classList.add('loaded'); };
+        if (img.complete && img.naturalWidth > 0) go();
+        else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', go, { once: true }); }
+      });
+    }, { threshold: 0.05 });
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      imgs.forEach(function (i) { io.observe(i); });
+    }); });
+    // red de seguridad: nunca dejar una card sin su imagen
+    setTimeout(function () { imgs.forEach(function (i) { i.classList.add('loaded'); }); }, 5000);
+  }
+
   // Videos de Experiencia: cargar y reproducir solo cuando entran en pantalla
   function expVideos() {
     var vids = document.querySelectorAll('.exp-vid');
@@ -290,7 +314,7 @@
     if (isEN()) apply();
   }
 
-  function init() { heroQuality(); heroVideoRescue(); buildTicker(); scnSafety(); initReveal(); fadeImages(); expVideos(); progressBar(); topButton(); badgeLang(); gsapRescue(); aliasLinks(); }
+  function init() { heroQuality(); heroVideoRescue(); buildTicker(); scnSafety(); initReveal(); fadeImages(); cardFade(); expVideos(); progressBar(); topButton(); badgeLang(); gsapRescue(); aliasLinks(); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
