@@ -1945,7 +1945,7 @@ const CHAT_EN = new Map([
     ['#aip-input','Type your question…','p'],
     ['.aip-pwrd','Tierra Desarrollos · Immediate attention'],
   ];
-  const DICT_EN = { nav_proyectos:'Projects', nav_construccion:'Construction', nav_nosotros:'About us', nav_galeria:'Gallery', nav_confianza:'Trust', nav_contacto:'Contact',
+  const DICT_EN = { nav_proyectos:'Projects', nav_construccion:'Construction', nav_nosotros:'About us', nav_galeria:'Gallery', nav_confianza:'Trust', nav_contacto:'Contact', nav_portal:'My project',
     mp_tag:'Masterplan', mp_sub:'Explore the map: every dot is a Tierra development. Tap a pin to discover it.', mp_3d:'Explore the coast in 3D →',
     sold_tag:'Track record', sold_sub:'When a Tierra project sells out, it becomes a community. This is our history — and the best proof of what comes next.', sold_badge:'Sold out', sold_loc:'Oaxaca Coast · 100% sold out',
     lg_label:'Tierra Desarrollos · Est. Mexico', lg_sub:'Architecture in harmony with nature', lg_body:'Every project starts from understanding the place: its topography, its landscape and the way it is lived in. We build respecting the environment and working with the qualities that make it unique.' };
