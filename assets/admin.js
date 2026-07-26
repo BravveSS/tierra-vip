@@ -26,6 +26,16 @@
   $('#googleBtn').addEventListener('click', function () {
     sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
   });
+  $('#adminEmailForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('#ae_btn'); btn.disabled = true; btn.textContent = 'Entrando…';
+    sb.auth.signInWithPassword({ email: $('#ae_email').value.trim(), password: $('#ae_pass').value })
+      .then(function (r) {
+        btn.disabled = false; btn.textContent = 'Entrar';
+        if (r.error) { $('#loginMsg').textContent = 'Correo o contraseña incorrectos.'; return; }
+        boot();
+      });
+  });
   logoutBtn.addEventListener('click', function () { sb.auth.signOut().then(function () { location.reload(); }); });
 
   function show(el) { [loading, login, panel].forEach(function (x) { x.classList.add('hidden'); }); el.classList.remove('hidden'); }
