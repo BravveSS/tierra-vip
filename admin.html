@@ -8,17 +8,20 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=5">
+<link rel="stylesheet" href="assets/portal.css?v=6">
 </head>
 <body>
-<div class="wrap">
-  <div class="pt-top">
+<header class="pt-bar">
+  <div class="wrap pt-top">
     <a href="index.html"><img src="assets/img/brand/tierra-logo.png" alt="Tierra Desarrollos"></a>
     <div class="rt">
       <div class="who hidden" id="whoBox"><div class="avatar" id="avatar">·</div><span id="whoami" class="muted"></span></div>
       <button id="logout" class="btn ghost sm hidden">Salir</button>
     </div>
   </div>
+</header>
+
+<div class="wrap">
 
   <!-- LOGIN admin -->
   <section id="login" class="login hidden">
@@ -50,6 +53,7 @@
       <div class="tab" data-tab="notas">Notas</div>
       <div class="tab" data-tab="obras">Proyectos</div>
       <div class="tab" data-tab="clientes">Clientes</div>
+      <div class="tab" data-tab="asesor">Asesor</div>
       <div class="tab hidden" data-tab="admins" id="tabAdmins">Admins</div>
     </div>
 
@@ -95,10 +99,25 @@
         <select id="k_project"></select>
         <span class="muted" id="k_count" style="font-size:13px"></span>
       </div>
+      <div class="auto-box">
+        <div class="ab-head"><span class="tag">Automático</span><h2>Suelta el Excel de la semana y listo</h2></div>
+        <div class="hint">Lo leo, lo publico en el portal del cliente y le mando el correo de aviso. Sin pasos intermedios.</div>
+        <div class="dz auto" id="kdz">
+          <div class="ic">⇪</div>
+          <div><b>Arrastra aquí el Excel de la semana</b> o toca para elegirlo</div>
+          <div class="muted" style="font-size:12px;margin-top:4px">.xlsx · .xls · .csv</div>
+          <input type="file" id="k_auto_file" accept=".xlsx,.xls,.csv">
+        </div>
+        <label class="autochk"><input type="checkbox" id="k_auto_send" checked> Avisar al cliente por correo al publicar</label>
+        <div class="uprog" id="k_auto_prog"><i></i></div>
+        <div class="msg" id="k_auto_msg"></div>
+        <div class="auto-result" id="k_auto_res"></div>
+      </div>
+
       <div class="grid2">
         <div class="box">
-          <h2>Registrar semana de costos</h2>
-          <div class="hint">Copia las celdas de tu Excel y pégalas abajo (o sube el archivo .xlsx). Detecto conceptos y montos solos.</div>
+          <h2>Registrar semana a mano</h2>
+          <div class="hint">Si prefieres revisar antes de publicar: pega las celdas o sube el archivo y edita la vista previa.</div>
           <div class="two">
             <div class="field"><label>Etiqueta</label><input id="k_label" placeholder="Semana 78"></div>
             <div class="field"><label>&nbsp;</label>
@@ -203,6 +222,21 @@
       </div>
     </section>
 
+    <!-- ASESOR IA -->
+    <section class="panel" data-panel="asesor">
+      <div class="pills" style="margin-bottom:16px">
+        <button class="pill-t on" data-adv="obra">Asesor de obra</button>
+        <button class="pill-t" data-adv="ventas">Asesor de ventas</button>
+      </div>
+      <div class="chat">
+        <div class="chat-log" id="advLog"></div>
+        <div class="chat-in">
+          <textarea id="advIn" placeholder="Escribe tu pregunta…" rows="1"></textarea>
+          <button class="btn" id="advSend">Enviar</button>
+        </div>
+      </div>
+    </section>
+
     <!-- ADMINS (solo superadmin) -->
     <section class="panel" data-panel="admins">
       <div class="grid2">
@@ -280,6 +314,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=6"></script>
+<script src="assets/admin.js?v=7"></script>
 </body>
 </html>

@@ -8,18 +8,22 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=5">
+<link rel="stylesheet" href="assets/portal.css?v=6">
 </head>
 <body>
 
-<div class="wrap">
-  <div class="pt-top">
+<header class="pt-bar">
+  <div class="wrap pt-top">
     <a href="index.html"><img src="assets/img/brand/tierra-logo.png" alt="Tierra Desarrollos"></a>
     <div class="rt">
       <div class="who hidden" id="whoBox"><div class="avatar" id="avatar">·</div><span id="whoami" class="muted"></span></div>
+      <button id="chpass" class="btn ghost sm hidden">Contraseña</button>
       <button id="logout" class="btn ghost sm hidden">Salir</button>
     </div>
   </div>
+</header>
+
+<div class="wrap">
 
   <!-- LOGIN -->
   <section id="login" class="login hidden">
@@ -32,11 +36,27 @@
           <input type="email" id="email" autocomplete="email" required>
         </div>
         <div class="field">
-          <label>Contraseña</label>
+          <label>Contraseña
+            <a href="#" id="forgot" style="float:right;font-size:11px;letter-spacing:.06em">¿La olvidaste?</a>
+          </label>
           <input type="password" id="password" autocomplete="current-password" required>
         </div>
         <button class="btn block" type="submit" id="loginBtn">Entrar</button>
         <div class="msg err" id="loginMsg"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- NUEVA CONTRASEÑA (al volver del correo de recuperación) -->
+  <section id="recover" class="login hidden">
+    <div class="card">
+      <h1>Elige tu nueva contraseña</h1>
+      <div class="sub">Escríbela dos veces y entrarás directo a tu obra.</div>
+      <form id="recoverForm">
+        <div class="field"><label>Nueva contraseña</label><input type="password" id="np1" autocomplete="new-password" required></div>
+        <div class="field"><label>Repítela</label><input type="password" id="np2" autocomplete="new-password" required></div>
+        <button class="btn block" type="submit" id="npBtn">Guardar y entrar</button>
+        <div class="msg" id="npMsg"></div>
       </form>
     </div>
   </section>
@@ -57,10 +77,24 @@
   <div class="cnt" id="lbcnt"></div>
 </div>
 
+<!-- Modal cambiar contraseña -->
+<div class="modal" id="cpModal">
+  <div class="card">
+    <h2>Cambiar mi contraseña</h2>
+    <div class="field"><label>Nueva contraseña</label><input type="password" id="cp1" autocomplete="new-password"></div>
+    <div class="field"><label>Repítela</label><input type="password" id="cp2" autocomplete="new-password"></div>
+    <div class="msg" id="cpMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn ghost sm" id="cp_cancel">Cancelar</button>
+      <button class="btn sm" id="cp_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/portal.js?v=4"></script>
+<script src="assets/portal.js?v=5"></script>
 </body>
 </html>

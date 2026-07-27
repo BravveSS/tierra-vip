@@ -3,6 +3,7 @@
 // Acciones (solo invocables por un ADMIN autenticado):
 //   { action:'create', email, password, full_name, project_id } → crea cliente
 //   { action:'delete', user_id }                                → borra cuenta
+//   { action:'reset',  user_id, password }                      → nueva contraseña
 // La service_role vive SOLO aquí (servidor), nunca en el navegador.
 // ============================================================================
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -43,6 +44,19 @@ Deno.serve(async (req) => {
       if (prof.role !== 'client') return json({ error: 'Solo se pueden borrar cuentas de cliente' }, 400)
       const { error: dErr } = await admin.auth.admin.deleteUser(uid)
       if (dErr) return json({ error: dErr.message }, 400)
+      return json({ ok: true })
+    }
+
+    if (action === 'reset') {
+      const uid = body.user_id
+      const password = body.password
+      if (!uid || !password) return json({ error: 'Faltan datos' }, 400)
+      if (String(password).length < 8) return json({ error: 'La contrasena debe tener al menos 8 caracteres' }, 400)
+      const { data: prof } = await admin.from('profiles').select('role').eq('id', uid).single()
+      if (!prof) return json({ error: 'Usuario no encontrado' }, 404)
+      if (prof.role !== 'client') return json({ error: 'Solo cuentas de cliente' }, 400)
+      const { error: rsErr } = await admin.auth.admin.updateUserById(uid, { password })
+      if (rsErr) return json({ error: rsErr.message }, 400)
       return json({ ok: true })
     }
 
