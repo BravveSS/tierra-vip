@@ -117,20 +117,7 @@
 
  function startFlow() {
  if (MAINTENANCE) { maintenanceFlow(); return; }
- botSay(t('¡Hola! Soy tu asesor de Tierra Desarrollos. En un minuto te ayudo a encontrar tu lugar en la Costa de Oaxaca.',
- 'Hi! I\'m your Tierra Desarrollos advisor. In a minute I\'ll help you find your place on the Oaxaca Coast.'), function () {
- botSay(t('¿Qué estás buscando?', 'What are you looking for?'), function () {
- options([
- { v: 'Terreno / lote', label: t('Un terreno / lote', 'Land / a lot') },
- { v: 'Construir mi casa', label: t('Construir mi casa', 'Build my home') },
- { v: 'Invertir', label: t('Invertir', 'Invest') },
- { v: 'ai', label: t('Tengo una pregunta', 'I have a question') }
- ], function (o) {
- if (o.v === 'ai') { aiMode(); return; }
- lead.busca = o.v; askProject();
- });
- });
- });
+ aiMode();
  }
 
  /* ---------- Aviso de mantenimiento (formal, sin jerga técnica) ---------- */
@@ -162,8 +149,11 @@
 
  function aiMode() {
  if (!AI_ENABLED) { aiMaintenance(); return; }
- botSay(t('¡Claro! Escríbeme tu pregunta y te respondo al instante. ',
- 'Sure! Type your question and I\'ll answer right away. '), showAiInput);
+ botSay(t('¡Hola! Soy el asesor de Tierra. Conozco los terrenos, sus precios y lo que implica construir en la costa.',
+ 'Hi! I\'m Tierra\'s advisor. I know the lots, their prices and what building on the coast involves.'), function () {
+ botSay(t('Pregúntame lo que quieras — por ejemplo, «quiero vista al mar sin gastar tanto» o «¿cuánto cuesta construir?».',
+ 'Ask me anything — for example, "I want an ocean view without spending too much" or "how much does it cost to build?".'), showAiInput);
+ });
  }
 
  function aiMaintenance() {
@@ -221,7 +211,7 @@
  m.className = 'tadv-msg bot';
  m.textContent = d.reply;
  els.body.appendChild(m); scroll();
- if (aiTurns >= 4) nudgeContact(); else showAiInput();
+ showAiInput();
  })
  .catch(function () {
  clearTimeout(to); typing.remove();
