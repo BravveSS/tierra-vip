@@ -125,13 +125,13 @@
         acts.appendChild(chip); acts.appendChild(ed); acts.appendChild(del);
         li.appendChild(info); li.appendChild(acts); list.appendChild(li);
       });
-      ['#a_project', '#c_project', '#k_project', '#n_project'].forEach(function (sel) {
+      ['#a_project', '#c_project', '#k_project'].forEach(function (sel) {
         var s = $(sel); var prev = s.value; s.innerHTML = '';
         if (!PROJECTS.length) { s.innerHTML = '<option value="">— crea un proyecto primero —</option>'; return; }
         PROJECTS.forEach(function (p) { var o = document.createElement('option'); o.value = p.id; o.textContent = p.name; s.appendChild(o); });
         if (prev && PROJECTS.some(function (p) { return p.id === prev; })) s.value = prev;
       });
-      if (PROJECTS.length) { loadUpdates(); loadWeeks(); loadNotes(); }
+      if (PROJECTS.length) { loadUpdates(); loadWeeks(); }
       loadClients();
       loadStats();
     });
@@ -444,11 +444,10 @@
       return q.then(function (r) { return r.count || 0; }, function () { return 0; });
     };
     Promise.all([
-      cnt('projects'), cnt('profiles', { k: 'role', v: 'client' }), cnt('updates'), cnt('cost_weeks'), cnt('project_notes')
+      cnt('projects'), cnt('profiles', { k: 'role', v: 'client' }), cnt('updates'), cnt('cost_weeks')
     ]).then(function (n) {
       $('#statsRow').innerHTML =
-        stTile('Proyectos', n[0]) + stTile('Clientes', n[1]) + stTile('Avances publicados', n[2]) +
-        stTile('Semanas de costos', n[3]) + stTile('Notas de obra', n[4]);
+        stTile('Obras', n[0]) + stTile('Clientes', n[1]) + stTile('Avances', n[2]) + stTile('Semanas', n[3]);
     });
   }
   function stTile(k, v) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
@@ -528,128 +527,6 @@
       b.addEventListener('click', function () { KROWS.splice(parseInt(b.dataset.i, 10), 1); renderCostPreview(); });
     });
   }
-  // ══ FLUJO AUTOMÁTICO: soltar Excel → leer → publicar → avisar ══
-  var kdz = $('#kdz'), kAutoInput = $('#k_auto_file');
-  kdz.addEventListener('click', function () { kAutoInput.click(); });
-  ['dragenter', 'dragover'].forEach(function (ev) { kdz.addEventListener(ev, function (e) { e.preventDefault(); kdz.classList.add('drag'); }); });
-  ['dragleave', 'drop'].forEach(function (ev) { kdz.addEventListener(ev, function (e) { e.preventDefault(); kdz.classList.remove('drag'); }); });
-  kdz.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) autoFlow(e.dataTransfer.files[0]); });
-  kAutoInput.addEventListener('change', function (e) { if (e.target.files[0]) autoFlow(e.target.files[0]); e.target.value = ''; });
-
-  function autoStep(pctVal, txt) {
-    var prog = $('#k_auto_prog'); prog.classList.add('on');
-    prog.querySelector('i').style.width = pctVal + '%';
-    setMsg('#k_auto_msg', txt, '');
-  }
-  function autoFail(txt) {
-    $('#k_auto_prog').classList.remove('on');
-    setMsg('#k_auto_msg', txt, 'err');
-  }
-
-  function autoFlow(file) {
-    var pid = $('#k_project').value;
-    if (!pid) { autoFail('Elige primero la obra arriba.'); return; }
-    $('#k_auto_res').classList.remove('on'); $('#k_auto_res').innerHTML = '';
-    autoStep(12, 'Leyendo ' + file.name + '…');
-
-    readSheet(file).then(function (grid) {
-      var text = grid.map(function (row) { return row.join('\t'); }).join('\n');
-      autoStep(34, 'Interpretando los conceptos…');
-      // Primero la IA (entiende Excels desordenados); si no está configurada, parser local.
-      return callFn('ai-parse-costs', { text: text }).then(function (r) {
-        var j = r.j || {};
-        if (r.ok && j.items && j.items.length) return { src: 'ia', data: j };
-        return { src: 'local', data: localParse(grid) };
-      }, function () { return { src: 'local', data: localParse(grid) }; });
-    }).then(function (out) {
-      var d = out.data;
-      var items = (d.items || []).filter(function (x) { return x && x.concept && !isNaN(Number(x.amount)); })
-        .map(function (x) { return { concept: String(x.concept), amount: Number(x.amount) }; });
-      if (!items.length) { autoFail('No encontré gastos en ese archivo. Revísalo o usa el registro manual.'); return; }
-      var label = d.week_label || ('Semana ' + new Date().toISOString().slice(0, 10));
-      autoStep(62, 'Publicando ' + label + ' (' + items.length + ' conceptos)…');
-      var total = items.reduce(function (n, i) { return n + i.amount; }, 0);
-
-      sb.from('cost_weeks').insert({
-        project_id: pid, week_label: label,
-        date_from: d.date_from || null, date_to: d.date_to || null, created_by: ME.id
-      }).select().single().then(function (r) {
-        if (r.error) { autoFail(human(r.error)); return; }
-        var wid = r.data.id;
-        sb.from('cost_items').insert(items.map(function (x, i) {
-          return { week_id: wid, concept: x.concept, amount: x.amount, sort: i };
-        })).then(function (r2) {
-          if (r2.error) { autoFail(human(r2.error)); return; }
-          if (!$('#k_auto_send').checked) { autoDone(out.src, label, items, total, wid, null); return; }
-          autoStep(84, 'Avisando al cliente por correo…');
-          callFn('notify-update', { project_id: pid, kind: 'costos', title: label, total: total, week_id: wid })
-            .then(function (n) { autoDone(out.src, label, items, total, wid, n.j || {}); },
-                  function () { autoDone(out.src, label, items, total, wid, {}); });
-        });
-      });
-    }).catch(function (e) { autoFail('No pude leer el archivo: ' + e); });
-  }
-
-  function autoDone(src, label, items, total, weekId, mail) {
-    autoStep(100, '');
-    setTimeout(function () { $('#k_auto_prog').classList.remove('on'); }, 700);
-    var mailTxt = mail == null ? 'sin correo (lo desactivaste)'
-      : mail.sent > 0 ? 'correo enviado al cliente ✓'
-      : mail.reason === 'email_no_configurado' ? 'falta la clave de correo (RESEND_API_KEY)'
-      : mail.reason === 'sin_clientes' ? 'esta obra no tiene cliente con cuenta todavía'
-      : 'no se pudo enviar el correo';
-    setMsg('#k_auto_msg', '', '');
-    var box = $('#k_auto_res');
-    box.innerHTML = '<div class="ar-head">✓ ' + esc(label) + ' publicada</div>' +
-      '<div class="ar-sub">' + items.length + ' conceptos · Total <b>' + money(total) + '</b> · ' +
-      (src === 'ia' ? 'leído con IA' : 'leído con el lector local') + ' · ' + mailTxt + '</div>' +
-      '<div class="ar-list">' + items.slice(0, 5).map(function (i) {
-        return '<span>' + esc(i.concept) + ' <b>' + money(i.amount) + '</b></span>';
-      }).join('') + (items.length > 5 ? '<span class="mas">+' + (items.length - 5) + ' más</span>' : '') + '</div>' +
-      '<button class="btn ghost tiny" id="k_undo">Deshacer</button>';
-    box.classList.add('on');
-    $('#k_undo').addEventListener('click', function () {
-      if (!confirm('¿Borrar ' + label + ' del portal del cliente?')) return;
-      sb.from('cost_weeks').delete().eq('id', weekId).then(function () {
-        box.classList.remove('on'); toast('Semana deshecha', 'ok'); loadWeeks(); loadStats();
-      });
-    });
-    toast(label + ' publicada ✓', 'ok');
-    loadWeeks(); loadStats();
-  }
-
-  // Lee un archivo y devuelve TODAS sus hojas: [{ name, grid }]
-  function readWorkbook(file) {
-    return new Promise(function (resolve, reject) {
-      if (typeof XLSX === 'undefined') { reject('el lector de Excel no cargó; recarga la página'); return; }
-      var reader = new FileReader();
-      reader.onerror = function () { reject('no se pudo abrir'); };
-      reader.onload = function (ev) {
-        try {
-          var wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
-          resolve(wb.SheetNames.map(function (nm) {
-            return {
-              name: nm,
-              grid: XLSX.utils.sheet_to_json(wb.Sheets[nm], { header: 1, raw: false }).map(function (row) {
-                return (row || []).map(function (c) { return c == null ? '' : String(c); });
-              })
-            };
-          }));
-        } catch (err) { reject(err); }
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  }
-  // Solo la primera hoja, como matriz de celdas
-  function readSheet(file) {
-    return readWorkbook(file).then(function (sheets) { return sheets.length ? sheets[0].grid : []; });
-  }
-  function sheetsToText(sheets) {
-    return sheets.map(function (s) {
-      return '### HOJA: ' + s.name + '\n' + s.grid.map(function (r) { return r.join('\t'); }).join('\n');
-    }).join('\n\n');
-  }
-
   // ══ Lector de rejilla: semanas en columnas, en varias bandas apiladas ══
   // Formato real de Tierra: cada semana ocupa 2 columnas (Descripción / Coste),
   // varias semanas lado a lado, y el bloque se repite hacia abajo.
@@ -1005,138 +882,6 @@
         list.innerHTML = '<li class="muted" style="padding:10px 0">La tabla de costos aún no está en la base de datos.</li>';
       });
   }
-
-  // ══ NOTAS DE CONSTRUCCIÓN ══
-  $('#n_date').value = new Date().toISOString().slice(0, 10);
-  $('#n_project').addEventListener('change', loadNotes);
-  $('#n_save').addEventListener('click', function () {
-    var pid = $('#n_project').value; if (!pid) { toast('Elige una obra.', 'err'); return; }
-    var body = $('#n_body').value.trim(); if (!body) { toast('Escribe la nota.', 'err'); return; }
-    var btn = $('#n_save'); btn.disabled = true; btn.textContent = 'Publicando…';
-    sb.from('project_notes').insert({
-      project_id: pid, note_date: $('#n_date').value || new Date().toISOString().slice(0, 10),
-      title: $('#n_title').value.trim() || null, body: body, created_by: ME.id
-    }).then(function (r) {
-      btn.disabled = false; btn.textContent = 'Publicar nota';
-      if (r.error) { toast(human(r.error), 'err'); return; }
-      notify(pid, 'nota', $('#n_title').value.trim());
-      $('#n_title').value = $('#n_body').value = '';
-      toast('Nota publicada ✓ El cliente ya la ve.', 'ok'); loadNotes(); loadStats();
-    });
-  });
-  function loadNotes() {
-    var pid = $('#n_project').value; var list = $('#n_list');
-    if (!pid) { list.innerHTML = ''; $('#n_count').textContent = ''; return; }
-    sb.from('project_notes').select('*').eq('project_id', pid)
-      .order('note_date', { ascending: false }).order('created_at', { ascending: false })
-      .then(function (r) {
-        var ns = r.data || [];
-        $('#n_count').textContent = ns.length ? ns.length + ' nota' + (ns.length === 1 ? '' : 's') : '';
-        list.innerHTML = '';
-        if (!ns.length) { list.innerHTML = '<li class="muted" style="padding:10px 0">Sin notas aún. Escribe la primera a la izquierda.</li>'; return; }
-        ns.forEach(function (n) {
-          var li = document.createElement('li'); li.className = 'row note-row';
-          li.innerHTML = '<div><div class="t">' + esc(n.title || 'Nota de obra') + '</div>' +
-            '<div class="s">' + fmtDate(n.note_date) + '</div>' +
-            '<div class="body">' + esc(n.body) + '</div></div>';
-          var acts = document.createElement('div'); acts.className = 'acts';
-          var ed = document.createElement('button'); ed.className = 'iconbtn'; ed.title = 'Editar'; ed.textContent = '✎';
-          ed.addEventListener('click', function () { openNoteModal(n); });
-          var del = document.createElement('button'); del.className = 'iconbtn'; del.title = 'Borrar'; del.textContent = '🗑';
-          del.addEventListener('click', function () {
-            if (!confirm('¿Borrar esta nota?')) return;
-            sb.from('project_notes').delete().eq('id', n.id).then(function () { toast('Nota borrada', 'ok'); loadNotes(); loadStats(); });
-          });
-          acts.appendChild(ed); acts.appendChild(del);
-          li.appendChild(acts); list.appendChild(li);
-        });
-      }, function () {
-        list.innerHTML = '<li class="muted" style="padding:10px 0">La tabla de notas aún no está en la base de datos.</li>';
-      });
-  }
-  var NM = null;
-  function openNoteModal(n) {
-    NM = n;
-    $('#nm_date').value = n.note_date; $('#nm_title').value = n.title || ''; $('#nm_body').value = n.body || '';
-    $('#nModal').classList.add('on');
-  }
-  $('#nm_cancel').addEventListener('click', function () { $('#nModal').classList.remove('on'); });
-  $('#nm_save').addEventListener('click', function () {
-    if (!NM) return;
-    sb.from('project_notes').update({
-      note_date: $('#nm_date').value, title: $('#nm_title').value.trim() || null, body: $('#nm_body').value.trim()
-    }).eq('id', NM.id).then(function (r) {
-      if (r.error) { toast(human(r.error), 'err'); return; }
-      $('#nModal').classList.remove('on'); toast('Nota actualizada ✓', 'ok'); loadNotes();
-    });
-  });
-
-  // ══ ASESOR IA (obra + ventas) ══
-  var ADV = 'obra', ADVCHAT = { obra: [], ventas: [] }, ADVBUSY = false;
-  var SUGG = {
-    obra: ['¿Cómo va el gasto contra el presupuesto?', 'Redacta la nota de esta semana para el cliente',
-           '¿Qué gasto se disparó respecto a las semanas anteriores?', '¿Qué obras llevan mucho sin avances publicados?'],
-    ventas: ['Escríbeme un mensaje de WhatsApp para un prospecto de Azimut',
-             'Un cliente dice que está muy lejos, ¿qué le respondo?',
-             '¿Cómo explico el portal de avance de obra en una llamada?',
-             'Redacta el texto de un anuncio para Instagram']
-  };
-  document.querySelectorAll('.pill-t[data-adv]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('.pill-t[data-adv]').forEach(function (x) { x.classList.remove('on'); });
-      b.classList.add('on'); ADV = b.dataset.adv; paintAdv();
-    });
-  });
-  function paintAdv() {
-    var log = $('#advLog'), chat = ADVCHAT[ADV];
-    if (!chat.length) {
-      log.innerHTML = '<div class="chat-empty">' +
-        (ADV === 'obra'
-          ? 'Conozco tus obras, sus costos semana a semana, los avances y las notas.<br>Pregúntame lo que sea sobre ellas.'
-          : 'Conozco los desarrollos de Tierra.<br>Te ayudo a responder prospectos y escribir mensajes que sí contestan.') +
-        '<div class="chips-q">' + SUGG[ADV].map(function (q) {
-          return '<button data-q="' + esc(q) + '">' + esc(q) + '</button>';
-        }).join('') + '</div></div>';
-      log.querySelectorAll('.chips-q button').forEach(function (b) {
-        b.addEventListener('click', function () { $('#advIn').value = b.dataset.q; advSend(); });
-      });
-      return;
-    }
-    log.innerHTML = chat.map(function (m) {
-      return '<div class="bub ' + (m.role === 'user' ? 'me' : 'ai') + '">' + esc(m.content) + '</div>';
-    }).join('') + (ADVBUSY ? '<div class="bub ai dots"><span></span><span></span><span></span></div>' : '');
-    log.scrollTop = log.scrollHeight;
-  }
-  function advSend() {
-    if (ADVBUSY) return;
-    var input = $('#advIn'), q = input.value.trim();
-    if (!q) return;
-    input.value = ''; input.style.height = 'auto';
-    ADVCHAT[ADV].push({ role: 'user', content: q });
-    ADVBUSY = true; paintAdv();
-    var mode = ADV;
-    callFn('ai-advisor', { mode: mode, messages: ADVCHAT[mode] }).then(function (r) {
-      ADVBUSY = false;
-      var j = r.j || {};
-      var txt = j.error === 'ia_no_configurada'
-        ? 'Falta activar la IA: agrega el secreto ANTHROPIC_API_KEY en Supabase → Edge Functions → Secrets.'
-        : (j.text || j.error || 'No obtuve respuesta.');
-      ADVCHAT[mode].push({ role: 'assistant', content: txt });
-      if (mode === ADV) paintAdv();
-    }, function (e) {
-      ADVBUSY = false;
-      ADVCHAT[mode].push({ role: 'assistant', content: 'Error de conexión: ' + e });
-      if (mode === ADV) paintAdv();
-    });
-  }
-  $('#advSend').addEventListener('click', advSend);
-  $('#advIn').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); advSend(); }
-  });
-  $('#advIn').addEventListener('input', function () {
-    this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 130) + 'px';
-  });
-  paintAdv();
 
   // ══ helpers de funciones / correo ══
   function callFn(name, body) {
