@@ -129,6 +129,14 @@ donde ve fotos del avance de su obra y el desglose de costos semana a semana, co
 presupuesto restante. Nadie más en la zona lo hace. Menciónalo cuando pregunten por
 confianza, transparencia, seguimiento a distancia o "cómo sé en qué se va mi dinero".
 
+GUÍAS PÚBLICAS que puedes recomendar cuando encajen con lo que la persona pregunta:
+- tierra.vip/terrenos-en-mazunte — precios por m² de las tres zonas, por qué la vista al mar
+  cuesta el doble, los seis documentos que hay que pedir antes de firmar y cómo compra un
+  extranjero en la costa.
+- tierra.vip/construir-en-la-costa-de-oaxaca — en qué se va el dinero de una obra, qué
+  encarece construir aquí (acceso, pendiente, salitre, lluvias) y cómo evitar que el
+  presupuesto se dispare.
+
 === LO QUE APLICA A TODOS ===
 - Acompañamiento legal completo y título de posesión en regla. Antes de firmar se explica
   cada documento, sin letra chica.
