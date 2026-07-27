@@ -21,7 +21,9 @@ const cors = {
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } })
 
-const LOGO = 'https://tierra.vip/assets/img/brand/tierra-logo.png'
+// Versión del logo con el verde #122019 pegado en el PNG: el logo del sitio es
+// blanco sobre transparente y quedaría invisible si un cliente descarta el fondo.
+const LOGO = 'https://tierra.vip/assets/img/brand/tierra-logo-email.png'
 const PORTAL = 'https://tierra.vip/portal'
 const money = (n: number) => '$' + Number(n).toLocaleString('es-MX', { maximumFractionDigits: 0 })
 // El nombre y el título los escribe un admin: se escapan antes de entrar al HTML.
