@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=7">
+<link rel="stylesheet" href="assets/portal.css?v=8">
 </head>
 <body>
 <header class="pt-bar">
@@ -122,6 +122,9 @@
           <div><b>Arrastra aquí el Excel completo</b> o toca para elegirlo</div>
           <div class="muted" style="font-size:12px;margin-top:4px">Lee todas las hojas del archivo</div>
           <input type="file" id="k_hist_file" accept=".xlsx,.xls,.csv">
+        </div>
+        <div class="field" style="margin-top:14px"><label>…o pega aquí todo el contenido del Excel</label>
+          <textarea id="k_hist_paste" style="min-height:90px" placeholder="Selecciona todo en Excel (Ctrl+E), copia (Ctrl+C) y pega aquí (Ctrl+V)"></textarea>
         </div>
         <div class="uprog" id="k_hist_prog"><i></i></div>
         <div class="msg" id="k_hist_msg"></div>
@@ -328,6 +331,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=8"></script>
+<script src="assets/admin.js?v=9"></script>
 </body>
 </html>
