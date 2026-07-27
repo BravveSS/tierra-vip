@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=6">
+<link rel="stylesheet" href="assets/portal.css?v=7">
 </head>
 <body>
 <header class="pt-bar">
@@ -112,6 +112,20 @@
         <div class="uprog" id="k_auto_prog"><i></i></div>
         <div class="msg" id="k_auto_msg"></div>
         <div class="auto-result" id="k_auto_res"></div>
+      </div>
+
+      <div class="auto-box alt">
+        <div class="ab-head"><span class="tag alt">Histórico</span><h2>¿Tienes el Excel con todas las semanas?</h2></div>
+        <div class="hint">Súbelo completo una sola vez. Separo cada semana con sus gastos y las publico todas de golpe. Antes de guardar te muestro lo que entendí para que lo revises.</div>
+        <div class="dz auto" id="khdz">
+          <div class="ic">⇪</div>
+          <div><b>Arrastra aquí el Excel completo</b> o toca para elegirlo</div>
+          <div class="muted" style="font-size:12px;margin-top:4px">Lee todas las hojas del archivo</div>
+          <input type="file" id="k_hist_file" accept=".xlsx,.xls,.csv">
+        </div>
+        <div class="uprog" id="k_hist_prog"><i></i></div>
+        <div class="msg" id="k_hist_msg"></div>
+        <div class="weeks-preview" id="k_hist_prev"></div>
       </div>
 
       <div class="grid2">
@@ -314,6 +328,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=7"></script>
+<script src="assets/admin.js?v=8"></script>
 </body>
 </html>
