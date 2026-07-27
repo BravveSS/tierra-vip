@@ -6,6 +6,7 @@
   'use strict';
   var $ = function (s) { return document.querySelector(s); };
   var loading = $('#loading'), login = $('#login'), content = $('#content'),
+      recover = $('#recover'),
       whoami = $('#whoami'), whoBox = $('#whoBox'), avatar = $('#avatar'),
       logoutBtn = $('#logout');
 
@@ -17,9 +18,11 @@
     return;
   }
 
+  // storageKey propio: así la sesión del cliente y la del panel de admin conviven
+  // en el mismo navegador sin pisarse.
   var sb = window.supabase.createClient(
     window.TIERRA_SUPABASE.url, window.TIERRA_SUPABASE.anonKey,
-    { auth: { persistSession: true, autoRefreshToken: true } }
+    { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'tierra-portal-auth' } }
   );
 
   // Paleta categórica validada (dona) + neutral para "Otros"
@@ -41,9 +44,63 @@
   });
   logoutBtn.addEventListener('click', function () { sb.auth.signOut().then(function () { location.reload(); }); });
 
+  // ── Olvidé mi contraseña ──
+  $('#forgot').addEventListener('click', function (e) {
+    e.preventDefault();
+    var mail = $('#email').value.trim();
+    var msg = $('#loginMsg');
+    if (!mail) { msg.className = 'msg err'; msg.textContent = 'Escribe tu correo arriba y vuelve a tocar aquí.'; return; }
+    msg.className = 'msg'; msg.textContent = 'Enviando…';
+    sb.auth.resetPasswordForEmail(mail, { redirectTo: location.origin + '/portal' }).then(function (r) {
+      if (r.error) { msg.className = 'msg err'; msg.textContent = r.error.message; return; }
+      msg.className = 'msg ok';
+      msg.textContent = 'Listo: te mandamos un correo a ' + mail + ' para elegir una contraseña nueva.';
+    });
+  });
+
+  // ── Nueva contraseña (viene del enlace del correo) ──
+  $('#recoverForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var p1 = $('#np1').value, p2 = $('#np2').value, msg = $('#npMsg'), btn = $('#npBtn');
+    if (p1.length < 8) { msg.className = 'msg err'; msg.textContent = 'Usa al menos 8 caracteres.'; return; }
+    if (p1 !== p2) { msg.className = 'msg err'; msg.textContent = 'Las dos contraseñas no coinciden.'; return; }
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    sb.auth.updateUser({ password: p1 }).then(function (r) {
+      btn.disabled = false; btn.textContent = 'Guardar y entrar';
+      if (r.error) { msg.className = 'msg err'; msg.textContent = r.error.message; return; }
+      RECOVERY = false;
+      history.replaceState(null, '', location.pathname);
+      route();
+    });
+  });
+
+  // ── Cambiar contraseña estando dentro ──
+  $('#chpass').addEventListener('click', function () {
+    $('#cp1').value = $('#cp2').value = ''; $('#cpMsg').textContent = '';
+    $('#cpModal').classList.add('on');
+  });
+  $('#cp_cancel').addEventListener('click', function () { $('#cpModal').classList.remove('on'); });
+  $('#cp_save').addEventListener('click', function () {
+    var p1 = $('#cp1').value, p2 = $('#cp2').value, msg = $('#cpMsg'), btn = $('#cp_save');
+    if (p1.length < 8) { msg.className = 'msg err'; msg.textContent = 'Usa al menos 8 caracteres.'; return; }
+    if (p1 !== p2) { msg.className = 'msg err'; msg.textContent = 'Las dos contraseñas no coinciden.'; return; }
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    sb.auth.updateUser({ password: p1 }).then(function (r) {
+      btn.disabled = false; btn.textContent = 'Guardar';
+      if (r.error) { msg.className = 'msg err'; msg.textContent = r.error.message; return; }
+      msg.className = 'msg ok'; msg.textContent = 'Contraseña actualizada ✓';
+      setTimeout(function () { $('#cpModal').classList.remove('on'); }, 1200);
+    });
+  });
+
+  // Supabase manda el enlace de recuperación con #access_token=…&type=recovery
+  var RECOVERY = /[#&?]type=recovery/.test(location.hash + location.search);
+  sb.auth.onAuthStateChange(function (evt) { if (evt === 'PASSWORD_RECOVERY') { RECOVERY = true; show(recover); } });
+
   // ── Router ──
   function route() {
     show(loading);
+    if (RECOVERY) { show(recover); return; }
     sb.auth.getSession().then(function (r) {
       var session = r.data.session;
       if (!session) { show(login); return; }
@@ -55,6 +112,7 @@
           avatar.textContent = (name || '·').trim().charAt(0).toUpperCase();
           whoBox.classList.remove('hidden');
           logoutBtn.classList.remove('hidden');
+          $('#chpass').classList.remove('hidden');
           if (!p) { renderMessage('Tu cuenta', 'No encontramos tu perfil. Contacta a Tierra.'); return; }
           if (p.role === 'admin' || p.role === 'superadmin') {
             renderMessage('Cuenta de administrador', 'Tu cuenta es de administrador. Entra al <a href="admin.html">panel de administración</a>.');
@@ -330,7 +388,7 @@
   }, { passive: true });
 
   // ── utils ──
-  function show(el) { [loading, login, content].forEach(function (x) { x.classList.add('hidden'); }); el.classList.remove('hidden'); }
+  function show(el) { [loading, login, content, recover].forEach(function (x) { x.classList.add('hidden'); }); el.classList.remove('hidden'); }
   function esc(s) { return (s == null ? '' : String(s)).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function fmtDate(d) {
     try { return new Date(d + 'T12:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); }

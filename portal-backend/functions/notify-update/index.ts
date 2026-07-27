@@ -33,16 +33,31 @@ Deno.serve(async (req) => {
     const { data: isAdmin } = await asUser.rpc('is_admin')
     if (!isAdmin) return json({ error: 'No autorizado' }, 403)
 
-    const { project_id, kind, title } = await req.json()
+    const { project_id, kind, title, total, week_id } = await req.json()
     if (!project_id) return json({ error: 'Falta project_id' }, 400)
     if (!RESEND) return json({ sent: 0, reason: 'email_no_configurado' })
 
     const admin = createClient(URL, SERVICE)
-    const { data: proj } = await admin.from('projects').select('name').eq('id', project_id).single()
+    const { data: proj } = await admin.from('projects').select('name, progress').eq('id', project_id).single()
     const { data: clients } = await admin.from('profiles')
       .select('email, full_name').eq('project_id', project_id).eq('role', 'client')
     const emails = (clients ?? []).map(c => c.email).filter(Boolean)
     if (!emails.length) return json({ sent: 0, reason: 'sin_clientes' })
+
+    // Desglose de la semana (solo para costos)
+    let breakdown = ''
+    if (kind === 'costos' && week_id) {
+      const { data: items } = await admin.from('cost_items')
+        .select('concept, amount').eq('week_id', week_id).order('amount', { ascending: false }).limit(6)
+      if (items && items.length) {
+        breakdown = '<table style="width:100%;border-collapse:collapse;margin:18px 0">' +
+          items.map((i: { concept: string; amount: number }) =>
+            '<tr><td style="padding:7px 0;border-bottom:1px solid rgba(201,169,110,.14);font-size:14px;color:#d9d4c7">' + i.concept + '</td>' +
+            '<td style="padding:7px 0;border-bottom:1px solid rgba(201,169,110,.14);font-size:14px;color:#F2EEE4;text-align:right">$' +
+            Number(i.amount).toLocaleString('es-MX', { maximumFractionDigits: 0 }) + '</td></tr>').join('') +
+          '</table>'
+      }
+    }
 
     const what = kind === 'costos' ? 'un nuevo reporte de costos'
       : kind === 'nota' ? 'una nueva nota de construcción'
@@ -55,6 +70,8 @@ Deno.serve(async (req) => {
         <p style="font-size:15px;line-height:1.7;color:#d9d4c7">
           Se publicó ${what} de <b style="color:#F2EEE4">${proj?.name ?? 'tu obra'}</b>${title ? ': <i>' + title + '</i>' : ''}.
         </p>
+        ${total ? '<p style="font-size:15px;color:#d9d4c7;margin:14px 0 0">Total de la semana: <b style="color:#C9A96E;font-size:20px">$' + Number(total).toLocaleString('es-MX', { maximumFractionDigits: 0 }) + '</b></p>' : ''}
+        ${breakdown}
         <p style="text-align:center;margin:26px 0">
           <a href="https://tierra.vip/portal" style="background:#C9A96E;color:#20170c;text-decoration:none;padding:13px 30px;border-radius:8px;font-family:Arial,sans-serif;font-size:14px">Ver mi obra</a>
         </p>
