@@ -92,6 +92,20 @@
  els.body.appendChild(m); scroll();
  }
 
+ /* La IA responde en markdown ligero: negritas para los números de lote y
+    enlaces a las guías. Sin esto se leerían los asteriscos en crudo y las
+    URLs no serían clicables. Se escapa TODO primero y solo después se
+    permiten <strong>, <br> y <a> generados aquí — nunca HTML del modelo. */
+ function richText(txt) {
+ var s = String(txt)
+ .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+ s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+ s = s.replace(/(^|[\s(])(tierra\.vip\/[a-z0-9\-\/]*)/gi, function (_m, pre, url) {
+ return pre + '<a href="https://' + url + '" target="_blank" rel="noopener">' + url + '</a>';
+ });
+ return s.replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
+ }
+
  function options(opts, onPick) {
  var wrap = document.createElement('div');
  wrap.className = 'tadv-opts';
@@ -209,7 +223,7 @@
  aiHistory.push({ role: 'assistant', content: d.reply });
  var m = document.createElement('div');
  m.className = 'tadv-msg bot';
- m.textContent = d.reply;
+ m.innerHTML = richText(d.reply);
  els.body.appendChild(m); scroll();
  showAiInput();
  })
