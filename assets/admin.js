@@ -650,14 +650,110 @@
     }).join('\n\n');
   }
 
+  // ══ Lector de rejilla: semanas en columnas, en varias bandas apiladas ══
+  // Formato real de Tierra: cada semana ocupa 2 columnas (Descripción / Coste),
+  // varias semanas lado a lado, y el bloque se repite hacia abajo.
+  function parseGridWeeks(grid) {
+    var heads = [];
+    for (var r = 0; r < grid.length; r++) {
+      var row = grid[r] || [];
+      for (var c = 0; c < row.length; c++) {
+        var m = String(row[c] == null ? '' : row[c]).trim().match(/^SEMANA\s*(\d+)\s*$/i);
+        if (m) heads.push({ r: r, c: c, num: parseInt(m[1], 10) });
+      }
+    }
+    if (!heads.length) return [];
+    var byCol = {};
+    heads.forEach(function (h) { (byCol[h.c] = byCol[h.c] || []).push(h); });
+    Object.keys(byCol).forEach(function (c) { byCol[c].sort(function (a, b) { return a.r - b.r; }); });
+
+    var out = [];
+    heads.forEach(function (h) {
+      var col = byCol[h.c], endR = grid.length;
+      for (var k = 0; k < col.length; k++) if (col[k].r > h.r) { endR = col[k].r; break; }
+      // Bajo el encabezado: fila de fechas y fila "Descripción | Coste"
+      var mmdd = null, headerRow = -1;
+      for (var r2 = h.r + 1; r2 < Math.min(h.r + 5, endR); r2++) {
+        var v = String(((grid[r2] || [])[h.c]) == null ? '' : (grid[r2] || [])[h.c]).trim();
+        var dm = v.match(/(\d{1,2})[-\/](\d{1,2})\s*(?:a|al|–|-)\s*(\d{1,2})[-\/](\d{1,2})/i);
+        if (dm && !mmdd) mmdd = { fm: +dm[2], fd: +dm[1], tm: +dm[4], td: +dm[3] };
+        if (/^descripci/i.test(v)) { headerRow = r2; break; }
+      }
+      var start = headerRow >= 0 ? headerRow + 1 : h.r + 3;
+      var items = [], declared = null, closed = false;
+      for (var i = start; i < endR; i++) {
+        var rw = grid[i] || [];
+        var concept = String(rw[h.c] == null ? '' : rw[h.c]).trim();
+        var raw = rw[h.c + 1];
+        var amount = parseMoney(raw);
+        if (amount == null && /^\s*\$?\s*-\s*$/.test(String(raw == null ? '' : raw))) amount = 0;
+        if (!concept) {
+          // Fila sin concepto pero con importe = el total del bloque: ahí termina
+          if (amount != null) { declared = amount; closed = true; break; }
+          continue;
+        }
+        if (/^descripci/i.test(concept) || /^coste$/i.test(concept)) continue;
+        if (/^semana\s*\d/i.test(concept)) { closed = true; break; }
+        if (amount == null) continue;
+        items.push({ concept: concept, amount: amount });
+      }
+      if (items.length) out.push({
+        num: h.num, label: 'Semana ' + h.num, mmdd: mmdd, items: items,
+        declared: declared, truncated: !closed
+      });
+    });
+    out.sort(function (a, b) { return a.num - b.num; });
+    return out;
+  }
+
+  // Las fechas del Excel vienen sin año (13-01 a 19-01): se deducen avanzando
+  // por número de semana y subiendo el año cada vez que la fecha retrocede.
+  function assignYears(weeks, baseYear) {
+    var y = baseYear, prev = null;
+    weeks.forEach(function (w) {
+      if (!w.mmdd) { w.from = w.to = null; return; }
+      var mm = w.mmdd.fm, dd = w.mmdd.fd;
+      if (prev && (mm < prev.mm || (mm === prev.mm && dd < prev.dd))) y++;
+      w.from = iso(y, mm, dd);
+      var y2 = (w.mmdd.tm < mm || (w.mmdd.tm === mm && w.mmdd.td < dd)) ? y + 1 : y;
+      w.to = iso(y2, w.mmdd.tm, w.mmdd.td);
+      prev = { mm: mm, dd: dd };
+    });
+  }
+  function iso(y, m, d) { return y + '-' + ('0' + m).slice(-2) + '-' + ('0' + d).slice(-2); }
+  function guessBaseYear(weeks) {
+    var con = weeks.filter(function (w) { return w.mmdd; });
+    if (!con.length) return new Date().getFullYear();
+    var bumps = 0, prev = null;
+    con.forEach(function (w) {
+      if (prev && (w.mmdd.fm < prev.mm || (w.mmdd.fm === prev.mm && w.mmdd.fd < prev.dd))) bumps++;
+      prev = { mm: w.mmdd.fm, dd: w.mmdd.fd };
+    });
+    // La última semana del archivo debería caer cerca de hoy
+    var last = con[con.length - 1], today = new Date(), best = today.getFullYear(), bestD = Infinity;
+    [-1, 0, 1].forEach(function (o) {
+      var y = today.getFullYear() + o;
+      var diff = Math.abs(new Date(y, last.mmdd.fm - 1, last.mmdd.fd) - today);
+      if (diff < bestD) { bestD = diff; best = y; }
+    });
+    return best - bumps;
+  }
+
   // ══ HISTÓRICO: un Excel con todas las semanas ══
-  var HWEEKS = [];
+  var HWEEKS = [], HBASE = null;
   var khdz = $('#khdz'), kHistInput = $('#k_hist_file');
   khdz.addEventListener('click', function () { kHistInput.click(); });
   ['dragenter', 'dragover'].forEach(function (ev) { khdz.addEventListener(ev, function (e) { e.preventDefault(); khdz.classList.add('drag'); }); });
   ['dragleave', 'drop'].forEach(function (ev) { khdz.addEventListener(ev, function (e) { e.preventDefault(); khdz.classList.remove('drag'); }); });
   khdz.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) histFlow(e.dataTransfer.files[0]); });
   kHistInput.addEventListener('change', function (e) { if (e.target.files[0]) histFlow(e.target.files[0]); e.target.value = ''; });
+  var histT = null;
+  $('#k_hist_paste').addEventListener('input', function () {
+    var v = this.value;
+    clearTimeout(histT);
+    if (v.trim().length < 20) return;
+    histT = setTimeout(function () { histPaste(v); }, 500);
+  });
 
   function histStep(p, txt) {
     var pr = $('#k_hist_prog'); pr.classList.add('on'); pr.querySelector('i').style.width = p + '%';
@@ -666,46 +762,96 @@
   function histFail(txt) { $('#k_hist_prog').classList.remove('on'); setMsg('#k_hist_msg', txt, 'err'); }
 
   function histFlow(file) {
-    var pid = $('#k_project').value;
-    if (!pid) { histFail('Elige primero la obra arriba.'); return; }
-    HWEEKS = []; $('#k_hist_prev').classList.remove('on'); $('#k_hist_prev').innerHTML = '';
+    if (!guardProject()) return;
+    resetHist();
     histStep(10, 'Abriendo ' + file.name + '…');
     readWorkbook(file).then(function (sheets) {
-      histStep(30, sheets.length + ' hoja(s) · separando las semanas con IA…');
+      // 1) Lector de rejilla propio: exacto y sin depender de la IA
+      var found = [];
+      sheets.forEach(function (s) { found = found.concat(parseGridWeeks(s.grid)); });
+      if (found.length >= 2) { finishHist(found, 'lector de columnas'); return null; }
+      // 2) Si el archivo no tiene esa forma, que lo interprete la IA
+      histStep(35, sheets.length + ' hoja(s) · pidiendo ayuda a la IA…');
       return callFn('ai-parse-costs', { text: sheetsToText(sheets), multi: true }).then(function (r) {
         var j = r.j || {};
-        if (j.error === 'ia_no_configurada') throw 'Para leer el histórico completo necesito la IA activada (falta ANTHROPIC_API_KEY en Supabase).';
-        if (!r.ok || !j.weeks) throw (j.error || 'No pude separar las semanas de ese archivo.');
-        return j.weeks;
+        if (j.error === 'ia_no_configurada') throw 'No reconocí el formato y la IA no está activada (falta ANTHROPIC_API_KEY en Supabase).';
+        if (!r.ok || !j.weeks || !j.weeks.length) throw (j.error || 'No pude separar las semanas de ese archivo.');
+        finishHist(j.weeks.map(function (w) {
+          return { num: null, label: w.week_label || 'Semana', from: w.date_from, to: w.date_to, items: w.items || [] };
+        }), 'IA');
       });
-    }).then(function (weeks) {
-      var existing = {};
-      (WEEKS_NOW || []).forEach(function (w) { existing[String(w.week_label).toLowerCase().trim()] = true; });
-      HWEEKS = weeks.map(function (w) {
-        var items = (w.items || []).filter(function (x) { return x && x.concept && !isNaN(Number(x.amount)); })
-          .map(function (x) { return { concept: String(x.concept), amount: Number(x.amount) }; });
-        var label = w.week_label || 'Semana sin nombre';
-        return {
-          label: label, from: w.date_from || null, to: w.date_to || null, items: items,
-          total: items.reduce(function (n, i) { return n + i.amount; }, 0),
-          dup: !!existing[String(label).toLowerCase().trim()],
-          on: !existing[String(label).toLowerCase().trim()] && items.length > 0
-        };
-      }).filter(function (w) { return w.items.length; });
-      if (!HWEEKS.length) { histFail('No encontré semanas con gastos en ese archivo.'); return; }
-      histStep(100, '');
-      setTimeout(function () { $('#k_hist_prog').classList.remove('on'); }, 600);
-      setMsg('#k_hist_msg', '', '');
-      renderHist();
     }).catch(function (e) { histFail(String(e)); });
   }
+
+  function histPaste(text) {
+    if (!guardProject()) return;
+    resetHist();
+    histStep(20, 'Leyendo lo que pegaste…');
+    var grid = text.split(/\r?\n/).map(function (l) { return l.split('\t'); });
+    var found = parseGridWeeks(grid);
+    if (found.length >= 2) { finishHist(found, 'lector de columnas'); return; }
+    histStep(40, 'Formato no reconocido · pidiendo ayuda a la IA…');
+    callFn('ai-parse-costs', { text: text, multi: true }).then(function (r) {
+      var j = r.j || {};
+      if (j.error === 'ia_no_configurada') { histFail('No reconocí el formato y la IA no está activada (falta ANTHROPIC_API_KEY en Supabase).'); return; }
+      if (!r.ok || !j.weeks || !j.weeks.length) { histFail(j.error || 'No encontré semanas ahí.'); return; }
+      finishHist(j.weeks.map(function (w) {
+        return { num: null, label: w.week_label || 'Semana', from: w.date_from, to: w.date_to, items: w.items || [] };
+      }), 'IA');
+    }, function (e) { histFail(String(e)); });
+  }
+
+  function guardProject() {
+    if ($('#k_project').value) return true;
+    histFail('Elige primero la obra arriba.'); return false;
+  }
+  function resetHist() {
+    HWEEKS = []; HBASE = null;
+    $('#k_hist_prev').classList.remove('on'); $('#k_hist_prev').innerHTML = '';
+  }
+
+  function finishHist(found, how) {
+    var conFecha = found.filter(function (w) { return w.mmdd; });
+    if (conFecha.length) { HBASE = guessBaseYear(found); assignYears(found, HBASE); }
+    var existing = {};
+    (WEEKS_NOW || []).forEach(function (w) { existing[String(w.week_label).toLowerCase().trim()] = true; });
+    HWEEKS = found.map(function (w) {
+      var items = (w.items || []).filter(function (x) { return x && x.concept && !isNaN(Number(x.amount)); })
+        .map(function (x) { return { concept: String(x.concept), amount: Number(x.amount) }; });
+      var label = w.label || 'Semana sin nombre';
+      var dup = !!existing[String(label).toLowerCase().trim()];
+      var total = items.reduce(function (n, i) { return n + i.amount; }, 0);
+      // Aviso si el bloque quedó cortado o si no cuadra con el total del propio Excel
+      var desc = (w.declared != null && Math.abs(total - w.declared) > 2)
+        ? 'el Excel dice ' + money(w.declared) : null;
+      return {
+        num: w.num, label: label, mmdd: w.mmdd, from: w.from || null, to: w.to || null,
+        items: items, total: total, declared: w.declared, cut: !!w.truncated, mismatch: desc,
+        dup: dup, on: !dup && items.length > 0
+      };
+    }).filter(function (w) { return w.items.length; });
+    if (!HWEEKS.length) { histFail('No encontré semanas con gastos ahí.'); return; }
+    histStep(100, '');
+    setTimeout(function () { $('#k_hist_prog').classList.remove('on'); }, 600);
+    setMsg('#k_hist_msg', '', '');
+    HOW = how;
+    renderHist();
+  }
+  var HOW = '';
 
   function renderHist() {
     var box = $('#k_hist_prev');
     var sel = HWEEKS.filter(function (w) { return w.on; });
     var gran = sel.reduce(function (n, w) { return n + w.total; }, 0);
-    var html = '<div class="wp-head">Encontré ' + HWEEKS.length + ' semana' + (HWEEKS.length === 1 ? '' : 's') +
-      '. Destilda las que no quieras publicar.</div><ul class="wp-list">';
+    var conFecha = HWEEKS.some(function (w) { return w.mmdd; });
+    var html = '<div class="wp-head">Encontré <b>' + HWEEKS.length + '</b> semana' + (HWEEKS.length === 1 ? '' : 's') +
+      ' con el ' + HOW + '. Destilda las que no quieras publicar.</div>';
+    if (conFecha) {
+      html += '<div class="yearbox">Tu Excel trae las fechas sin año. Deduje que la <b>semana ' +
+        (HWEEKS[0].num || 1) + '</b> empieza en ' +
+        '<input type="number" id="k_hist_year" value="' + HBASE + '" min="2000" max="2100"> — corrígelo si no cuadra.</div>';
+    }
+    html += '<ul class="wp-list">';
     HWEEKS.forEach(function (w, i) {
       html += '<li class="' + (w.dup ? 'dup' : '') + '">' +
         '<label><input type="checkbox" data-i="' + i + '"' + (w.on ? ' checked' : '') + '>' +
@@ -714,6 +860,8 @@
         '<span class="wi">' + w.items.length + (w.items.length === 1 ? ' concepto' : ' conceptos') + '</span>' +
         '<span class="wt">' + money(w.total) + '</span>' +
         (w.dup ? '<span class="wdup">ya existe</span>' : '') +
+        (w.mismatch ? '<span class="wwarn" title="Revisa esta semana antes de publicarla">⚠ ' + esc(w.mismatch) + '</span>' : '') +
+        (w.cut && !w.mismatch ? '<span class="wwarn" title="No encontré la fila de total de este bloque">⚠ revisar</span>' : '') +
         '</li>';
     });
     html += '</ul><div class="wp-foot"><b>' + sel.length + '</b> semanas seleccionadas · Total <b>' + money(gran) + '</b></div>' +
@@ -722,6 +870,12 @@
     box.innerHTML = html; box.classList.add('on');
     box.querySelectorAll('.wp-list input[type=checkbox]').forEach(function (c) {
       c.addEventListener('change', function () { HWEEKS[parseInt(c.dataset.i, 10)].on = c.checked; renderHist(); });
+    });
+    var yb = $('#k_hist_year');
+    if (yb) yb.addEventListener('change', function () {
+      var y = parseInt(yb.value, 10);
+      if (!y || y < 2000 || y > 2100) return;
+      HBASE = y; assignYears(HWEEKS, y); renderHist();
     });
     $('#k_hist_save').addEventListener('click', saveHist);
   }
