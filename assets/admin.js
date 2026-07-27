@@ -918,10 +918,22 @@
     if (extra) { body.total = extra.total; body.week_id = extra.week_id; }
     callFn('notify-update', body).then(function (r) {
       var j = r.j || {};
+      if (j.reason === 'email_no_configurado') { toast('Publicado ✓ (los correos aún no están activados)', ''); return; }
+      if (j.reason === 'sin_clientes') { toast('Publicado ✓ (esta obra aún no tiene cliente con cuenta)', ''); return; }
+      // Un correo rechazado casi siempre es el dominio sin verificar en Resend
+      // o el remitente equivocado. Callarlo hacía creer que el aviso salió.
+      if (j.failed) { toast('Publicado ✓ pero ' + j.failed + ' correo(s) no salieron: ' + correoErr(j.error), 'err'); return; }
       if (r.ok && j.sent > 0) toast('📧 Aviso enviado al cliente (' + j.sent + ')', 'ok');
-      else if (j.reason === 'email_no_configurado') toast('Publicado ✓ (los correos aún no están activados)', '');
-      else if (j.reason === 'sin_clientes') toast('Publicado ✓ (esta obra aún no tiene cliente con cuenta)', '');
+      else if (!r.ok) toast('Publicado ✓ pero el aviso por correo falló', 'err');
     }).catch(function () { /* silencioso */ });
+  }
+  function correoErr(txt) {
+    var s = String(txt || '');
+    if (/domain is not verified|not verified/i.test(s)) return 'el dominio no está verificado en Resend.';
+    if (/testing emails|own email address/i.test(s)) return 'el remitente sigue siendo el de pruebas; falta el secreto NOTIFY_FROM.';
+    if (/API key|unauthorized|401/i.test(s)) return 'la clave RESEND_API_KEY no es válida.';
+    if (/rate|429|limit/i.test(s)) return 'se alcanzó el límite de envíos de Resend por hoy.';
+    return s.slice(0, 120);
   }
   function money(n) { return '$' + Number(n || 0).toLocaleString('es-MX', { maximumFractionDigits: 0 }); }
 
