@@ -14,7 +14,7 @@
    ========================================================================== */
 'use strict';
 
-var CACHE = 'tierra-v3';
+var CACHE = 'tierra-v4';
 
 /* Precache mínimo: lo justo para que una visita repetida sin señal
    tenga página, estilos y logo. Rutas RELATIVAS al scope del SW, así
@@ -22,7 +22,7 @@ var CACHE = 'tierra-v3';
 var CORE = [
   './',
   'assets/styles.min.css?v=17',
-  'assets/pages.css?v=12',
+  'assets/pages.css?v=13',
   'assets/img/brand/tierra-logo.png'
 ];
 
