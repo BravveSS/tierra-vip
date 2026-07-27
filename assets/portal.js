@@ -276,6 +276,7 @@
     });
     html += '</select>';
     if (wk.date_from && wk.date_to) html += '<span class="rng">' + fmtDate(wk.date_from) + ' — ' + fmtDate(wk.date_to) + '</span>';
+    html += '<button class="btn ghost sm dl-xls" id="dlxls" title="Descargar todas las semanas en Excel">↓ Excel completo</button>';
     html += '</div>';
 
     html += '<div class="stats-row">' +
@@ -312,6 +313,7 @@
 
     view.innerHTML = html;
     $('#wksel').addEventListener('change', function () { WEEK_ID = this.value; renderCostos(); });
+    $('#dlxls').addEventListener('click', downloadXls);
     // hover leyenda ⇄ dona
     var donut = $('#donut');
     view.querySelectorAll('.lg li').forEach(function (li) {
@@ -323,6 +325,51 @@
     });
   }
   function tile(k, v, s) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : '') + '</div>'; }
+
+  // ── Descargar todas las semanas en Excel ──
+  function downloadXls() {
+    if (typeof XLSX === 'undefined') { alert('El generador de Excel no cargó. Recarga la página e intenta de nuevo.'); return; }
+    var proj = D.proj;
+    // Las semanas vienen de la más reciente a la más antigua: al revés se lee mejor.
+    var weeks = D.weeks.slice().reverse();
+    var wb = XLSX.utils.book_new();
+
+    // Hoja 1 — resumen de todas las semanas
+    var resumen = [['Obra', proj.name], ['Cliente', proj.client_name || ''], ['Ubicación', proj.location || '']];
+    if (proj.budget_total) resumen.push(['Presupuesto total', Number(proj.budget_total)]);
+    resumen.push([], ['Semana', 'Del', 'Al', 'Conceptos', 'Total']);
+    var acum = 0;
+    weeks.forEach(function (w) {
+      acum += w.total;
+      resumen.push([w.week_label, w.date_from || '', w.date_to || '', w.items.length, w.total]);
+    });
+    resumen.push([], ['Total invertido', '', '', '', acum]);
+    if (proj.budget_total) resumen.push(['Presupuesto restante', '', '', '', Math.max(Number(proj.budget_total) - acum, 0)]);
+    var wsR = XLSX.utils.aoa_to_sheet(resumen);
+    wsR['!cols'] = [{ wch: 26 }, { wch: 13 }, { wch: 13 }, { wch: 11 }, { wch: 15 }];
+    XLSX.utils.book_append_sheet(wb, wsR, 'Resumen');
+
+    // Una hoja por semana con el desglose
+    var used = {};
+    weeks.forEach(function (w) {
+      var rows = [[w.week_label], [(w.date_from && w.date_to) ? ('Del ' + w.date_from + ' al ' + w.date_to) : ''], [],
+                  ['Descripción', 'Costo']];
+      w.items.slice().sort(function (a, b) { return b.amount - a.amount; })
+        .forEach(function (i) { rows.push([i.concept, Number(i.amount)]); });
+      rows.push([], ['Total', w.total]);
+      var ws = XLSX.utils.aoa_to_sheet(rows);
+      ws['!cols'] = [{ wch: 38 }, { wch: 15 }];
+      // Excel limita el nombre de hoja a 31 caracteres y no admite duplicados
+      var nm = String(w.week_label).replace(/[\\\/\?\*\[\]:]/g, '').slice(0, 28) || 'Semana';
+      var base = nm, k = 2;
+      while (used[nm]) { nm = base.slice(0, 26) + ' ' + k; k++; }
+      used[nm] = true;
+      XLSX.utils.book_append_sheet(wb, ws, nm);
+    });
+
+    var safe = String(proj.name).replace(/[^\wáéíóúñÁÉÍÓÚÑ ]+/g, '').trim().replace(/\s+/g, '-');
+    XLSX.writeFile(wb, 'Costos-' + (safe || 'obra') + '-' + new Date().toISOString().slice(0, 10) + '.xlsx');
+  }
 
   function donutGroups(items) {
     var sorted = items.slice().sort(function (a, b) { return b.amount - a.amount; });

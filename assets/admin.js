@@ -454,7 +454,7 @@
   function stTile(k, v) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
 
   // ══ COSTOS ══
-  var KROWS = [];
+  var KROWS = [], WEEKS_NOW = [];
   $('#k_project').addEventListener('change', loadWeeks);
   $('#k_paste').addEventListener('input', function () { parseCostText(this.value); });
   $('#k_file_btn').addEventListener('click', function () { $('#k_file').click(); });
@@ -618,23 +618,151 @@
     loadWeeks(); loadStats();
   }
 
-  // Lee .xlsx/.xls/.csv y devuelve una matriz de celdas
-  function readSheet(file) {
+  // Lee un archivo y devuelve TODAS sus hojas: [{ name, grid }]
+  function readWorkbook(file) {
     return new Promise(function (resolve, reject) {
+      if (typeof XLSX === 'undefined') { reject('el lector de Excel no cargó; recarga la página'); return; }
       var reader = new FileReader();
       reader.onerror = function () { reject('no se pudo abrir'); };
-      if (typeof XLSX === 'undefined') { reject('el lector de Excel no cargó; recarga la página'); return; }
       reader.onload = function (ev) {
         try {
           var wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
-          var ws = wb.Sheets[wb.SheetNames[0]];
-          resolve(XLSX.utils.sheet_to_json(ws, { header: 1, raw: false }).map(function (row) {
-            return (row || []).map(function (c) { return c == null ? '' : String(c); });
+          resolve(wb.SheetNames.map(function (nm) {
+            return {
+              name: nm,
+              grid: XLSX.utils.sheet_to_json(wb.Sheets[nm], { header: 1, raw: false }).map(function (row) {
+                return (row || []).map(function (c) { return c == null ? '' : String(c); });
+              })
+            };
           }));
         } catch (err) { reject(err); }
       };
       reader.readAsArrayBuffer(file);
     });
+  }
+  // Solo la primera hoja, como matriz de celdas
+  function readSheet(file) {
+    return readWorkbook(file).then(function (sheets) { return sheets.length ? sheets[0].grid : []; });
+  }
+  function sheetsToText(sheets) {
+    return sheets.map(function (s) {
+      return '### HOJA: ' + s.name + '\n' + s.grid.map(function (r) { return r.join('\t'); }).join('\n');
+    }).join('\n\n');
+  }
+
+  // ══ HISTÓRICO: un Excel con todas las semanas ══
+  var HWEEKS = [];
+  var khdz = $('#khdz'), kHistInput = $('#k_hist_file');
+  khdz.addEventListener('click', function () { kHistInput.click(); });
+  ['dragenter', 'dragover'].forEach(function (ev) { khdz.addEventListener(ev, function (e) { e.preventDefault(); khdz.classList.add('drag'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { khdz.addEventListener(ev, function (e) { e.preventDefault(); khdz.classList.remove('drag'); }); });
+  khdz.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) histFlow(e.dataTransfer.files[0]); });
+  kHistInput.addEventListener('change', function (e) { if (e.target.files[0]) histFlow(e.target.files[0]); e.target.value = ''; });
+
+  function histStep(p, txt) {
+    var pr = $('#k_hist_prog'); pr.classList.add('on'); pr.querySelector('i').style.width = p + '%';
+    setMsg('#k_hist_msg', txt, '');
+  }
+  function histFail(txt) { $('#k_hist_prog').classList.remove('on'); setMsg('#k_hist_msg', txt, 'err'); }
+
+  function histFlow(file) {
+    var pid = $('#k_project').value;
+    if (!pid) { histFail('Elige primero la obra arriba.'); return; }
+    HWEEKS = []; $('#k_hist_prev').classList.remove('on'); $('#k_hist_prev').innerHTML = '';
+    histStep(10, 'Abriendo ' + file.name + '…');
+    readWorkbook(file).then(function (sheets) {
+      histStep(30, sheets.length + ' hoja(s) · separando las semanas con IA…');
+      return callFn('ai-parse-costs', { text: sheetsToText(sheets), multi: true }).then(function (r) {
+        var j = r.j || {};
+        if (j.error === 'ia_no_configurada') throw 'Para leer el histórico completo necesito la IA activada (falta ANTHROPIC_API_KEY en Supabase).';
+        if (!r.ok || !j.weeks) throw (j.error || 'No pude separar las semanas de ese archivo.');
+        return j.weeks;
+      });
+    }).then(function (weeks) {
+      var existing = {};
+      (WEEKS_NOW || []).forEach(function (w) { existing[String(w.week_label).toLowerCase().trim()] = true; });
+      HWEEKS = weeks.map(function (w) {
+        var items = (w.items || []).filter(function (x) { return x && x.concept && !isNaN(Number(x.amount)); })
+          .map(function (x) { return { concept: String(x.concept), amount: Number(x.amount) }; });
+        var label = w.week_label || 'Semana sin nombre';
+        return {
+          label: label, from: w.date_from || null, to: w.date_to || null, items: items,
+          total: items.reduce(function (n, i) { return n + i.amount; }, 0),
+          dup: !!existing[String(label).toLowerCase().trim()],
+          on: !existing[String(label).toLowerCase().trim()] && items.length > 0
+        };
+      }).filter(function (w) { return w.items.length; });
+      if (!HWEEKS.length) { histFail('No encontré semanas con gastos en ese archivo.'); return; }
+      histStep(100, '');
+      setTimeout(function () { $('#k_hist_prog').classList.remove('on'); }, 600);
+      setMsg('#k_hist_msg', '', '');
+      renderHist();
+    }).catch(function (e) { histFail(String(e)); });
+  }
+
+  function renderHist() {
+    var box = $('#k_hist_prev');
+    var sel = HWEEKS.filter(function (w) { return w.on; });
+    var gran = sel.reduce(function (n, w) { return n + w.total; }, 0);
+    var html = '<div class="wp-head">Encontré ' + HWEEKS.length + ' semana' + (HWEEKS.length === 1 ? '' : 's') +
+      '. Destilda las que no quieras publicar.</div><ul class="wp-list">';
+    HWEEKS.forEach(function (w, i) {
+      html += '<li class="' + (w.dup ? 'dup' : '') + '">' +
+        '<label><input type="checkbox" data-i="' + i + '"' + (w.on ? ' checked' : '') + '>' +
+        '<span class="wl">' + esc(w.label) + '</span></label>' +
+        '<span class="wd">' + (w.from && w.to ? fmtDate(w.from) + ' — ' + fmtDate(w.to) : 'sin fechas') + '</span>' +
+        '<span class="wi">' + w.items.length + (w.items.length === 1 ? ' concepto' : ' conceptos') + '</span>' +
+        '<span class="wt">' + money(w.total) + '</span>' +
+        (w.dup ? '<span class="wdup">ya existe</span>' : '') +
+        '</li>';
+    });
+    html += '</ul><div class="wp-foot"><b>' + sel.length + '</b> semanas seleccionadas · Total <b>' + money(gran) + '</b></div>' +
+      '<label class="autochk"><input type="checkbox" id="k_hist_send"> Avisar al cliente por correo (solo de la semana más reciente)</label>' +
+      '<button class="btn block" id="k_hist_save" style="margin-top:14px">Publicar ' + sel.length + ' semana' + (sel.length === 1 ? '' : 's') + '</button>';
+    box.innerHTML = html; box.classList.add('on');
+    box.querySelectorAll('.wp-list input[type=checkbox]').forEach(function (c) {
+      c.addEventListener('change', function () { HWEEKS[parseInt(c.dataset.i, 10)].on = c.checked; renderHist(); });
+    });
+    $('#k_hist_save').addEventListener('click', saveHist);
+  }
+
+  function saveHist() {
+    var pid = $('#k_project').value;
+    var sel = HWEEKS.filter(function (w) { return w.on; });
+    if (!sel.length) { histFail('No hay semanas seleccionadas.'); return; }
+    var avisar = $('#k_hist_send').checked;
+    var btn = $('#k_hist_save'); btn.disabled = true;
+    var done = 0, fail = 0, last = null;
+    histStep(4, 'Publicando…');
+    (function next(i) {
+      if (i >= sel.length) {
+        $('#k_hist_prog').classList.remove('on');
+        btn.disabled = false;
+        var txt = done + ' semana' + (done === 1 ? '' : 's') + ' publicada' + (done === 1 ? '' : 's') +
+          (fail ? ' · ' + fail + ' fallaron' : '');
+        setMsg('#k_hist_msg', txt, fail ? 'err' : 'ok');
+        toast(txt, fail ? 'err' : 'ok');
+        $('#k_hist_prev').classList.remove('on'); HWEEKS = [];
+        loadWeeks(); loadStats();
+        if (avisar && last) notify(pid, 'costos', last.label, { total: last.total, week_id: last.id });
+        return;
+      }
+      var w = sel[i];
+      btn.textContent = 'Publicando ' + w.label + ' (' + (i + 1) + '/' + sel.length + ')…';
+      histStep(4 + Math.round((i / sel.length) * 92), 'Publicando ' + w.label + '…');
+      sb.from('cost_weeks').insert({
+        project_id: pid, week_label: w.label, date_from: w.from, date_to: w.to, created_by: ME.id
+      }).select().single().then(function (r) {
+        if (r.error) { fail++; next(i + 1); return; }
+        var wid = r.data.id;
+        sb.from('cost_items').insert(w.items.map(function (x, k) {
+          return { week_id: wid, concept: x.concept, amount: x.amount, sort: k };
+        })).then(function (r2) {
+          if (r2.error) fail++; else { done++; last = { label: w.label, total: w.total, id: wid }; }
+          next(i + 1);
+        });
+      });
+    })(0);
   }
   // Parser local (sin IA) reutilizando la misma lógica de la vista previa
   function localParse(grid) {
@@ -699,6 +827,7 @@
     sb.from('cost_weeks').select('*, cost_items(amount)').eq('project_id', pid).order('created_at', { ascending: false })
       .then(function (r) {
         var ws = r.data || [];
+        WEEKS_NOW = ws;
         $('#k_count').textContent = ws.length ? ws.length + ' semana' + (ws.length === 1 ? '' : 's') : '';
         list.innerHTML = '';
         if (!ws.length) { list.innerHTML = '<li class="muted" style="padding:10px 0">Sin semanas aún.</li>'; return; }
