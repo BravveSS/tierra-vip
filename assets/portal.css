@@ -9,10 +9,11 @@
   --fh:'Cormorant Garamond',Georgia,serif; --fb:'DM Sans',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background-color:#080706}  /* evita el blanco del rebote en iOS */
 body{
-  font-family:var(--fb); color:var(--cream); min-height:100vh;
-  background:
+  font-family:var(--fb); color:var(--cream); min-height:100vh; overflow-x:hidden;
+  background-color:#080706;
+  background-image:
     radial-gradient(1100px 700px at 82% 6%, rgba(201,169,110,.10), transparent 60%),
     radial-gradient(900px 700px at 8% 100%, rgba(201,169,110,.06), transparent 55%),
     linear-gradient(160deg,#16261e 0%, var(--dark) 45%, var(--black) 100%);
@@ -339,3 +340,115 @@ a{color:var(--gold);text-decoration:none}
 .yearbox b{color:var(--cream);font-weight:500}
 .yearbox input{display:inline-block;width:86px;margin:0 4px;padding:4px 8px;font-size:13px;text-align:center}
 .wp-list .wwarn{font-size:11px;letter-spacing:.04em;color:#e0a23c;border:1px solid rgba(224,162,60,.45);border-radius:20px;padding:2px 9px;background:rgba(224,162,60,.08)}
+
+/* ============================================================================
+   MÓVIL — el panel se usa desde el teléfono, así que aquí manda el teléfono.
+   ========================================================================== */
+@media (max-width:720px){
+  .wrap{padding:0 14px}
+
+  /* Barra superior compacta y sin apellidos que la rompan */
+  .pt-top{padding:11px 14px;gap:10px}
+  .pt-top img{height:34px}
+  .pt-top .rt{gap:8px;font-size:13px;min-width:0}
+  .pt-top .who{min-width:0}
+  .pt-top #whoami{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:38vw}
+  .avatar{width:28px;height:28px;font-size:13px;flex:none}
+
+  /* Estadísticas: 2x2 compacto, no una tarjeta por pantalla */
+  .stats-row{grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 16px!important}
+  .stat{padding:11px 13px;border-radius:10px}
+  .stat .k{font-size:9.5px;letter-spacing:.1em}
+  .stat .v{font-size:24px;margin-top:2px}
+  .stat .s{font-size:11px}
+
+  /* Pestañas en una sola tira deslizable */
+  .tabs{margin:0 -14px 18px;padding:0 14px;flex-wrap:nowrap;overflow-x:auto;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:57px;z-index:30;
+    background:rgba(8,7,6,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none;padding:13px 15px;font-size:14px}
+
+  /* Contenedores: menos aire, más contenido */
+  .box,.auto-box{padding:18px 15px;border-radius:13px}
+  .box h2,.ab-head h2{font-size:21px}
+  .grid2{gap:14px}
+  .ctxbar{flex-wrap:wrap;gap:9px;padding:13px 15px}
+  .ctxbar select{flex:1 1 100%;min-width:0}
+  .two{grid-template-columns:1fr;gap:0}
+
+  /* Todo lo tocable, cómodo con el dedo */
+  .btn{padding:13px 18px;font-size:15px}
+  .btn.sm{padding:11px 14px;font-size:14px}
+  .btn.tiny{padding:9px 13px;font-size:13px}
+  .iconbtn{padding:11px;font-size:18px;min-width:42px;min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+  .field input,.field textarea,.field select{font-size:16px;padding:13px 14px}  /* 16px evita el zoom de iOS */
+
+  /* Filas de lista: en columna, sin apretujar */
+  .list .row{flex-wrap:wrap;gap:10px;padding:14px 0}
+  .list .row > div:first-child{flex:1 1 100%;min-width:0}
+  .list .row .acts{width:100%;justify-content:flex-start;gap:6px}
+  .list .row .t{font-size:16px}
+
+  /* Vista previa de semanas: cada dato en su renglón */
+  .wp-list{max-height:none}
+  .wp-list li{flex-direction:column;align-items:stretch;gap:5px;padding:13px 14px}
+  .wp-list label{flex:none;min-height:26px}
+  .wp-list .wl{font-size:16px}
+  .wp-list .wd,.wp-list .wi{min-width:0;font-size:12px}
+  .wp-list .wt{min-width:0;text-align:left;font-size:16px}
+  .wp-list .wdup,.wp-list .wwarn{align-self:flex-start}
+  .wp-list input[type=checkbox]{width:20px;height:20px}
+
+  /* Dropzone y miniaturas */
+  .dz{padding:22px 14px}
+  .thumbs{gap:7px}
+  .thumb{width:74px;height:74px}
+  .thumb .rm,.av-thumbs .t .rm{opacity:1}   /* en táctil no hay hover */
+
+  /* Modales a pantalla casi completa */
+  .modal{padding:0;align-items:flex-end}
+  .modal .card{max-width:none;border-radius:16px 16px 0 0;padding:26px 18px 28px;max-height:92vh;overflow-y:auto}
+  .modal .card h2{font-size:23px}
+
+  /* Login */
+  .login{min-height:auto;padding:26px 0 40px}
+  .card{padding:28px 20px}
+  .card h1{font-size:29px}
+
+  /* Portal del cliente */
+  .hero-obra h1{font-size:34px;line-height:1.06}
+  .hero-obra .meta{gap:8px;font-size:13px}
+  .pills{gap:7px}
+  .pill-t{padding:10px 15px;font-size:14px}
+  .weekbar{flex-wrap:wrap;gap:9px}
+  .weekbar select{flex:1 1 100%}
+  .donut{width:190px;height:190px}
+  .donut .c .n{font-size:24px}
+  .lg li{padding:9px 0}
+  .ctable th,.ctable td{padding:10px 12px;font-size:13.5px}
+  .ph-grid{gap:7px}
+  .tl-item{padding-left:18px}
+  .tl-item h3{font-size:20px}
+  .budget{padding:16px 15px}
+  .budget .top b{font-size:19px}
+  .auto-result .ar-head{font-size:18px}
+
+  #toasts{left:12px;right:12px;bottom:12px}
+  .toast{width:100%}
+}
+
+/* Teléfonos angostos (iPhone SE y similares) */
+@media (max-width:380px){
+  .stats-row{grid-template-columns:1fr 1fr;gap:7px}
+  .stat .v{font-size:21px}
+  .hero-obra h1{font-size:29px}
+  .donut{width:168px;height:168px}
+  .pt-top #whoami{display:none}
+}
+.d-mob{display:none}
+@media (max-width:720px){ .d-desk{display:none} .d-mob{display:inline} }
+/* Enlaces pequeños dentro de etiquetas: área táctil cómoda */
+@media (max-width:720px){
+  .field label a{padding:8px 4px;margin:-8px -4px;display:inline-block;font-size:12px}
+}

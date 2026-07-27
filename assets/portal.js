@@ -124,21 +124,19 @@
     });
   }
 
-  var D = { proj: null, items: [], weeks: [], notes: [] };   // estado del dashboard
+  var D = { proj: null, items: [], weeks: [] };   // estado del dashboard
 
   function loadAll(pid) {
     var soft = function (q) { return q.then(function (r) { return r.data || []; }, function () { return []; }); };
     var qWeeks = soft(sb.from('cost_weeks').select('*').eq('project_id', pid).order('created_at', { ascending: false }));
-    var qNotes = soft(sb.from('project_notes').select('*').eq('project_id', pid)
-      .order('note_date', { ascending: false }).order('created_at', { ascending: false }));
     Promise.all([
       sb.from('projects').select('*').eq('id', pid).single(),
       sb.from('updates').select('*').eq('project_id', pid).order('date', { ascending: false }).order('created_at', { ascending: false }),
-      qWeeks, qNotes
+      qWeeks
     ]).then(function (res) {
       var proj = res[0].data, ups = res[1].data || [], weeks = res[2] || [];
       if (!proj) { renderMessage('Error', 'No pudimos cargar tu obra. Intenta de nuevo.'); return; }
-      D.proj = proj; D.weeks = weeks; D.notes = res[3] || [];
+      D.proj = proj; D.weeks = weeks;
       var wIds = weeks.map(function (w) { return w.id; });
       var qItems = wIds.length
         ? sb.from('cost_items').select('*').in('week_id', wIds).order('sort', { ascending: true }).then(function (r) { return r.data || []; }, function () { return []; })
@@ -193,7 +191,6 @@
       '</section>';
 
     var tabs = [['avance', 'Avance de obra']];
-    if (D.notes.length) tabs.push(['notas', 'Notas de obra']);
     if (weeks.length) tabs.push(['costos', 'Costos']);
     if (tabs.length > 1) {
       if (!tabs.some(function (t) { return t[0] === VIEW; })) VIEW = 'avance';
@@ -209,22 +206,7 @@
       b.addEventListener('click', function () { VIEW = b.dataset.v; render(); });
     });
     if (VIEW === 'costos') renderCostos();
-    else if (VIEW === 'notas') renderNotas();
     else renderAvance();
-  }
-
-  // ── Vista: notas de construcción ──
-  function renderNotas() {
-    var view = $('#view');
-    var html = '<div class="notes">';
-    D.notes.forEach(function (n, i) {
-      html += '<article class="note-card" style="animation-delay:' + Math.min(i * 80, 460) + 'ms">' +
-        '<div class="nd">' + fmtDate(n.note_date) + '</div>' +
-        (n.title ? '<h3>' + esc(n.title) + '</h3>' : '') +
-        '<p>' + esc(n.body).replace(/\n/g, '<br>') + '</p></article>';
-    });
-    html += '</div><div style="height:60px"></div>';
-    view.innerHTML = html;
   }
 
   // ── Vista: avance ──
