@@ -454,6 +454,26 @@
 
   // ══ COSTOS ══
   var KROWS = [], WEEKS_NOW = [];
+
+  // Las semanas se ordenan por su NÚMERO, no por cuándo se guardaron: si borras
+  // y vuelves a subir la 3, tiene que quedar entre la 2 y la 4, no hasta arriba.
+  function weekNum(w) {
+    var m = String(w.week_label == null ? '' : w.week_label).match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+  function sortWeeks(list, asc) {
+    var dir = asc ? 1 : -1;
+    return list.slice().sort(function (a, b) {
+      var na = weekNum(a), nb = weekNum(b);
+      if (na != null && nb != null) { if (na !== nb) return (na - nb) * dir; }
+      else if (na != null) return -1 * dir;      // las que tienen número, primero
+      else if (nb != null) return 1 * dir;
+      var da = a.date_from || '', db = b.date_from || '';
+      if (da && db && da !== db) return (da < db ? -1 : 1) * dir;
+      var ca = a.created_at || '', cb = b.created_at || '';
+      return (ca < cb ? -1 : ca > cb ? 1 : 0) * dir;
+    });
+  }
   $('#k_project').addEventListener('change', loadWeeks);
   $('#k_paste').addEventListener('input', function () { parseCostText(this.value); });
   $('#k_file_btn').addEventListener('click', function () { $('#k_file').click(); });
@@ -857,7 +877,7 @@
     if (!pid) { list.innerHTML = ''; return; }
     sb.from('cost_weeks').select('*, cost_items(amount)').eq('project_id', pid).order('created_at', { ascending: false })
       .then(function (r) {
-        var ws = r.data || [];
+        var ws = sortWeeks(r.data || [], false);   // de la más reciente a la más antigua
         WEEKS_NOW = ws;
         $('#k_count').textContent = ws.length ? ws.length + ' semana' + (ws.length === 1 ? '' : 's') : '';
         list.innerHTML = '';

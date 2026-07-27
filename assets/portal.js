@@ -126,6 +126,25 @@
 
   var D = { proj: null, items: [], weeks: [] };   // estado del dashboard
 
+  // Orden por NÚMERO de semana, no por cuándo se guardó en el sistema.
+  function weekNum(w) {
+    var m = String(w.week_label == null ? '' : w.week_label).match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+  function sortWeeks(list, asc) {
+    var dir = asc ? 1 : -1;
+    return list.slice().sort(function (a, b) {
+      var na = weekNum(a), nb = weekNum(b);
+      if (na != null && nb != null) { if (na !== nb) return (na - nb) * dir; }
+      else if (na != null) return -1 * dir;
+      else if (nb != null) return 1 * dir;
+      var da = a.date_from || '', db = b.date_from || '';
+      if (da && db && da !== db) return (da < db ? -1 : 1) * dir;
+      var ca = a.created_at || '', cb = b.created_at || '';
+      return (ca < cb ? -1 : ca > cb ? 1 : 0) * dir;
+    });
+  }
+
   function loadAll(pid) {
     var soft = function (q) { return q.then(function (r) { return r.data || []; }, function () { return []; }); };
     var qWeeks = soft(sb.from('cost_weeks').select('*').eq('project_id', pid).order('created_at', { ascending: false }));
@@ -134,7 +153,7 @@
       sb.from('updates').select('*').eq('project_id', pid).order('date', { ascending: false }).order('created_at', { ascending: false }),
       qWeeks
     ]).then(function (res) {
-      var proj = res[0].data, ups = res[1].data || [], weeks = res[2] || [];
+      var proj = res[0].data, ups = res[1].data || [], weeks = sortWeeks(res[2] || [], false);
       if (!proj) { renderMessage('Error', 'No pudimos cargar tu obra. Intenta de nuevo.'); return; }
       D.proj = proj; D.weeks = weeks;
       var wIds = weeks.map(function (w) { return w.id; });
@@ -312,8 +331,8 @@
   function downloadXls() {
     if (typeof XLSX === 'undefined') { alert('El generador de Excel no cargó. Recarga la página e intenta de nuevo.'); return; }
     var proj = D.proj;
-    // Las semanas vienen de la más reciente a la más antigua: al revés se lee mejor.
-    var weeks = D.weeks.slice().reverse();
+    // En el Excel se leen mejor de la más antigua a la más reciente.
+    var weeks = sortWeeks(D.weeks, true);
     var wb = XLSX.utils.book_new();
 
     // Hoja 1 — resumen de todas las semanas
