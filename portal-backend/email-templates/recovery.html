@@ -1,0 +1,62 @@
+<!-- Supabase → Authentication → Emails → Templates → "Reset Password"
+     Asunto: Restablece tu contraseña — Tierra Desarrollos
+     NO quites {{ .ConfirmationURL }}: es lo que genera el enlace de un solo uso. -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#080706;margin:0;padding:32px 12px">
+  <tr>
+    <td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;width:100%;background:#122019;border-radius:12px">
+        <tr>
+          <td style="padding:36px 32px 8px;text-align:center">
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:.28em;color:#C9A96E">T I E R R A</div>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,238,228,.45);margin-top:8px">Desarrollo y Construcción · Costa de Oaxaca</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:26px 32px 0">
+            <div style="height:1px;background:#C9A96E;opacity:.28;line-height:1px;font-size:0">&nbsp;</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:30px 32px 0">
+            <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:27px;line-height:1.25;color:#F2EEE4;margin:0">Restablece tu contraseña</h1>
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.75;color:#d9d4c7;margin:18px 0 0">
+              Pediste una contraseña nueva para entrar al portal de tu obra. Toca el botón y elígela — es lo único que tienes que hacer.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:30px 32px 0;text-align:center">
+            <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#C9A96E;color:#20170c;text-decoration:none;padding:15px 34px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold">Elegir mi contraseña</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:26px 32px 0">
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:rgba(242,238,228,.5);margin:0">
+              Si el botón no abre, copia y pega esta dirección en tu navegador:
+            </p>
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#C9A96E;word-break:break-all;margin:8px 0 0">
+              {{ .ConfirmationURL }}
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:24px 32px 0">
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:rgba(242,238,228,.5);margin:0">
+              El enlace sirve una sola vez y caduca pronto. <strong style="color:rgba(242,238,228,.7)">Si no fuiste tú, ignora este correo</strong>: tu contraseña actual sigue funcionando y nadie ha entrado a tu cuenta.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:30px 32px 34px;text-align:center">
+            <div style="height:1px;background:#C9A96E;opacity:.18;line-height:1px;font-size:0;margin-bottom:20px">&nbsp;</div>
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.8;color:rgba(242,238,228,.42);margin:0">
+              ¿Necesitas ayuda? Escríbenos por WhatsApp al
+              <a href="https://wa.me/529581087977" style="color:#C9A96E;text-decoration:none">+52 958 108 7977</a><br>
+              <a href="https://tierra.vip" style="color:rgba(242,238,228,.42);text-decoration:none">tierra.vip</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
