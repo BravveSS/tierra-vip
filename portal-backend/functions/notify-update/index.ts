@@ -44,7 +44,9 @@ Deno.serve(async (req) => {
     const emails = (clients ?? []).map(c => c.email).filter(Boolean)
     if (!emails.length) return json({ sent: 0, reason: 'sin_clientes' })
 
-    const what = kind === 'costos' ? 'un nuevo reporte de costos' : 'un nuevo avance con fotos'
+    const what = kind === 'costos' ? 'un nuevo reporte de costos'
+      : kind === 'nota' ? 'una nueva nota de construcción'
+      : 'un nuevo avance con fotos'
     const subj = `Tu obra tiene ${what} — ${proj?.name ?? 'Tierra'}`
     const html = `
       <div style="font-family:Georgia,serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#122019;color:#F2EEE4;border-radius:12px">

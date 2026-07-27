@@ -251,3 +251,24 @@ a{color:var(--gold);text-decoration:none}
 .cost-preview .rowline .amt{font-variant-numeric:tabular-nums;color:var(--cream)}
 .cost-preview .tot{padding:10px 4px;font-size:15px;color:var(--gold);text-align:right}
 .paste-hint{font-size:12px;color:rgba(242,238,228,.45);margin-top:6px;line-height:1.5}
+
+/* ── v4 · Notas de construcción + avance % ── */
+.hprog{margin-top:20px;max-width:420px}
+.hp-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,238,228,.5)}
+.hp-top b{font-family:var(--fh);font-size:20px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--gold)}
+.hp-bar{height:6px;border-radius:4px;background:rgba(201,169,110,.14);overflow:hidden;margin-top:8px}
+.hp-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width 1s cubic-bezier(.16,1,.3,1)}
+
+.notes{display:flex;flex-direction:column;gap:14px;margin-top:22px}
+.note-card{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:0 14px 14px 0;padding:20px 24px;opacity:0;animation:noteIn .7s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes noteIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.note-card .nd{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.note-card h3{font-family:var(--fh);font-size:21px;font-weight:400;margin:0 0 8px;color:var(--cream)}
+.note-card p{margin:0;font-size:15px;line-height:1.75;color:rgba(242,238,228,.82);white-space:normal}
+@media (prefers-reduced-motion:reduce){.note-card{opacity:1;animation:none}}
+
+/* Admin · notas + IA */
+.note-row{align-items:flex-start!important}
+.note-row .body{font-size:13.5px;color:rgba(242,238,228,.6);line-height:1.6;margin-top:4px;max-width:46ch;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ai-btn{display:inline-flex;align-items:center;gap:7px}
+.ai-note{font-size:12px;color:rgba(242,238,228,.45);margin-top:8px;line-height:1.55}

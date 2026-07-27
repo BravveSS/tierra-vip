@@ -113,13 +113,13 @@
         acts.appendChild(chip); acts.appendChild(ed); acts.appendChild(del);
         li.appendChild(info); li.appendChild(acts); list.appendChild(li);
       });
-      ['#a_project', '#c_project', '#k_project'].forEach(function (sel) {
+      ['#a_project', '#c_project', '#k_project', '#n_project'].forEach(function (sel) {
         var s = $(sel); var prev = s.value; s.innerHTML = '';
         if (!PROJECTS.length) { s.innerHTML = '<option value="">— crea un proyecto primero —</option>'; return; }
         PROJECTS.forEach(function (p) { var o = document.createElement('option'); o.value = p.id; o.textContent = p.name; s.appendChild(o); });
         if (prev && PROJECTS.some(function (p) { return p.id === prev; })) s.value = prev;
       });
-      if (PROJECTS.length) { loadUpdates(); loadWeeks(); }
+      if (PROJECTS.length) { loadUpdates(); loadWeeks(); loadNotes(); }
       loadClients();
       loadStats();
     });
@@ -142,19 +142,29 @@
     $('#pm_name').value = p.name || ''; $('#pm_client').value = p.client_name || '';
     $('#pm_loc').value = p.location || ''; $('#pm_status').value = p.status || 'en_progreso';
     $('#pm_budget').value = p.budget_total || '';
+    $('#pm_progress').value = (p.progress == null ? '' : p.progress);
     $('#pModal').classList.add('on');
   }
   $('#pm_cancel').addEventListener('click', function () { $('#pModal').classList.remove('on'); });
   $('#pm_save').addEventListener('click', function () {
     if (!PM) return;
-    sb.from('projects').update({
+    var base = {
       name: $('#pm_name').value.trim(), client_name: $('#pm_client').value.trim() || null,
       location: $('#pm_loc').value.trim() || null, status: $('#pm_status').value,
       budget_total: $('#pm_budget').value ? Number($('#pm_budget').value) : null
-    }).eq('id', PM.id).then(function (r) {
-      if (r.error) { toast(r.error.message, 'err'); return; }
-      $('#pModal').classList.remove('on'); toast('Proyecto actualizado ✓', 'ok'); loadProjects();
+    };
+    var full = Object.assign({}, base, {
+      progress: $('#pm_progress').value === '' ? 0 : Math.max(0, Math.min(100, Number($('#pm_progress').value)))
     });
+    var save = function (payload, retry) {
+      sb.from('projects').update(payload).eq('id', PM.id).then(function (r) {
+        // Si aún no existe la columna progress, guarda el resto sin perder los cambios.
+        if (r.error && retry && /progress/.test(r.error.message || '')) { save(base, false); return; }
+        if (r.error) { toast(r.error.message, 'err'); return; }
+        $('#pModal').classList.remove('on'); toast('Proyecto actualizado ✓', 'ok'); loadProjects();
+      });
+    };
+    save(full, true);
   });
 
   // ══ AVANCES ══
@@ -408,10 +418,11 @@
       return q.then(function (r) { return r.count || 0; }, function () { return 0; });
     };
     Promise.all([
-      cnt('projects'), cnt('profiles', { k: 'role', v: 'client' }), cnt('updates'), cnt('cost_weeks')
+      cnt('projects'), cnt('profiles', { k: 'role', v: 'client' }), cnt('updates'), cnt('cost_weeks'), cnt('project_notes')
     ]).then(function (n) {
       $('#statsRow').innerHTML =
-        stTile('Proyectos', n[0]) + stTile('Clientes', n[1]) + stTile('Avances publicados', n[2]) + stTile('Semanas de costos', n[3]);
+        stTile('Proyectos', n[0]) + stTile('Clientes', n[1]) + stTile('Avances publicados', n[2]) +
+        stTile('Semanas de costos', n[3]) + stTile('Notas de obra', n[4]);
     });
   }
   function stTile(k, v) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
@@ -491,6 +502,28 @@
       b.addEventListener('click', function () { KROWS.splice(parseInt(b.dataset.i, 10), 1); renderCostPreview(); });
     });
   }
+  // Interpretar con IA (Claude) — para Excels desordenados
+  $('#k_ai').addEventListener('click', function () {
+    var txt = $('#k_paste').value.trim();
+    if (!txt) { toast('Primero pega el contenido del Excel.', 'err'); return; }
+    var btn = $('#k_ai'); btn.disabled = true; btn.textContent = '✨ Interpretando…';
+    callFn('ai-parse-costs', { text: txt }).then(function (r) {
+      btn.disabled = false; btn.textContent = '✨ Interpretar con IA';
+      var j = r.j || {};
+      if (j.error === 'ia_no_configurada') { toast('Falta la clave de IA (ANTHROPIC_API_KEY) en Supabase.', 'err'); return; }
+      if (!r.ok || !j.items || !j.items.length) { toast(j.error || 'La IA no encontró gastos en ese texto.', 'err'); return; }
+      KROWS = j.items.filter(function (x) { return x && x.concept && !isNaN(Number(x.amount)); })
+        .map(function (x) { return { concept: String(x.concept), amount: Number(x.amount) }; });
+      if (j.week_label) $('#k_label').value = j.week_label;
+      if (j.date_from) $('#k_from').value = j.date_from;
+      if (j.date_to) $('#k_to').value = j.date_to;
+      renderCostPreview();
+      toast('IA lista ✓ ' + KROWS.length + ' conceptos. Revísalos antes de guardar.', 'ok');
+    }).catch(function (e) {
+      btn.disabled = false; btn.textContent = '✨ Interpretar con IA'; toast(String(e), 'err');
+    });
+  });
+
   $('#k_save').addEventListener('click', function () {
     var pid = $('#k_project').value; if (!pid) { toast('Elige una obra.', 'err'); return; }
     var label = $('#k_label').value.trim(); if (!label) { toast('Ponle etiqueta (ej. Semana 78).', 'err'); return; }
@@ -543,6 +576,71 @@
         list.innerHTML = '<li class="muted" style="padding:10px 0">La tabla de costos aún no está en la base de datos.</li>';
       });
   }
+
+  // ══ NOTAS DE CONSTRUCCIÓN ══
+  $('#n_date').value = new Date().toISOString().slice(0, 10);
+  $('#n_project').addEventListener('change', loadNotes);
+  $('#n_save').addEventListener('click', function () {
+    var pid = $('#n_project').value; if (!pid) { toast('Elige una obra.', 'err'); return; }
+    var body = $('#n_body').value.trim(); if (!body) { toast('Escribe la nota.', 'err'); return; }
+    var btn = $('#n_save'); btn.disabled = true; btn.textContent = 'Publicando…';
+    sb.from('project_notes').insert({
+      project_id: pid, note_date: $('#n_date').value || new Date().toISOString().slice(0, 10),
+      title: $('#n_title').value.trim() || null, body: body, created_by: ME.id
+    }).then(function (r) {
+      btn.disabled = false; btn.textContent = 'Publicar nota';
+      if (r.error) { toast(r.error.message, 'err'); return; }
+      notify(pid, 'nota', $('#n_title').value.trim());
+      $('#n_title').value = $('#n_body').value = '';
+      toast('Nota publicada ✓ El cliente ya la ve.', 'ok'); loadNotes(); loadStats();
+    });
+  });
+  function loadNotes() {
+    var pid = $('#n_project').value; var list = $('#n_list');
+    if (!pid) { list.innerHTML = ''; $('#n_count').textContent = ''; return; }
+    sb.from('project_notes').select('*').eq('project_id', pid)
+      .order('note_date', { ascending: false }).order('created_at', { ascending: false })
+      .then(function (r) {
+        var ns = r.data || [];
+        $('#n_count').textContent = ns.length ? ns.length + ' nota' + (ns.length === 1 ? '' : 's') : '';
+        list.innerHTML = '';
+        if (!ns.length) { list.innerHTML = '<li class="muted" style="padding:10px 0">Sin notas aún. Escribe la primera a la izquierda.</li>'; return; }
+        ns.forEach(function (n) {
+          var li = document.createElement('li'); li.className = 'row note-row';
+          li.innerHTML = '<div><div class="t">' + esc(n.title || 'Nota de obra') + '</div>' +
+            '<div class="s">' + fmtDate(n.note_date) + '</div>' +
+            '<div class="body">' + esc(n.body) + '</div></div>';
+          var acts = document.createElement('div'); acts.className = 'acts';
+          var ed = document.createElement('button'); ed.className = 'iconbtn'; ed.title = 'Editar'; ed.textContent = '✎';
+          ed.addEventListener('click', function () { openNoteModal(n); });
+          var del = document.createElement('button'); del.className = 'iconbtn'; del.title = 'Borrar'; del.textContent = '🗑';
+          del.addEventListener('click', function () {
+            if (!confirm('¿Borrar esta nota?')) return;
+            sb.from('project_notes').delete().eq('id', n.id).then(function () { toast('Nota borrada', 'ok'); loadNotes(); loadStats(); });
+          });
+          acts.appendChild(ed); acts.appendChild(del);
+          li.appendChild(acts); list.appendChild(li);
+        });
+      }, function () {
+        list.innerHTML = '<li class="muted" style="padding:10px 0">La tabla de notas aún no está en la base de datos.</li>';
+      });
+  }
+  var NM = null;
+  function openNoteModal(n) {
+    NM = n;
+    $('#nm_date').value = n.note_date; $('#nm_title').value = n.title || ''; $('#nm_body').value = n.body || '';
+    $('#nModal').classList.add('on');
+  }
+  $('#nm_cancel').addEventListener('click', function () { $('#nModal').classList.remove('on'); });
+  $('#nm_save').addEventListener('click', function () {
+    if (!NM) return;
+    sb.from('project_notes').update({
+      note_date: $('#nm_date').value, title: $('#nm_title').value.trim() || null, body: $('#nm_body').value.trim()
+    }).eq('id', NM.id).then(function (r) {
+      if (r.error) { toast(r.error.message, 'err'); return; }
+      $('#nModal').classList.remove('on'); toast('Nota actualizada ✓', 'ok'); loadNotes();
+    });
+  });
 
   // ══ helpers de funciones / correo ══
   function callFn(name, body) {

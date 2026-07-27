@@ -66,19 +66,21 @@
     });
   }
 
-  var D = { proj: null, items: [], weeks: [] };   // estado del dashboard
+  var D = { proj: null, items: [], weeks: [], notes: [] };   // estado del dashboard
 
   function loadAll(pid) {
-    var qWeeks = sb.from('cost_weeks').select('*').eq('project_id', pid).order('created_at', { ascending: false })
-      .then(function (r) { return r.data || []; }, function () { return []; });
+    var soft = function (q) { return q.then(function (r) { return r.data || []; }, function () { return []; }); };
+    var qWeeks = soft(sb.from('cost_weeks').select('*').eq('project_id', pid).order('created_at', { ascending: false }));
+    var qNotes = soft(sb.from('project_notes').select('*').eq('project_id', pid)
+      .order('note_date', { ascending: false }).order('created_at', { ascending: false }));
     Promise.all([
       sb.from('projects').select('*').eq('id', pid).single(),
       sb.from('updates').select('*').eq('project_id', pid).order('date', { ascending: false }).order('created_at', { ascending: false }),
-      qWeeks
+      qWeeks, qNotes
     ]).then(function (res) {
       var proj = res[0].data, ups = res[1].data || [], weeks = res[2] || [];
       if (!proj) { renderMessage('Error', 'No pudimos cargar tu obra. Intenta de nuevo.'); return; }
-      D.proj = proj; D.weeks = weeks;
+      D.proj = proj; D.weeks = weeks; D.notes = res[3] || [];
       var wIds = weeks.map(function (w) { return w.id; });
       var qItems = wIds.length
         ? sb.from('cost_items').select('*').in('week_id', wIds).order('sort', { ascending: true }).then(function (r) { return r.data || []; }, function () { return []; })
@@ -118,6 +120,7 @@
     var proj = D.proj, items = D.items, weeks = D.weeks;
     var totalPhotos = items.reduce(function (n, it) { return n + it.photos.length; }, 0);
     var lastDate = items.length ? fmtDate(items[0].u.date) : null;
+    var prog = Math.max(0, Math.min(100, Number(proj.progress || 0)));
     var html = '<section class="hero-obra">' +
       '<div class="eyebrow">Tu obra con Tierra</div>' +
       '<h1>' + esc(proj.name) + '</h1>' +
@@ -126,21 +129,44 @@
         (proj.location ? '<span>' + esc(proj.location) + '</span>' : '') +
         (items.length ? '<span class="dot"></span><span>' + items.length + ' avance' + (items.length === 1 ? '' : 's') + ' · ' + totalPhotos + ' foto' + (totalPhotos === 1 ? '' : 's') + '</span>' : '') +
         (lastDate ? '<span class="dot"></span><span>Actualizado: ' + lastDate + '</span>' : '') +
-      '</div></section>';
+      '</div>' +
+      (prog > 0 ? '<div class="hprog"><div class="hp-top"><span>Avance de la construcción</span><b>' + prog + '%</b></div>' +
+        '<div class="hp-bar"><i style="width:' + prog + '%"></i></div></div>' : '') +
+      '</section>';
 
-    if (weeks.length) {
-      html += '<div class="pills">' +
-        '<button class="pill-t' + (VIEW === 'avance' ? ' on' : '') + '" data-v="avance">Avance de obra</button>' +
-        '<button class="pill-t' + (VIEW === 'costos' ? ' on' : '') + '" data-v="costos">Costos</button>' +
-        '</div>';
-    }
+    var tabs = [['avance', 'Avance de obra']];
+    if (D.notes.length) tabs.push(['notas', 'Notas de obra']);
+    if (weeks.length) tabs.push(['costos', 'Costos']);
+    if (tabs.length > 1) {
+      if (!tabs.some(function (t) { return t[0] === VIEW; })) VIEW = 'avance';
+      html += '<div class="pills">';
+      tabs.forEach(function (t) {
+        html += '<button class="pill-t' + (VIEW === t[0] ? ' on' : '') + '" data-v="' + t[0] + '">' + t[1] + '</button>';
+      });
+      html += '</div>';
+    } else { VIEW = 'avance'; }
     html += '<div id="view"></div>';
     content.innerHTML = html; show(content);
     content.querySelectorAll('.pill-t').forEach(function (b) {
       b.addEventListener('click', function () { VIEW = b.dataset.v; render(); });
     });
-    if (VIEW === 'costos' && weeks.length) renderCostos();
+    if (VIEW === 'costos') renderCostos();
+    else if (VIEW === 'notas') renderNotas();
     else renderAvance();
+  }
+
+  // ── Vista: notas de construcción ──
+  function renderNotas() {
+    var view = $('#view');
+    var html = '<div class="notes">';
+    D.notes.forEach(function (n, i) {
+      html += '<article class="note-card" style="animation-delay:' + Math.min(i * 80, 460) + 'ms">' +
+        '<div class="nd">' + fmtDate(n.note_date) + '</div>' +
+        (n.title ? '<h3>' + esc(n.title) + '</h3>' : '') +
+        '<p>' + esc(n.body).replace(/\n/g, '<br>') + '</p></article>';
+    });
+    html += '</div><div style="height:60px"></div>';
+    view.innerHTML = html;
   }
 
   // ── Vista: avance ──
