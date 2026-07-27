@@ -110,12 +110,10 @@
  }
 
  /* ---------- El flujo de la conversación ----------
- MAINTENANCE: mientras el asistente con IA no esté conectado (falta la
- ANTHROPIC_API_KEY en Netlify), el chat completo muestra un aviso de
- mantenimiento formal y deriva a WhatsApp. Al activar la IA: poner
- MAINTENANCE en false y AI_ENABLED en true. El flujo guiado queda
- intacto debajo, listo para reactivarse. */
- var MAINTENANCE = true;
+ El recorrido guiado funciona siempre (no depende de la IA): califica al
+ prospecto, capta sus datos y ofrece WhatsApp. MAINTENANCE solo se pone en
+ true si hiciera falta apagar el chat por completo. */
+ var MAINTENANCE = false;
 
  function startFlow() {
  if (MAINTENANCE) { maintenanceFlow(); return; }
@@ -152,13 +150,13 @@
  });
  }
 
- /* ---------- Modo IA real (Netlify Function + Claude) ----------
- AI_ENABLED: poner en true cuando el backend esté desplegado en Netlify
- con la variable ANTHROPIC_API_KEY configurada. Mientras esté en false,
- el chat muestra un aviso de mantenimiento elegante y sigue captando
- leads por WhatsApp y el recorrido guiado. */
- var AI_ENABLED = false;
- var AI_ENDPOINT = '/.netlify/functions/chat';
+ /* ---------- Modo IA real (Edge Function de Supabase + Claude) ----------
+ Si la función todavía no está desplegada o falta la ANTHROPIC_API_KEY,
+ la petición falla y aiFallback() deriva al visitante a WhatsApp con su
+ pregunta ya escrita: nunca se queda sin respuesta. */
+ var AI_ENABLED = true;
+ var AI_ENDPOINT = 'https://hgdccmkpepjcmrrnpdms.supabase.co/functions/v1/ai-sales';
+ var AI_KEY = 'sb_publishable_qp0nJ5AWwCFgekGkG01cEg_XQ4sP66m';
  var aiHistory = [];
  var aiTurns = 0;
 
@@ -210,7 +208,7 @@
 
  fetch(AI_ENDPOINT, {
  method: 'POST',
- headers: { 'Content-Type': 'application/json' },
+ headers: { 'Content-Type': 'application/json', 'apikey': AI_KEY, 'Authorization': 'Bearer ' + AI_KEY },
  body: JSON.stringify({ messages: aiHistory }),
  signal: ctrl ? ctrl.signal : undefined
  })
