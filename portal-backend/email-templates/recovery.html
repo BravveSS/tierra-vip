@@ -1,9 +1,11 @@
 <!-- Supabase → Authentication → Emails → Templates → "Reset Password"
      Asunto: Restablece tu contraseña — Tierra Desarrollos
      NO quites {{ .ConfirmationURL }}: es lo que genera el enlace de un solo uso. -->
-<!-- El logo es blanco sobre transparente. Los bgcolor= van además del CSS a
-     propósito: hay clientes que descartan el style pero respetan el atributo, y
-     sin fondo oscuro el logo quedaría blanco sobre blanco. -->
+<!-- El logo del sitio es blanco sobre transparente: si un cliente de correo
+     descarta el fondo, quedaría blanco sobre blanco. Por eso aquí se usa
+     tierra-logo-email.png, que lleva el verde #122019 pegado en el propio PNG y
+     se ve igual pase lo que pase. Los bgcolor= se quedan de todos modos para
+     que la tarjeta no salga blanca. -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#080706" style="background:#080706;margin:0;padding:32px 12px">
   <tr>
     <td align="center" bgcolor="#080706" style="background:#080706">
@@ -11,7 +13,7 @@
         <tr>
           <td bgcolor="#122019" style="padding:34px 32px 8px;text-align:center;background:#122019">
             <a href="https://tierra.vip" style="text-decoration:none">
-              <img src="https://tierra.vip/assets/img/brand/tierra-logo.png" width="82" height="103" alt="Tierra Desarrollos"
+              <img src="https://tierra.vip/assets/img/brand/tierra-logo-email.png" width="82" height="103" alt="Tierra Desarrollos"
                    style="display:block;margin:0 auto;width:82px;max-width:82px;height:auto;border:0;outline:none;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:.24em;color:#C9A96E">
             </a>
             <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,238,228,.45);margin-top:14px">Desarrollo y Construcción · Costa de Oaxaca</div>
