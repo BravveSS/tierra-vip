@@ -8,19 +8,19 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=1">
+<link rel="stylesheet" href="assets/portal.css?v=3">
 </head>
 <body>
 <div class="wrap">
   <div class="pt-top">
     <a href="index.html"><img src="assets/img/brand/tierra-logo.png" alt="Tierra Desarrollos"></a>
     <div class="rt">
-      <span id="whoami" class="muted"></span>
+      <div class="who hidden" id="whoBox"><div class="avatar" id="avatar">·</div><span id="whoami" class="muted"></span></div>
       <button id="logout" class="btn ghost sm hidden">Salir</button>
     </div>
   </div>
 
-  <!-- LOGIN admin (Google) -->
+  <!-- LOGIN admin -->
   <section id="login" class="login hidden">
     <div class="card">
       <h1>Panel de administración</h1>
@@ -33,7 +33,7 @@
       <form id="adminEmailForm">
         <div class="field"><label>Correo</label><input type="email" id="ae_email" autocomplete="email"></div>
         <div class="field"><label>Contraseña</label><input type="password" id="ae_pass" autocomplete="current-password"></div>
-        <button class="btn ghost" style="width:100%" type="submit" id="ae_btn">Entrar</button>
+        <button class="btn ghost block" type="submit" id="ae_btn">Entrar</button>
       </form>
       <div class="msg err" id="loginMsg"></div>
     </div>
@@ -43,22 +43,98 @@
 
   <!-- PANEL -->
   <main id="panel" class="hidden">
+    <div class="stats-row" id="statsRow" style="margin-top:24px"></div>
     <div class="tabs">
-      <div class="tab on" data-tab="obras">Proyectos</div>
-      <div class="tab" data-tab="avances">Avances</div>
+      <div class="tab on" data-tab="avances">Avances</div>
+      <div class="tab" data-tab="costos">Costos</div>
+      <div class="tab" data-tab="obras">Proyectos</div>
       <div class="tab" data-tab="clientes">Clientes</div>
       <div class="tab hidden" data-tab="admins" id="tabAdmins">Admins</div>
     </div>
 
+    <!-- AVANCES -->
+    <section class="panel on" data-panel="avances">
+      <div class="ctxbar">
+        <label>Obra</label>
+        <select id="a_project"></select>
+        <span class="muted" id="a_count" style="font-size:13px"></span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h2>Publicar avance</h2>
+          <div class="hint">Sube las fotos del día: el cliente las verá al instante en su portal.</div>
+          <div class="two">
+            <div class="field"><label>Fecha</label><input type="date" id="a_date"></div>
+            <div class="field"><label>Título (opcional)</label><input id="a_title" placeholder="Semana 3 · Cimentación"></div>
+          </div>
+          <div class="field"><label>Nota (opcional)</label><textarea id="a_note" placeholder="Se terminó el colado de la losa de planta baja…"></textarea></div>
+          <div class="dz" id="dz">
+            <div class="ic">⇪</div>
+            <div><b>Arrastra las fotos aquí</b> o toca para elegirlas</div>
+            <div class="muted" style="font-size:12px;margin-top:4px">Se optimizan solas antes de subir</div>
+            <input type="file" id="a_files" accept="image/*" multiple>
+          </div>
+          <div class="thumbs" id="a_prev"></div>
+          <div class="uprog" id="a_prog"><i></i></div>
+          <button class="btn block" id="a_publish" style="margin-top:16px">Publicar avance</button>
+          <div class="msg" id="a_msg"></div>
+        </div>
+        <div class="box">
+          <h2>Avances publicados</h2>
+          <div class="hint">Pasa el mouse sobre una foto para eliminarla. Puedes editar o borrar cada avance.</div>
+          <div id="a_list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COSTOS -->
+    <section class="panel" data-panel="costos">
+      <div class="ctxbar">
+        <label>Obra</label>
+        <select id="k_project"></select>
+        <span class="muted" id="k_count" style="font-size:13px"></span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h2>Registrar semana de costos</h2>
+          <div class="hint">Copia las celdas de tu Excel y pégalas abajo (o sube el archivo .xlsx). Detecto conceptos y montos solos.</div>
+          <div class="two">
+            <div class="field"><label>Etiqueta</label><input id="k_label" placeholder="Semana 78"></div>
+            <div class="field"><label>&nbsp;</label>
+              <button class="btn ghost block" id="k_file_btn" type="button">Subir Excel (.xlsx/.csv)</button>
+              <input type="file" id="k_file" accept=".xlsx,.xls,.csv" style="display:none">
+            </div>
+          </div>
+          <div class="two">
+            <div class="field"><label>Del</label><input type="date" id="k_from"></div>
+            <div class="field"><label>Al</label><input type="date" id="k_to"></div>
+          </div>
+          <div class="field"><label>Pega aquí tu Excel</label>
+            <textarea id="k_paste" style="min-height:120px" placeholder="4 Maestros&#9;$23,200&#10;3 Ayudantes&#9;$10,350&#10;…"></textarea>
+            <div class="paste-hint">Tip: en Excel selecciona las dos columnas (Descripción y Coste), copia (Ctrl+C) y pega aquí (Ctrl+V).</div>
+          </div>
+          <div class="cost-preview" id="k_prev"></div>
+          <button class="btn block" id="k_save" style="margin-top:14px">Guardar semana</button>
+          <div class="msg" id="k_msg"></div>
+        </div>
+        <div class="box">
+          <h2>Semanas registradas</h2>
+          <div class="hint">El cliente las ve en su dashboard con gráfica y desglose.</div>
+          <ul class="list" id="k_list"></ul>
+        </div>
+      </div>
+    </section>
+
     <!-- PROYECTOS -->
-    <section class="panel on" data-panel="obras">
+    <section class="panel" data-panel="obras">
       <div class="grid2">
         <div class="box">
           <h2>Nuevo proyecto</h2>
+          <div class="hint">Una obra por cliente. Después créale su cuenta en la pestaña Clientes.</div>
           <div class="field"><label>Nombre de la obra</label><input id="p_name" placeholder="Casa Yuu'Kee — Familia López"></div>
           <div class="field"><label>Cliente</label><input id="p_client" placeholder="Familia López"></div>
           <div class="field"><label>Ubicación</label><input id="p_loc" placeholder="La Boquilla, Oaxaca"></div>
-          <button class="btn" id="p_create">Crear proyecto</button>
+          <button class="btn block" id="p_create">Crear proyecto</button>
           <div class="msg" id="p_msg"></div>
         </div>
         <div class="box">
@@ -68,42 +144,25 @@
       </div>
     </section>
 
-    <!-- AVANCES -->
-    <section class="panel" data-panel="avances">
-      <div class="selectbar">
-        <label class="muted" style="font-size:13px">Obra:</label>
-        <select id="a_project" class="field" style="max-width:340px;margin:0"></select>
-      </div>
-      <div class="grid2">
-        <div class="box">
-          <h2>Publicar avance</h2>
-          <div class="field"><label>Fecha</label><input type="date" id="a_date"></div>
-          <div class="field"><label>Título (opcional)</label><input id="a_title" placeholder="Semana 3 · Cimentación"></div>
-          <div class="field"><label>Nota (opcional)</label><textarea id="a_note" placeholder="Se terminó el colado de la losa de planta baja…"></textarea></div>
-          <div class="field"><label>Fotos</label><input type="file" id="a_files" accept="image/*" multiple></div>
-          <div class="upload-prev" id="a_prev"></div>
-          <button class="btn" id="a_publish" style="margin-top:14px">Publicar avance</button>
-          <div class="msg" id="a_msg"></div>
-        </div>
-        <div class="box">
-          <h2>Avances publicados</h2>
-          <ul class="list" id="a_list"></ul>
-        </div>
-      </div>
-    </section>
-
     <!-- CLIENTES -->
     <section class="panel" data-panel="clientes">
       <div class="grid2">
         <div class="box">
           <h2>Crear cuenta de cliente</h2>
-          <div class="field"><label>Obra a la que pertenece</label><select id="c_project" class="field" style="margin:0"></select></div>
+          <div class="hint">El cliente entrará en <b>tierra.vip/portal</b> con estas credenciales.</div>
+          <div class="field"><label>Obra a la que pertenece</label><select id="c_project"></select></div>
           <div class="field"><label>Nombre del cliente</label><input id="c_name" placeholder="Juan López"></div>
           <div class="field"><label>Correo</label><input type="email" id="c_email" placeholder="cliente@correo.com"></div>
-          <div class="field"><label>Contraseña temporal</label><input id="c_pass" placeholder="mínimo 8 caracteres"></div>
-          <button class="btn" id="c_create">Crear cuenta</button>
+          <div class="field"><label>Contraseña temporal
+            <a href="#" id="c_gen" style="float:right;font-size:11px;letter-spacing:.06em">Generar segura</a></label>
+            <input id="c_pass" placeholder="mínimo 8 caracteres"></div>
+          <button class="btn block" id="c_create">Crear cuenta</button>
           <div class="msg" id="c_msg"></div>
-          <p class="muted" style="font-size:12px;margin-top:12px">Comparte el correo y la contraseña con tu cliente. Podrá entrar en <b>tierra.vip/portal</b>.</p>
+          <div class="cred" id="c_cred">
+            <div>✅ Cuenta creada. Comparte esto con tu cliente:</div>
+            <div style="margin-top:8px">Portal: <code>tierra.vip/portal</code><br>Correo: <code id="cr_email"></code><br>Contraseña: <code id="cr_pass"></code></div>
+            <button class="btn tiny ghost" id="cr_copy">Copiar mensaje para WhatsApp</button>
+          </div>
         </div>
         <div class="box">
           <h2>Clientes</h2>
@@ -117,9 +176,9 @@
       <div class="grid2">
         <div class="box">
           <h2>Autorizar administrador</h2>
-          <p class="muted" style="font-size:13px;margin-bottom:14px">Agrega el correo de Google de quien quieras que administre. Entrará al panel con ese Google.</p>
-          <div class="field"><label>Correo de Google</label><input type="email" id="ad_email" placeholder="persona@gmail.com"></div>
-          <button class="btn" id="ad_add">Autorizar</button>
+          <div class="hint">Agrega el correo de quien quieras que administre (Google o correo+contraseña). Solo tú puedes gestionar esta lista.</div>
+          <div class="field"><label>Correo</label><input type="email" id="ad_email" placeholder="persona@gmail.com"></div>
+          <button class="btn block" id="ad_add">Autorizar</button>
           <div class="msg" id="ad_msg"></div>
         </div>
         <div class="box">
@@ -131,8 +190,47 @@
   </main>
 </div>
 
+<!-- Modal editar proyecto -->
+<div class="modal" id="pModal">
+  <div class="card">
+    <h2>Editar proyecto</h2>
+    <div class="field"><label>Nombre</label><input id="pm_name"></div>
+    <div class="field"><label>Cliente</label><input id="pm_client"></div>
+    <div class="field"><label>Ubicación</label><input id="pm_loc"></div>
+    <div class="field"><label>Estado</label>
+      <select id="pm_status">
+        <option value="en_progreso">En progreso</option>
+        <option value="entregada">Entregada</option>
+        <option value="pausada">En pausa</option>
+      </select>
+    </div>
+    <div class="field"><label>Presupuesto total (MXN, opcional)</label><input type="number" id="pm_budget" placeholder="2500000"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn ghost sm" id="pm_cancel">Cancelar</button>
+      <button class="btn sm" id="pm_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal editar avance -->
+<div class="modal" id="aModal">
+  <div class="card">
+    <h2>Editar avance</h2>
+    <div class="field"><label>Fecha</label><input type="date" id="am_date"></div>
+    <div class="field"><label>Título</label><input id="am_title"></div>
+    <div class="field"><label>Nota</label><textarea id="am_note"></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn ghost sm" id="am_cancel">Cancelar</button>
+      <button class="btn sm" id="am_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=2"></script>
+<script src="assets/admin.js?v=4"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=1">
+<link rel="stylesheet" href="assets/portal.css?v=3">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
   <div class="pt-top">
     <a href="index.html"><img src="assets/img/brand/tierra-logo.png" alt="Tierra Desarrollos"></a>
     <div class="rt">
-      <span id="whoami" class="muted"></span>
+      <div class="who hidden" id="whoBox"><div class="avatar" id="avatar">·</div><span id="whoami" class="muted"></span></div>
       <button id="logout" class="btn ghost sm hidden">Salir</button>
     </div>
   </div>
@@ -35,13 +35,12 @@
           <label>Contraseña</label>
           <input type="password" id="password" autocomplete="current-password" required>
         </div>
-        <button class="btn" style="width:100%" type="submit" id="loginBtn">Entrar</button>
+        <button class="btn block" type="submit" id="loginBtn">Entrar</button>
         <div class="msg err" id="loginMsg"></div>
       </form>
     </div>
   </section>
 
-  <!-- LOADING -->
   <div id="loading" class="spinner"></div>
 
   <!-- CONTENIDO (cliente) -->
@@ -51,13 +50,17 @@
 <!-- Lightbox -->
 <div id="lb">
   <button class="x" aria-label="Cerrar">&#x2715;</button>
+  <a class="dl" id="lbdl" download target="_blank" rel="noopener">Descargar ↓</a>
   <button class="nav prev" aria-label="Anterior">&#8249;</button>
   <img id="lbimg" src="" alt="">
   <button class="nav next" aria-label="Siguiente">&#8250;</button>
+  <div class="cnt" id="lbcnt"></div>
 </div>
+
+<div id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/portal.js?v=1"></script>
+<script src="assets/portal.js?v=3"></script>
 </body>
 </html>
