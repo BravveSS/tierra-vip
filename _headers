@@ -41,3 +41,15 @@
 
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
+
+/terrenos-en-mazunte
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terrenos-en-mazunte.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/construir-en-la-costa-de-oaxaca
+  Cache-Control: public, max-age=0, must-revalidate
+
+/construir-en-la-costa-de-oaxaca.html
+  Cache-Control: public, max-age=0, must-revalidate

@@ -59,14 +59,21 @@
     const data = LOTES[host.dataset.lotes];
     if (!data) return;
     const total = data.lotes.length;
-    const disp = data.lotes.filter(l => typeof l.e === 'number').length;
+    const libres = data.lotes.filter(l => typeof l.e === 'number');
+    const disp = libres.length;
+    const precios = libres.map(l => l.e);
+    const porM2 = libres.map(l => l.e / l.m2);
 
     const wrap = document.createElement('div');
     wrap.className = 'lt';
 
     // resumen + filtro
     const head = document.createElement('div'); head.className = 'lt-head';
-    head.innerHTML = '<div class="lt-sum"><b>' + disp + '</b> ' + T('lotes disponibles de','lots available of') + ' ' + total + '</div>';
+    // El resumen incluye el precio de entrada: es lo primero que busca quien llega
+    // desde Google ("terrenos en Mazunte precio") y evita que tenga que sumar solo.
+    head.innerHTML = '<div class="lt-sum"><b>' + disp + '</b> ' + T('lotes disponibles de','lots available of') + ' ' + total
+      + (disp ? '<span class="lt-desde">' + T('desde','from') + ' <b>' + fmt(Math.min.apply(null, precios)) + ' MXN</b>'
+                + ' · ' + fmt(Math.min.apply(null, porM2)) + '/m²</span>' : '') + '</div>';
     const filt = document.createElement('div'); filt.className = 'lt-filt';
     const bAll = document.createElement('button'); bAll.textContent = T('Todos','All'); bAll.className = 'on';
     const bDisp = document.createElement('button'); bDisp.textContent = T('Disponibles','Available');
@@ -127,5 +134,25 @@
     // El host nace vacío (altura 0) y el IntersectionObserver de .reveal nunca
     // dispara sobre elementos sin área → el mapa quedaba invisible. Se revela solo.
     host.classList.add('in');
+
+    // Los datos estructurados de la página traen los precios escritos a mano para
+    // que un buscador que no ejecute JS los lea igual. Aquí los recalculamos desde
+    // esta misma lista: si Tomás vende un lote y solo edita este archivo, el
+    // AggregateOffer se corrige solo y nunca queda un precio viejo publicado.
+    sincronizarLD(disp, precios);
   });
+
+  function sincronizarLD(disp, precios){
+    const tag = document.querySelector('script[type="application/ld+json"][data-lotes-ld]');
+    if (!tag || !disp) return;
+    try {
+      const ld = JSON.parse(tag.textContent);
+      const of = ld && ld.offers;
+      if (!of || of['@type'] !== 'AggregateOffer') return;
+      of.lowPrice = String(Math.round(Math.min.apply(null, precios)));
+      of.highPrice = String(Math.round(Math.max.apply(null, precios)));
+      of.offerCount = disp;
+      tag.textContent = JSON.stringify(ld);
+    } catch (_e) { /* si el JSON no se puede leer, se queda el estático */ }
+  }
 })();

@@ -180,6 +180,28 @@ section{position:relative}
   .vis-tab,.btn{min-height:46px}
 }
 
+/* ── GUÍAS (páginas de contenido largo: precios, construcción) ── */
+.gp{max-width:760px}
+.gp h3{font-family:var(--fh);font-weight:400;font-size:clamp(22px,3vw,30px);color:var(--cream);margin:52px 0 14px;line-height:1.25}
+.gp h3:first-child{margin-top:0}
+.gp p{font-family:var(--fb);font-weight:300;font-size:15.5px;line-height:1.85;color:rgba(242,238,228,.62);margin-bottom:16px}
+.gp p strong,.gp li strong{color:rgba(242,238,228,.9);font-weight:500}
+.gp ul{list-style:none;margin:8px 0 20px}
+.gp ul li{font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.75;color:rgba(242,238,228,.62);padding:9px 0 9px 22px;position:relative;border-top:1px solid rgba(201,169,110,.12)}
+.gp ul li::before{content:'◆';position:absolute;left:0;top:12px;color:var(--gold);font-size:8px}
+.gp a{color:var(--gold);border-bottom:1px solid rgba(201,169,110,.35)}
+.gp a:hover{color:var(--gold-hi)}
+.gnote{border-left:2px solid var(--gold);padding:4px 0 4px 20px;margin:26px 0}
+.gnote p{margin-bottom:0;font-style:italic;color:rgba(242,238,228,.72)}
+.gtab-w{overflow-x:auto;margin:26px 0 8px;-webkit-overflow-scrolling:touch}
+.gtab{width:100%;min-width:520px;border-collapse:collapse;font-family:var(--fb)}
+.gtab th{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-align:left;font-weight:500;padding:0 18px 12px 0;border-bottom:1px solid rgba(201,169,110,.3)}
+.gtab td{font-size:14px;font-weight:300;color:rgba(242,238,228,.7);padding:15px 18px 15px 0;border-bottom:1px solid rgba(201,169,110,.12);vertical-align:top}
+.gtab td:first-child{color:var(--cream)}
+.gtab td b{font-weight:500;color:var(--gold)}
+.gcap{font-family:var(--fb);font-size:12px;line-height:1.7;color:rgba(242,238,228,.42);margin-top:12px}
+@media(max-width:860px){.gp h3{margin-top:40px}}
+
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
@@ -254,6 +276,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .lt-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:10px}
 .lt-sum{font-family:var(--fb);font-size:14px;color:rgba(242,238,228,.7)}
 .lt-sum b{font-family:var(--fh);font-size:28px;color:var(--gold);font-weight:400;margin-right:5px}
+.lt-desde{display:block;margin-top:3px;font-size:13px;color:rgba(242,238,228,.55)}
+.lt-desde b{font-family:var(--fb);font-size:13px;font-weight:500;color:var(--gold);margin-right:0}
 .lt-filt{display:flex;gap:8px}
 .lt-filt button{font-family:var(--fb);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border:1px solid rgba(201,169,110,.4);border-radius:20px;color:rgba(242,238,228,.7);background:none;cursor:pointer;transition:all .25s}
 .lt-filt button.on{background:var(--gold);color:var(--black);border-color:var(--gold)}
