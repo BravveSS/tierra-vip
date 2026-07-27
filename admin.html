@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=4">
+<link rel="stylesheet" href="assets/portal.css?v=5">
 </head>
 <body>
 <div class="wrap">
@@ -47,6 +47,7 @@
     <div class="tabs">
       <div class="tab on" data-tab="avances">Avances</div>
       <div class="tab" data-tab="costos">Costos</div>
+      <div class="tab" data-tab="notas">Notas</div>
       <div class="tab" data-tab="obras">Proyectos</div>
       <div class="tab" data-tab="clientes">Clientes</div>
       <div class="tab hidden" data-tab="admins" id="tabAdmins">Admins</div>
@@ -113,6 +114,8 @@
             <textarea id="k_paste" style="min-height:120px" placeholder="4 Maestros&#9;$23,200&#10;3 Ayudantes&#9;$10,350&#10;…"></textarea>
             <div class="paste-hint">Tip: en Excel selecciona las dos columnas (Descripción y Coste), copia (Ctrl+C) y pega aquí (Ctrl+V).</div>
           </div>
+          <button class="btn ghost block ai-btn" id="k_ai" type="button">✨ Interpretar con IA</button>
+          <div class="ai-note">Si el Excel viene desordenado, la IA lo acomoda sola: detecta conceptos, montos, semana y fechas.</div>
           <div class="cost-preview" id="k_prev"></div>
           <button class="btn block" id="k_save" style="margin-top:14px">Guardar semana</button>
           <div class="msg" id="k_msg"></div>
@@ -121,6 +124,35 @@
           <h2>Semanas registradas</h2>
           <div class="hint">El cliente las ve en su dashboard con gráfica y desglose.</div>
           <ul class="list" id="k_list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTAS DE CONSTRUCCIÓN -->
+    <section class="panel" data-panel="notas">
+      <div class="ctxbar">
+        <label>Obra</label>
+        <select id="n_project"></select>
+        <span class="muted" id="n_count" style="font-size:13px"></span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h2>Escribir nota de obra</h2>
+          <div class="hint">Para lo que no se ve en las fotos: materiales, decisiones, pendientes, entregas. El cliente la lee en su portal.</div>
+          <div class="two">
+            <div class="field"><label>Fecha</label><input type="date" id="n_date"></div>
+            <div class="field"><label>Título (opcional)</label><input id="n_title" placeholder="Llegó el acero de la losa"></div>
+          </div>
+          <div class="field"><label>Nota</label>
+            <textarea id="n_body" style="min-height:150px" placeholder="Esta semana se colocó la impermeabilización de la azotea y llegaron los muebles de baño…"></textarea>
+          </div>
+          <button class="btn block" id="n_save">Publicar nota</button>
+          <div class="msg" id="n_msg"></div>
+        </div>
+        <div class="box">
+          <h2>Notas publicadas</h2>
+          <div class="hint">Puedes editarlas o borrarlas cuando quieras.</div>
+          <ul class="list" id="n_list"></ul>
         </div>
       </div>
     </section>
@@ -204,10 +236,27 @@
         <option value="pausada">En pausa</option>
       </select>
     </div>
-    <div class="field"><label>Presupuesto total (MXN, opcional)</label><input type="number" id="pm_budget" placeholder="2500000"></div>
+    <div class="two">
+      <div class="field"><label>Presupuesto total (MXN, opcional)</label><input type="number" id="pm_budget" placeholder="2500000"></div>
+      <div class="field"><label>Avance de obra (%)</label><input type="number" id="pm_progress" min="0" max="100" placeholder="0"></div>
+    </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
       <button class="btn ghost sm" id="pm_cancel">Cancelar</button>
       <button class="btn sm" id="pm_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal editar nota -->
+<div class="modal" id="nModal">
+  <div class="card">
+    <h2>Editar nota</h2>
+    <div class="field"><label>Fecha</label><input type="date" id="nm_date"></div>
+    <div class="field"><label>Título</label><input id="nm_title"></div>
+    <div class="field"><label>Nota</label><textarea id="nm_body" style="min-height:140px"></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn ghost sm" id="nm_cancel">Cancelar</button>
+      <button class="btn sm" id="nm_save">Guardar</button>
     </div>
   </div>
 </div>
@@ -231,6 +280,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=4"></script>
+<script src="assets/admin.js?v=5"></script>
 </body>
 </html>
