@@ -1,26 +1,59 @@
 <!-- Supabase → Authentication → Emails → Templates → "Reset Password"
      Asunto: Restablece tu contraseña — Tierra Desarrollos
-     NO quites {{ .ConfirmationURL }}: es lo que genera el enlace de un solo uso. -->
-<!-- El logo del sitio es blanco sobre transparente: si un cliente de correo
-     descarta el fondo, quedaría blanco sobre blanco. Por eso aquí se usa
-     logo-correo.png, que lleva el verde #122019 pegado en el propio PNG y
-     se ve igual pase lo que pase. Los bgcolor= se quedan de todos modos para
-     que la tarjeta no salga blanca. -->
+     NO quites {{ .ConfirmationURL }}: es lo que genera el enlace de un solo uso.
+
+     El logo va DIBUJADO con tablas y texto, sin ninguna <img>. Es la única
+     forma de que se vea siempre: Gmail y Outlook bloquean las imágenes de un
+     remitente que aún no es de confianza, y aquí no se puede incrustar el PNG
+     como en el correo de avances porque esta plantilla la envía Supabase y no
+     admite adjuntos. Sin imagen no hay nada que bloquear.
+
+     El árbol se compone con celdas: una copa de rombos (◆) sobre un tronco de
+     1px. Se ve idéntico en cualquier cliente porque son caracteres y bordes,
+     no gráficos. -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#080706" style="background:#080706;margin:0;padding:32px 12px">
   <tr>
     <td align="center" bgcolor="#080706" style="background:#080706">
       <table width="520" cellpadding="0" cellspacing="0" border="0" bgcolor="#122019" style="max-width:520px;width:100%;background:#122019;border-radius:12px">
+
+        <!-- ══ LOGO DIBUJADO ══ -->
         <tr>
-          <td bgcolor="#122019" style="padding:34px 32px 8px;text-align:center;background:#122019">
-            <a href="https://tierra.vip" style="text-decoration:none">
-              <img src="https://tierra.vip/assets/img/brand/logo-correo.png" width="82" height="103" alt="Tierra Desarrollos"
-                   style="display:block;margin:0 auto;width:82px;max-width:82px;height:auto;border:0;outline:none;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:.24em;color:#C9A96E">
-            </a>
-            <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,238,228,.45);margin-top:14px">Desarrollo y Construcción · Costa de Oaxaca</div>
+          <td bgcolor="#122019" align="center" style="padding:38px 32px 0;text-align:center;background:#122019">
+            <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto">
+              <!-- copa del árbol -->
+              <tr>
+                <td align="center" style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:15px;color:#C9A96E;padding-bottom:2px">&#9670;</td>
+              </tr>
+              <tr>
+                <td align="center" style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:16px;color:#C9A96E;letter-spacing:3px;padding-bottom:2px">&#9670;&#9670;&#9670;</td>
+              </tr>
+              <tr>
+                <td align="center" style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:16px;color:#C9A96E;letter-spacing:3px">&#9670;&#9670;&#9670;&#9670;&#9670;</td>
+              </tr>
+              <!-- tronco -->
+              <tr>
+                <td align="center" style="padding:3px 0 0">
+                  <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto">
+                    <tr><td width="2" bgcolor="#C9A96E" style="width:2px;height:16px;line-height:16px;font-size:0;background:#C9A96E">&nbsp;</td></tr>
+                  </table>
+                </td>
+              </tr>
+              <!-- suelo -->
+              <tr>
+                <td align="center" style="padding:4px 0 0">
+                  <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto">
+                    <tr><td width="46" bgcolor="#C9A96E" style="width:46px;height:1px;line-height:1px;font-size:0;background:#C9A96E">&nbsp;</td></tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:27px;letter-spacing:.30em;color:#F2EEE4;padding:16px 0 0;text-indent:.30em">TIERRA</div>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:.30em;text-transform:uppercase;color:rgba(201,169,110,.75);padding-top:7px;text-indent:.30em">Lifestyle Developments</div>
           </td>
         </tr>
+
         <tr>
-          <td style="padding:26px 32px 0">
+          <td style="padding:28px 32px 0">
             <div style="height:1px;background:#C9A96E;opacity:.28;line-height:1px;font-size:0">&nbsp;</div>
           </td>
         </tr>
