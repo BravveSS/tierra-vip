@@ -2,98 +2,88 @@
      Asunto: Restablece tu contraseña — Tierra Desarrollos
      NO quites {{ .ConfirmationURL }}: es lo que genera el enlace de un solo uso.
 
-     El logo va DIBUJADO con tablas y texto, sin ninguna <img>. Es la única
-     forma de que se vea siempre: Gmail y Outlook bloquean las imágenes de un
-     remitente que aún no es de confianza, y aquí no se puede incrustar el PNG
-     como en el correo de avances porque esta plantilla la envía Supabase y no
-     admite adjuntos. Sin imagen no hay nada que bloquear.
+     El logo es email-logo-tierra.png, con el verde #122019 ya compuesto dentro
+     del PNG (el logo del sitio es blanco sobre transparente y desaparecería si
+     un cliente descarta el fondo). Se sirve a 220x277 y se muestra a 110, para
+     que salga nítido en pantallas retina.
 
-     El árbol se compone con celdas: una copa de rombos (◆) sobre un tronco de
-     1px. Se ve idéntico en cualquier cliente porque son caracteres y bordes,
-     no gráficos. -->
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#080706" style="background:#080706;margin:0;padding:32px 12px">
+     Si alguna vez hay que cambiar la imagen, usar un NOMBRE DE ARCHIVO NUEVO:
+     /assets/* va con cache immutable a 30 días y una URL que se pidió antes de
+     existir se queda cacheada devolviendo la portada del sitio. -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#080706" style="background:#080706;margin:0;padding:40px 12px">
   <tr>
     <td align="center" bgcolor="#080706" style="background:#080706">
-      <table width="520" cellpadding="0" cellspacing="0" border="0" bgcolor="#122019" style="max-width:520px;width:100%;background:#122019;border-radius:12px">
+      <table width="520" cellpadding="0" cellspacing="0" border="0" bgcolor="#122019" style="max-width:520px;width:100%;background:#122019;border-radius:14px">
 
-        <!-- ══ LOGO DIBUJADO ══ -->
         <tr>
-          <td bgcolor="#122019" align="center" style="padding:38px 32px 0;text-align:center;background:#122019">
-            <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto">
-              <!-- copa del árbol -->
+          <td bgcolor="#122019" align="center" style="padding:44px 32px 0;text-align:center;background:#122019">
+            <a href="https://tierra.vip" style="text-decoration:none;border:0">
+              <img src="https://tierra.vip/assets/img/brand/email-logo-tierra.png" width="110" height="139" alt="Tierra Desarrollos"
+                   style="display:block;margin:0 auto;width:110px;max-width:110px;height:auto;border:0;outline:none;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:.28em;color:#C9A96E">
+            </a>
+          </td>
+        </tr>
+
+        <!-- separador: hairline dorado con un rombo al centro -->
+        <tr>
+          <td align="center" style="padding:30px 32px 0">
+            <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="margin:0 auto">
               <tr>
-                <td align="center" style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:15px;color:#C9A96E;padding-bottom:2px">&#9670;</td>
-              </tr>
-              <tr>
-                <td align="center" style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:16px;color:#C9A96E;letter-spacing:3px;padding-bottom:2px">&#9670;&#9670;&#9670;</td>
-              </tr>
-              <tr>
-                <td align="center" style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:16px;color:#C9A96E;letter-spacing:3px">&#9670;&#9670;&#9670;&#9670;&#9670;</td>
-              </tr>
-              <!-- tronco -->
-              <tr>
-                <td align="center" style="padding:3px 0 0">
-                  <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto">
-                    <tr><td width="2" bgcolor="#C9A96E" style="width:2px;height:16px;line-height:16px;font-size:0;background:#C9A96E">&nbsp;</td></tr>
-                  </table>
-                </td>
-              </tr>
-              <!-- suelo -->
-              <tr>
-                <td align="center" style="padding:4px 0 0">
-                  <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto">
-                    <tr><td width="46" bgcolor="#C9A96E" style="width:46px;height:1px;line-height:1px;font-size:0;background:#C9A96E">&nbsp;</td></tr>
-                  </table>
-                </td>
+                <td style="height:1px;line-height:1px;font-size:0;background:#C9A96E;opacity:.22">&nbsp;</td>
+                <td width="34" align="center" style="width:34px;font-family:Georgia,'Times New Roman',serif;font-size:8px;line-height:8px;color:#C9A96E">&#9670;</td>
+                <td style="height:1px;line-height:1px;font-size:0;background:#C9A96E;opacity:.22">&nbsp;</td>
               </tr>
             </table>
-            <div style="font-family:Georgia,'Times New Roman',serif;font-size:27px;letter-spacing:.30em;color:#F2EEE4;padding:16px 0 0;text-indent:.30em">TIERRA</div>
-            <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:.30em;text-transform:uppercase;color:rgba(201,169,110,.75);padding-top:7px;text-indent:.30em">Lifestyle Developments</div>
           </td>
         </tr>
 
         <tr>
-          <td style="padding:28px 32px 0">
-            <div style="height:1px;background:#C9A96E;opacity:.28;line-height:1px;font-size:0">&nbsp;</div>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:30px 32px 0">
-            <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:27px;line-height:1.25;color:#F2EEE4;margin:0">Restablece tu contraseña</h1>
-            <p style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.75;color:#d9d4c7;margin:18px 0 0">
+          <td style="padding:32px 40px 0">
+            <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:30px;line-height:1.2;color:#F2EEE4;margin:0;letter-spacing:-.01em">Restablece tu contraseña</h1>
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.8;color:#c9c4b6;margin:20px 0 0">
               Pediste una contraseña nueva para entrar al portal de tu obra. Toca el botón y elígela — es lo único que tienes que hacer.
             </p>
           </td>
         </tr>
+
         <tr>
-          <td style="padding:30px 32px 0;text-align:center">
-            <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#C9A96E;color:#20170c;text-decoration:none;padding:15px 34px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold">Elegir mi contraseña</a>
+          <td align="center" style="padding:34px 40px 0;text-align:center">
+            <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#C9A96E;color:#1a1408;text-decoration:none;padding:16px 38px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;letter-spacing:.03em">Elegir mi contraseña</a>
           </td>
         </tr>
+
         <tr>
-          <td style="padding:26px 32px 0">
-            <p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:rgba(242,238,228,.5);margin:0">
-              Si el botón no abre, copia y pega esta dirección en tu navegador:
+          <td style="padding:30px 40px 0">
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.7;color:rgba(242,238,228,.42);margin:0">
+              Si el botón no abre, copia esta dirección en tu navegador:
             </p>
-            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#C9A96E;word-break:break-all;margin:8px 0 0">
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.7;color:#C9A96E;word-break:break-all;margin:6px 0 0">
               {{ .ConfirmationURL }}
             </p>
           </td>
         </tr>
+
         <tr>
-          <td style="padding:24px 32px 0">
-            <p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:rgba(242,238,228,.5);margin:0">
-              El enlace sirve una sola vez y caduca pronto. <strong style="color:rgba(242,238,228,.7)">Si no fuiste tú, ignora este correo</strong>: tu contraseña actual sigue funcionando y nadie ha entrado a tu cuenta.
-            </p>
+          <td style="padding:26px 40px 0">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0e1a14" style="background:#0e1a14;border-radius:8px">
+              <tr>
+                <td style="padding:16px 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:rgba(242,238,228,.55)">
+                  El enlace sirve una sola vez y caduca pronto.<br>
+                  <strong style="color:rgba(242,238,228,.8)">Si no fuiste tú, ignora este correo</strong> — tu contraseña actual sigue funcionando y nadie ha entrado a tu cuenta.
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
+
         <tr>
-          <td style="padding:30px 32px 34px;text-align:center">
-            <div style="height:1px;background:#C9A96E;opacity:.18;line-height:1px;font-size:0;margin-bottom:20px">&nbsp;</div>
-            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.8;color:rgba(242,238,228,.42);margin:0">
+          <td align="center" style="padding:34px 40px 40px;text-align:center">
+            <div style="height:1px;background:#C9A96E;opacity:.15;line-height:1px;font-size:0;margin-bottom:22px">&nbsp;</div>
+            <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.9;color:rgba(242,238,228,.4);margin:0">
               ¿Necesitas ayuda? Escríbenos por WhatsApp al
               <a href="https://wa.me/529581087977" style="color:#C9A96E;text-decoration:none">+52 958 108 7977</a><br>
-              <a href="https://tierra.vip" style="color:rgba(242,238,228,.42);text-decoration:none">tierra.vip</a>
+              <a href="https://tierra.vip" style="color:rgba(242,238,228,.4);text-decoration:none">tierra.vip</a>
+              &nbsp;·&nbsp; Costa de Oaxaca
             </p>
           </td>
         </tr>
