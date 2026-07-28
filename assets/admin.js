@@ -48,6 +48,21 @@
   }
 
   // ── Login ──
+  // El botón de Google solo aparece si el proveedor está realmente activo en
+  // Supabase. Estaba apagado y el botón se mostraba igual: quien lo tocaba se
+  // quedaba en una pantalla de error sin saber por qué.
+  (function comprobarGoogle() {
+    var g = $('#googleBtn'), div = $('#login .divider');
+    g.classList.add('hidden'); if (div) div.classList.add('hidden');
+    fetch(window.TIERRA_SUPABASE.url + '/auth/v1/settings', { headers: { apikey: window.TIERRA_SUPABASE.anonKey } })
+      .then(function (r) { return r.json(); })
+      .then(function (s) {
+        if (s && s.external && s.external.google) {
+          g.classList.remove('hidden'); if (div) div.classList.remove('hidden');
+        }
+      })
+      .catch(function () { /* sin respuesta: se queda solo el correo, que siempre funciona */ });
+  })();
   $('#googleBtn').addEventListener('click', function () {
     sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
   });
