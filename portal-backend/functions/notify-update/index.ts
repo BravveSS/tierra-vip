@@ -12,6 +12,7 @@
 // mucho más fácil.
 // ============================================================================
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { LOGO_B64 } from './logo.ts'
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -23,26 +24,14 @@ const json = (body: unknown, status = 200) =>
 
 // El logo NO va como <img src="https://…">: Gmail y Outlook bloquean las
 // imágenes externas de un remitente que aún no es de confianza, y el correo
-// llegaba sin logo. Se manda incrustado en el propio mensaje (adjunto con
-// content_id, que se referencia como cid:), así no hay petición externa que
-// bloquear y se ve siempre.
-// Si por lo que sea no se pudiera descargar, se cae a la URL normal.
-const LOGO_URL = 'https://tierra.vip/assets/img/brand/logo-correo.png'
+// llegaba sin logo. Viaja incrustado en el propio mensaje (adjunto con
+// content_id, referenciado como cid:), así no hay petición externa que
+// bloquear. El PNG está escrito en logo.ts, no se descarga de ningún sitio:
+// una descarga puede fallar en silencio y volveríamos al mismo problema.
 const LOGO_CID = 'logo-tierra'
+const LOGO_SRC = 'cid:' + LOGO_CID
+const ADJUNTOS = [{ filename: 'tierra.png', content: LOGO_B64, content_type: 'image/png', content_id: LOGO_CID }]
 
-let logoB64 = ''
-async function logoIncrustado(): Promise<string> {
-  if (logoB64) return logoB64
-  try {
-    const r = await fetch(LOGO_URL)
-    if (!r.ok) throw new Error('http ' + r.status)
-    const bytes = new Uint8Array(await r.arrayBuffer())
-    let bin = ''
-    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i])
-    logoB64 = btoa(bin)
-  } catch (_e) { /* se queda vacío y se usa la URL */ }
-  return logoB64
-}
 const PORTAL = 'https://tierra.vip/portal'
 const money = (n: number) => '$' + Number(n).toLocaleString('es-MX', { maximumFractionDigits: 0 })
 // El nombre y el título los escribe un admin: se escapan antes de entrar al HTML.
@@ -54,7 +43,7 @@ type Item = { concept: string; amount: number }
 
 function maquetar(o: {
   saludo: string; que: string; obra: string; titulo: string;
-  total: number | null; items: Item[]; progreso: number | null; logo: string;
+  total: number | null; items: Item[]; progreso: number | null;
 }): string {
   const fila = (i: Item) =>
     `<tr><td style="padding:8px 0;border-bottom:1px solid rgba(201,169,110,.14);font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#d9d4c7">${esc(i.concept)}</td>` +
@@ -97,7 +86,7 @@ function maquetar(o: {
     <table width="520" cellpadding="0" cellspacing="0" border="0" bgcolor="#122019" style="max-width:520px;width:100%;background:#122019;border-radius:12px">
       <tr><td bgcolor="#122019" style="padding:34px 32px 8px;text-align:center;background:#122019">
         <a href="https://tierra.vip" style="text-decoration:none">
-          <img src="${o.logo}" width="72" height="91" alt="Tierra Desarrollos"
+          <img src="${LOGO_SRC}" width="72" height="91" alt="Tierra Desarrollos"
                style="display:block;margin:0 auto;width:72px;max-width:72px;height:auto;border:0;outline:none;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:18px;letter-spacing:.24em;color:#C9A96E">
         </a>
         <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,238,228,.45);margin-top:14px">Portal de obra</div>
@@ -188,12 +177,6 @@ Deno.serve(async (req) => {
     const progreso = typeof proj?.progress === 'number' ? proj.progress : null
     const subject = `${obra}: ${kind === 'costos' ? 'nuevo reporte de costos' : 'nuevas fotos del avance'}`
 
-    const b64 = await logoIncrustado()
-    const logoSrc = b64 ? 'cid:' + LOGO_CID : LOGO_URL
-    const adjuntos = b64
-      ? [{ filename: 'tierra.png', content: b64, content_type: 'image/png', content_id: LOGO_CID }]
-      : undefined
-
     let sent = 0
     const fallos: string[] = []
     for (const c of destinatarios) {
@@ -202,7 +185,7 @@ Deno.serve(async (req) => {
         saludo: nombre ? `Hola ${esc(nombre)}, ` : '',
         que, obra, titulo: title ?? '',
         total: total != null ? Number(total) : null,
-        items, progreso, logo: logoSrc,
+        items, progreso,
       }
       const r = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -213,7 +196,7 @@ Deno.serve(async (req) => {
           reply_to: REPLY,
           subject,
           html: maquetar(datos),
-          attachments: adjuntos,
+          attachments: ADJUNTOS,
           text: textoPlano({ saludo: nombre ? `Hola ${nombre},` : '', que, obra, total: datos.total, progreso }),
         }),
       })
