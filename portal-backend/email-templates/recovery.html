@@ -2,10 +2,12 @@
      Asunto: Restablece tu contraseña — Tierra Desarrollos
      NO quites {{ .ConfirmationURL }}: es lo que genera el enlace de un solo uso.
 
-     El logo es email-logo-tierra.png, con el verde #122019 ya compuesto dentro
-     del PNG (el logo del sitio es blanco sobre transparente y desaparecería si
-     un cliente descarta el fondo). Se sirve a 220x277 y se muestra a 110, para
-     que salga nítido en pantallas retina.
+     El logo va con FONDO TRANSPARENTE a propósito. La versión anterior llevaba
+     el verde pegado dentro del PNG y se veía un recuadro de otro tono: Gmail
+     ajusta los colores del HTML en modo oscuro pero no toca las imágenes, así
+     que el fondo del correo y el de la imagen dejaban de coincidir. Sin fondo
+     propio, el logo adopta el que tenga el correo y siempre encaja.
+     Se sirve a 220x277 y se muestra a 110, para que salga nítido en retina.
 
      Si alguna vez hay que cambiar la imagen, usar un NOMBRE DE ARCHIVO NUEVO:
      /assets/* va con cache immutable a 30 días y una URL que se pidió antes de
@@ -18,7 +20,7 @@
         <tr>
           <td bgcolor="#122019" align="center" style="padding:44px 32px 0;text-align:center;background:#122019">
             <a href="https://tierra.vip" style="text-decoration:none;border:0">
-              <img src="https://tierra.vip/assets/img/brand/email-logo-tierra.png" width="110" height="139" alt="Tierra Desarrollos"
+              <img src="https://tierra.vip/assets/img/brand/tierra-email-logo.png" width="110" height="139" alt="Tierra Desarrollos"
                    style="display:block;margin:0 auto;width:110px;max-width:110px;height:auto;border:0;outline:none;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:.28em;color:#C9A96E">
             </a>
           </td>
