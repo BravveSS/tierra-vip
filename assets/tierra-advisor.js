@@ -106,6 +106,53 @@
  return s.replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
  }
 
+ /* Handoff: cuando la IA ya calificó al visitante, le entrega SU PROPIO mensaje
+    ya redactado (en primera persona, con todo lo que contó) para que se lo envíe
+    al equipo por WhatsApp. Es editable: si quiere ajustar algo, el enlace toma
+    el texto en el momento del clic. */
+ function handoff(resumen) {
+ var box = document.createElement('div');
+ box.className = 'tadv-handoff';
+
+ var lbl = document.createElement('div');
+ lbl.className = 'tadv-handoff-lbl';
+ lbl.textContent = t('Tu mensaje para el equipo', 'Your message to the team');
+
+ var ta = document.createElement('textarea');
+ ta.className = 'tadv-handoff-txt';
+ ta.rows = 3;
+ ta.value = resumen;
+ ta.setAttribute('aria-label', t('Mensaje para el equipo de Tierra', 'Message to the Tierra team'));
+ // se ajusta al contenido para que se lea completo sin scroll interno
+ function fit() { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 340) + 'px'; }
+ ta.addEventListener('input', fit);
+
+ var cta = document.createElement('a');
+ cta.className = 'tadv-wa-cta';
+ cta.target = '_blank'; cta.rel = 'noopener';
+ cta.href = WA + '?text=' + encodeURIComponent(resumen);
+ cta.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35z"/></svg>' +
+ t('Enviarlo por WhatsApp', 'Send it on WhatsApp');
+
+ // el texto puede haber cambiado: se relee justo antes de abrir WhatsApp
+ cta.addEventListener('click', function () {
+ var v = ta.value.trim();
+ cta.href = WA + (v ? '?text=' + encodeURIComponent(v) : '');
+ if (typeof window.gtag === 'function') {
+ window.gtag('event', 'advisor_handoff_whatsapp', { event_category: 'lead' });
+ }
+ });
+
+ var nota = document.createElement('p');
+ nota.className = 'tadv-handoff-nota';
+ nota.textContent = t('Puedes editarlo antes de enviarlo.', 'You can edit it before sending.');
+
+ box.appendChild(lbl); box.appendChild(ta); box.appendChild(cta); box.appendChild(nota);
+ els.body.appendChild(box);
+ fit();          // solo mide bien ya dentro del DOM
+ scroll();
+ }
+
  function options(opts, onPick) {
  var wrap = document.createElement('div');
  wrap.className = 'tadv-opts';
@@ -165,8 +212,8 @@
  if (!AI_ENABLED) { aiMaintenance(); return; }
  botSay(t('¡Hola! Soy el asesor de Tierra. Conozco los terrenos, sus precios y lo que implica construir en la costa.',
  'Hi! I\'m Tierra\'s advisor. I know the lots, their prices and what building on the coast involves.'), function () {
- botSay(t('Pregúntame lo que quieras — por ejemplo, «quiero vista al mar sin gastar tanto» o «¿cuánto cuesta construir?».',
- 'Ask me anything — for example, "I want an ocean view without spending too much" or "how much does it cost to build?".'), showAiInput);
+ botSay(t('Cuéntame qué buscas y te oriento; al final te dejo tu mensaje listo para enviárselo al equipo. ¿Buscas un terreno, construir tu casa, invertir o un departamento?',
+ 'Tell me what you\'re after and I\'ll guide you; at the end I\'ll leave your message ready to send to the team. Are you looking for land, to build a home, to invest, or an apartment?'), showAiInput);
  });
  }
 
@@ -225,6 +272,7 @@
  m.className = 'tadv-msg bot';
  m.innerHTML = richText(d.reply);
  els.body.appendChild(m); scroll();
+ if (d.listo && d.resumen) handoff(d.resumen);
  showAiInput();
  })
  .catch(function () {

@@ -145,25 +145,65 @@ GUÍAS PÚBLICAS que puedes recomendar cuando encajen con lo que la persona preg
 - Se coordinan visitas: el equipo recibe en la costa para caminar el terreno.
 - Los precios de lotes son en pesos mexicanos (MXN), de contado.`
 
-const REGLAS = `=== CÓMO RESPONDES ===
+const REGLAS = `=== TU TRABAJO REAL ===
+No eres un buscador de información: eres quien CALIFICA al prospecto. Tu meta es
+entender a esta persona lo suficiente como para que un asesor humano la atienda ya
+sabiendo todo, y que ella misma escriba a la empresa. No cierras ventas en el chat.
+
+Para calificar necesitas, en este orden y SIEMPRE UNA PREGUNTA A LA VEZ:
+1. QUÉ BUSCA — terreno, construir una casa, invertir/rentar, o departamento.
+2. ZONA o proyecto que le llama (Mazunte / Puerto Ángel / La Boquilla), o si quiere que
+   le ayudes a elegir.
+3. PRESUPUESTO aproximado. Pregúntalo con naturalidad ("¿en qué rango te mueves?"),
+   nunca como interrogatorio, y acepta un rango vago.
+4. PLAZO — cuándo le gustaría avanzar.
+5. SI PUEDE VISITAR la costa, y desde dónde viaja o si ya vive por ahí.
+6. SU NOMBRE, al final, cuando ya hay confianza.
+Si la persona te da varios datos de golpe, DALOS POR BUENOS y salta a lo que falte.
+Nunca vuelvas a preguntar algo que ya te dijo.
+
+=== CÓMO RESPONDES (el campo reply) ===
 - En el idioma en que te escriban. Español mexicano, cálido y directo, sin cursilería
   inmobiliaria y sin presionar.
-- BREVE: dos o tres frases y UNA sola pregunta al final. Estás en un chat en un teléfono,
-  no escribiendo un folleto. Nada de encabezados ni listas largas.
+- BREVE: dos o tres frases como máximo y UNA sola pregunta al final. Estás en un chat en
+  un teléfono, no escribiendo un folleto. Nada de encabezados ni listas largas.
+- Toda respuesta termina en pregunta, salvo cuando listo es true.
 - SÍ puedes dar precios, medidas y disponibilidad de lotes: los tienes arriba y están al día.
   Cuando alguien pida algo por precio ("lo más barato", "vista al mar sin gastar tanto"),
-  recomiéndale lotes CONCRETOS con su número, metros y precio, máximo dos o tres.
+  recomiéndale lotes CONCRETOS con su número, metros y precio, máximo dos o tres, y en la
+  misma respuesta sigue calificando con la siguiente pregunta.
 - Si te piden algo que NO está arriba (fecha exacta de entrega, condiciones de un plan de
   pagos, escrituración de un caso puntual, precios de Depas Kora o Serena), di con
-  naturalidad que eso lo confirma un asesor y ofrece pasarlo a WhatsApp. Nunca lo inventes.
+  naturalidad que eso lo confirma un asesor. Nunca lo inventes.
 - Serena y Depas Kora no tienen precios publicados: para esos, lista de espera o asesor.
 - Ante una objeción (precio, lejanía, riesgo, escrituración), primero reconoce lo válido de
-  la duda y luego responde con hechos, sin defensividad.
+  la duda, luego responde con hechos, y luego retoma tu pregunta.
 - Si preguntan algo ajeno a Tierra o a bienes raíces en Oaxaca, redirige con amabilidad.
-- Después de tres o cuatro intercambios útiles, ofrece que un asesor humano le siga por
-  WhatsApp — una vez, sin insistir.
-- Tu meta no es cerrar en el chat: es que la persona entienda si Tierra le encaja y quiera
-  seguir con un humano.`
+
+=== CUÁNDO DAS EL PASO AL HUMANO (el campo listo) ===
+listo es true SOLO cuando se cumplen las dos cosas:
+  (a) ya sabes al menos QUÉ BUSCA, ZONA y (PRESUPUESTO o PLAZO); y
+  (b) la persona muestra interés real: pregunta por un lote concreto, por visitar, por
+      pagos, por cómo seguir, o te pide hablar con alguien.
+Si te pide hablar con un humano antes de tiempo, pon listo en true aunque falten datos:
+nunca lo retengas.
+Mientras no se cumpla, listo es false y resumen va vacío ("").
+
+Cuando listo es true:
+- reply: una frase que cierre con calidez y le diga que abajo tiene su mensaje ya escrito
+  para enviarlo al equipo por WhatsApp, y que ahí le confirman disponibilidad y visita.
+  Sin pregunta al final.
+- resumen: el mensaje que la PERSONA le va a enviar a la empresa, escrito EN PRIMERA
+  PERSONA como si lo hubiera escrito ella, en su idioma. Reglas del resumen:
+  · Empieza con "Hola, soy [su nombre]" — y si no te dio nombre, con "Hola,".
+  · Incluye TODO lo que sepas de ella: qué busca, zona o proyecto, presupuesto, plazo,
+    si puede visitar y de dónde viene, y los lotes concretos que le interesaron (número,
+    metros y precio) si los hubo.
+  · De 2 a 5 frases, natural, sin listas, sin emojis, sin markdown, sin encabezados.
+  · Termina pidiendo lo que ella quiere: disponibilidad, agendar una visita, o el detalle
+    de pagos.
+  · NO inventes ni un dato: solo lo que dijo en la conversación.
+  · Nunca escribas el resumen en tercera persona ni lo llames "resumen".`
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
@@ -197,7 +237,25 @@ ${REGLAS}`
     const response = await client.messages.create({
       model: 'claude-opus-5',
       max_tokens: 1024,
-      output_config: { effort: 'low' },   // es un chat: la rapidez importa
+      // Salida estructurada: además del texto del chat, el modelo decide si ya
+      // conoce lo suficiente al prospecto (listo) y redacta el mensaje que la
+      // propia persona enviará a la empresa por WhatsApp (resumen).
+      output_config: {
+        effort: 'low',   // es un chat: la rapidez importa
+        format: {
+          type: 'json_schema',
+          schema: {
+            type: 'object',
+            properties: {
+              reply: { type: 'string', description: 'Lo que el asesor le contesta a la persona.' },
+              listo: { type: 'boolean', description: 'true solo cuando ya está calificada y con interés claro.' },
+              resumen: { type: 'string', description: 'Mensaje en primera persona para WhatsApp; vacío si listo es false.' },
+            },
+            required: ['reply', 'listo', 'resumen'],
+            additionalProperties: false,
+          },
+        },
+      },
       system,
       messages: limpios,
     })
@@ -205,11 +263,25 @@ ${REGLAS}`
     if (response.stop_reason === 'refusal') {
       return json({ reply: 'Mejor eso lo vemos por WhatsApp con un asesor. ¿Te paso el enlace?' })
     }
-    const reply = response.content
+    const crudo = response.content
       .filter((b: { type: string }) => b.type === 'text')
       .map((b: { text: string }) => b.text).join('\n').trim()
-    if (!reply) return json({ error: 'respuesta_vacia' }, 502)
-    return json({ reply })
+    if (!crudo) return json({ error: 'respuesta_vacia' }, 502)
+
+    // El esquema garantiza el JSON, pero si algo cambiara del lado del modelo
+    // preferimos entregar el texto tal cual antes que romper el chat.
+    let reply = crudo, listo = false, resumen = ''
+    try {
+      const d = JSON.parse(crudo)
+      if (d && typeof d.reply === 'string' && d.reply.trim()) {
+        reply = d.reply.trim()
+        listo = d.listo === true
+        resumen = typeof d.resumen === 'string' ? d.resumen.trim() : ''
+      }
+    } catch (_e) { /* nos quedamos con el texto crudo */ }
+    if (!resumen) listo = false   // sin mensaje redactado no hay handoff que mostrar
+
+    return json({ reply, listo, resumen: listo ? resumen.slice(0, 900) : '' })
   } catch (_e) {
     return json({ error: 'error_interno' }, 500)
   }
