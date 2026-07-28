@@ -16,6 +16,7 @@
     <a href="index.html"><img src="assets/img/brand/tierra-logo.png" alt="Tierra Desarrollos"></a>
     <div class="rt">
       <div class="who hidden" id="whoBox"><div class="avatar" id="avatar">·</div><span id="whoami" class="muted"></span></div>
+      <button id="chpass" class="btn ghost sm hidden">Contraseña</button>
       <button id="logout" class="btn ghost sm hidden">Salir</button>
     </div>
   </div>
@@ -35,10 +36,29 @@
       <div class="divider">o con correo</div>
       <form id="adminEmailForm">
         <div class="field"><label>Correo</label><input type="email" id="ae_email" autocomplete="email"></div>
-        <div class="field"><label>Contraseña</label><input type="password" id="ae_pass" autocomplete="current-password"></div>
+        <div class="field">
+          <label>Contraseña
+            <a href="#" id="forgot" style="float:right;font-size:11px;letter-spacing:.06em">¿La olvidaste?</a>
+          </label>
+          <input type="password" id="ae_pass" autocomplete="current-password">
+        </div>
         <button class="btn ghost block" type="submit" id="ae_btn">Entrar</button>
       </form>
       <div class="msg err" id="loginMsg"></div>
+    </div>
+  </section>
+
+  <!-- NUEVA CONTRASEÑA (al volver del correo de recuperación) -->
+  <section id="recover" class="login hidden">
+    <div class="card">
+      <h1>Elige tu nueva contraseña</h1>
+      <div class="sub">Escríbela dos veces y entrarás directo al panel.</div>
+      <form id="recoverForm">
+        <div class="field"><label>Nueva contraseña</label><input type="password" id="np1" autocomplete="new-password" required></div>
+        <div class="field"><label>Repítela</label><input type="password" id="np2" autocomplete="new-password" required></div>
+        <button class="btn block" type="submit" id="npBtn">Guardar y entrar</button>
+        <div class="msg" id="npMsg"></div>
+      </form>
     </div>
   </section>
 
@@ -251,11 +271,43 @@
   </div>
 </div>
 
+<!-- Modal cambiar mi propia contraseña.
+     Pide la actual a propósito: sin eso, cualquiera que pillara la sesión
+     abierta en una computadora podría dejarte fuera de tu propia cuenta. -->
+<div class="modal" id="cpModal">
+  <div class="card">
+    <h2>Cambiar mi contraseña</h2>
+    <div class="field"><label>Contraseña actual</label><input type="password" id="cp0" autocomplete="current-password"></div>
+    <div class="field"><label>Nueva contraseña</label><input type="password" id="cp1" autocomplete="new-password"></div>
+    <div class="field"><label>Repítela</label><input type="password" id="cp2" autocomplete="new-password"></div>
+    <div class="msg" id="cpMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn ghost sm" id="cp_cancel">Cancelar</button>
+      <button class="btn sm" id="cp_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Contraseña temporal para otro administrador (solo superadmin) -->
+<div class="modal" id="apModal">
+  <div class="card">
+    <h2>Contraseña temporal</h2>
+    <div class="sub" id="ap_who"></div>
+    <div class="field"><label>Nueva contraseña (mínimo 10 caracteres)</label><input type="password" id="ap_pass" autocomplete="new-password"></div>
+    <div class="msg" id="ap_msg"></div>
+    <p class="muted" style="font-size:12px;line-height:1.6;margin:4px 0 0">Se le pedirá cambiarla la próxima vez que entre. Pásasela por un medio seguro, nunca por correo.</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+      <button class="btn ghost sm" id="ap_cancel">Cancelar</button>
+      <button class="btn sm" id="ap_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=13"></script>
+<script src="assets/admin.js?v=14"></script>
 </body>
 </html>

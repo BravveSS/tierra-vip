@@ -8,6 +8,7 @@
   'use strict';
   var $ = function (s) { return document.querySelector(s); };
   var loading = $('#loading'), login = $('#login'), panel = $('#panel'),
+      recover = $('#recover'),
       whoami = $('#whoami'), whoBox = $('#whoBox'), avatar = $('#avatar'),
       logoutBtn = $('#logout');
 
@@ -62,11 +63,80 @@
   });
   logoutBtn.addEventListener('click', function () { sb.auth.signOut().then(function () { location.reload(); }); });
 
-  function show(el) { [loading, login, panel].forEach(function (x) { x.classList.add('hidden'); }); el.classList.remove('hidden'); }
+  // ── Olvidé mi contraseña ──
+  $('#forgot').addEventListener('click', function (e) {
+    e.preventDefault();
+    var mail = $('#ae_email').value.trim(), msg = $('#loginMsg');
+    if (!mail) { msg.className = 'msg err'; msg.textContent = 'Escribe tu correo arriba y vuelve a tocar aquí.'; return; }
+    msg.className = 'msg'; msg.textContent = 'Enviando…';
+    sb.auth.resetPasswordForEmail(mail, { redirectTo: location.origin + '/admin' }).then(function (r) {
+      if (r.error) { msg.className = 'msg err'; msg.textContent = human(r.error); return; }
+      msg.className = 'msg ok';
+      msg.textContent = 'Listo: te mandamos un correo a ' + mail + ' para elegir una contraseña nueva.';
+    });
+  });
+
+  // Supabase manda el enlace con #access_token=…&type=recovery
+  var RECOVERY = /[#&?]type=recovery/.test(location.hash + location.search);
+  $('#recoverForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var p1 = $('#np1').value, p2 = $('#np2').value, msg = $('#npMsg'), btn = $('#npBtn');
+    if (p1.length < 10) { msg.className = 'msg err'; msg.textContent = 'Usa al menos 10 caracteres.'; return; }
+    if (p1 !== p2) { msg.className = 'msg err'; msg.textContent = 'Las dos contraseñas no coinciden.'; return; }
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    // data limpia la marca de "temporal" si venía de un restablecimiento forzado
+    sb.auth.updateUser({ password: p1, data: { must_change_password: false } }).then(function (r) {
+      btn.disabled = false; btn.textContent = 'Guardar y entrar';
+      if (r.error) { msg.className = 'msg err'; msg.textContent = human(r.error); return; }
+      RECOVERY = false;
+      history.replaceState(null, '', location.pathname);
+      boot();
+    });
+  });
+
+  // ── Cambiar mi contraseña estando dentro ──
+  function abrirCambio(obligatorio) {
+    $('#cp0').value = $('#cp1').value = $('#cp2').value = '';
+    var msg = $('#cpMsg');
+    msg.className = obligatorio ? 'msg err' : 'msg';
+    msg.textContent = obligatorio ? 'Tu contraseña es temporal: elige una nueva para continuar.' : '';
+    $('#cp_cancel').classList.toggle('hidden', !!obligatorio);
+    $('#cpModal').classList.add('on');
+  }
+  $('#chpass').addEventListener('click', function () { abrirCambio(false); });
+  $('#cp_cancel').addEventListener('click', function () { $('#cpModal').classList.remove('on'); });
+  $('#cp_save').addEventListener('click', function () {
+    var actual = $('#cp0').value, p1 = $('#cp1').value, p2 = $('#cp2').value,
+        msg = $('#cpMsg'), btn = $('#cp_save');
+    if (!actual) { msg.className = 'msg err'; msg.textContent = 'Escribe tu contraseña actual.'; return; }
+    if (p1.length < 10) { msg.className = 'msg err'; msg.textContent = 'Usa al menos 10 caracteres.'; return; }
+    if (p1 !== p2) { msg.className = 'msg err'; msg.textContent = 'Las dos contraseñas no coinciden.'; return; }
+    if (p1 === actual) { msg.className = 'msg err'; msg.textContent = 'La nueva tiene que ser distinta de la actual.'; return; }
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    // Se comprueba la contraseña actual antes de cambiarla: Supabase no la pide,
+    // así que sin esto bastaría una sesión abierta para secuestrar la cuenta.
+    sb.auth.signInWithPassword({ email: ME.email, password: actual }).then(function (v) {
+      if (v.error) {
+        btn.disabled = false; btn.textContent = 'Guardar';
+        msg.className = 'msg err'; msg.textContent = 'La contraseña actual no es correcta.';
+        return;
+      }
+      sb.auth.updateUser({ password: p1, data: { must_change_password: false } }).then(function (r) {
+        btn.disabled = false; btn.textContent = 'Guardar';
+        if (r.error) { msg.className = 'msg err'; msg.textContent = human(r.error); return; }
+        msg.className = 'msg ok'; msg.textContent = 'Contraseña actualizada ✓';
+        $('#cp_cancel').classList.remove('hidden');
+        setTimeout(function () { $('#cpModal').classList.remove('on'); }, 1200);
+      });
+    });
+  });
+
+  function show(el) { [loading, login, panel, recover].forEach(function (x) { x.classList.add('hidden'); }); el.classList.remove('hidden'); }
 
   function boot() {
     show(loading);
     sb.auth.getSession().then(function (r) {
+      if (RECOVERY) { show(recover); return; }
       if (!r.data.session) { show(login); return; }
       sb.rpc('is_admin').then(function (a) {
         if (!a.data) {
@@ -82,9 +152,14 @@
           avatar.textContent = (name || '·').trim().charAt(0).toUpperCase();
           whoBox.classList.remove('hidden');
           logoutBtn.classList.remove('hidden');
+          $('#chpass').classList.remove('hidden');
           if (ME.role === 'superadmin') { $('#tabAdmins').classList.remove('hidden'); loadAdmins(); }
           show(panel);
           loadProjects();
+          // Si entró con una contraseña temporal puesta por el superadmin, no
+          // se le deja seguir hasta que elija una suya.
+          var meta = (r.data.session.user || {}).user_metadata || {};
+          if (meta.must_change_password) abrirCambio(true);
         });
       });
     });
@@ -422,6 +497,26 @@
         var chip = document.createElement('span'); chip.className = 'chip'; chip.textContent = a.role;
         acts.appendChild(chip);
         if (a.role !== 'superadmin') {
+          // Enviarle el enlace es la vía preferente: el admin elige su propia
+          // contraseña y el superadmin nunca llega a conocerla.
+          var link = document.createElement('button'); link.className = 'iconbtn';
+          link.title = 'Enviarle un enlace para restablecer su contraseña'; link.textContent = '✉';
+          link.addEventListener('click', function () {
+            if (!confirm('¿Enviar a ' + a.email + ' un enlace para que elija una contraseña nueva?')) return;
+            link.disabled = true;
+            sb.auth.resetPasswordForEmail(a.email, { redirectTo: location.origin + '/admin' }).then(function (r) {
+              link.disabled = false;
+              if (r.error) { toast(human(r.error), 'err'); return; }
+              toast('Enlace enviado a ' + a.email, 'ok');
+            });
+          });
+          acts.appendChild(link);
+
+          var key = document.createElement('button'); key.className = 'iconbtn';
+          key.title = 'Ponerle una contraseña temporal'; key.textContent = '🔑';
+          key.addEventListener('click', function () { abrirTemporal(a.email); });
+          acts.appendChild(key);
+
           var del = document.createElement('button'); del.className = 'iconbtn'; del.title = 'Quitar'; del.textContent = '🗑';
           del.addEventListener('click', function () {
             if (!confirm('¿Quitar acceso de admin a ' + a.email + '?')) return;
@@ -435,6 +530,33 @@
       });
     });
   }
+
+  // Contraseña temporal para otro admin. La pone el servidor con la service_role
+  // y deja marcada la cuenta para que su dueño tenga que cambiarla al entrar.
+  var AP_EMAIL = '';
+  function abrirTemporal(email) {
+    AP_EMAIL = email;
+    $('#ap_who').textContent = 'Para ' + email;
+    $('#ap_pass').value = ''; $('#ap_msg').textContent = '';
+    $('#apModal').classList.add('on');
+  }
+  $('#ap_cancel').addEventListener('click', function () { $('#apModal').classList.remove('on'); });
+  $('#ap_save').addEventListener('click', function () {
+    var p = $('#ap_pass').value, msg = $('#ap_msg'), btn = $('#ap_save');
+    if (p.length < 10) { msg.className = 'msg err'; msg.textContent = 'Mínimo 10 caracteres.'; return; }
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    callFn('admin-create-client', { action: 'admin_password', email: AP_EMAIL, password: p })
+      .then(function (r) {
+        btn.disabled = false; btn.textContent = 'Guardar';
+        if (!r.ok) { msg.className = 'msg err'; msg.textContent = (r.j && r.j.error) || 'No se pudo cambiar.'; return; }
+        msg.className = 'msg ok'; msg.textContent = 'Listo. Cópiala y pásasela en persona o por WhatsApp.';
+        toast('Contraseña temporal puesta para ' + AP_EMAIL, 'ok');
+      })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = 'Guardar';
+        msg.className = 'msg err'; msg.textContent = 'Sin conexión con el servidor.';
+      });
+  });
 
   // ══ STATS ══
   function loadStats() {
