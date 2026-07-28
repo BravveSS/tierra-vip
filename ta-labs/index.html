@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TA Labs — Software que hace crecer empresas</title>
+<meta name="description" content="TA Labs diseña y desarrolla webs, plataformas y sistemas a medida combinando Inteligencia Artificial y desarrollo humano. Productos rápidos, escalables y preparados para crecer.">
+<link rel="canonical" href="https://talabs.dev/">
+<meta name="theme-color" content="#0A0B0F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TA Labs">
+<meta property="og:title" content="TA Labs — Software que hace crecer empresas">
+<meta property="og:description" content="Diseñamos plataformas, webs y sistemas usando IA y desarrollo humano. Productos rápidos, escalables y preparados para crecer.">
+<meta property="og:url" content="https://talabs.dev/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TA Labs — Software que hace crecer empresas">
+<meta name="twitter:description" content="Diseñamos plataformas, webs y sistemas usando IA y desarrollo humano.">
+
+<!-- Tipografía auto-alojada: sin CDN de terceros no hay conexión extra que
+     abrir antes de pintar el texto, ni datos de los visitantes saliendo a
+     otro dominio. Se precarga el subconjunto latino, que es el que se usa
+     desde el primer píxel del titular. -->
+<link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/ta.css?v=4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M0 0h32v23l-9 9H0z' fill='%237B2FFF'/%3E%3Ctext x='15' y='21' font-family='sans-serif' font-size='14' font-weight='800' fill='white' text-anchor='middle'%3ETA%3C/text%3E%3C/svg%3E">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "TA Labs",
+  "description": "Agencia de desarrollo de software que combina Inteligencia Artificial y desarrollo humano para crear webs, plataformas SaaS, sistemas internos y aplicaciones web.",
+  "url": "https://talabs.dev/",
+  "founder": { "@type": "Person", "name": "Tomás Attanzio" },
+  "areaServed": "Global",
+  "serviceType": ["Desarrollo web", "Plataformas SaaS", "Sistemas a medida", "Automatización con IA"],
+  "priceRange": "€€"
+}
+</script>
+
+<!-- El tema se fija antes de pintar: si se resolviera en ta.js, la página
+     parpadearía en oscuro un instante antes de pasar a claro. -->
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('ta-theme');
+    if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('js-on');
+  }
+})();
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="TA Labs, inicio">
+      <span class="logo-mark" aria-hidden="true">TA</span>
+      <span>TA Labs</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Principal">
+      <a href="#capacidades">Qué hacemos</a>
+      <a href="#estudio">Caso de estudio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#calculadora">Calculadora</a>
+      <a href="#agenda">Agenda</a>
+    </nav>
+
+    <div class="nav-act">
+      <button class="icon-btn" id="themeBtn" aria-label="Cambiar entre modo claro y oscuro">
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="btn btn-primary btn-sm" href="#calculadora">
+        Solicitar propuesta
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="wedge" aria-hidden="true"></div>
+  <div class="wedge-2" aria-hidden="true"></div>
+
+  <div class="wrap hero-in">
+    <span class="badge"><i class="dot" aria-hidden="true"></i> Aceptando proyectos para el próximo trimestre</span>
+
+    <h1 class="h-xl" data-split>Software que hace <em class="grad" style="font-style:normal">crecer</em> empresas.</h1>
+
+    <p class="lead rv">
+      Diseñamos plataformas, webs y sistemas utilizando Inteligencia Artificial
+      y desarrollo humano para construir productos rápidos, escalables y
+      preparados para crecer.
+    </p>
+
+    <div class="hero-cta rv">
+      <a class="btn btn-primary" href="#calculadora">
+        Solicitar propuesta
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="#estudio">Ver proyectos</a>
+    </div>
+
+  </div>
+
+  <div class="hero-stats">
+    <div class="wrap">
+      <div><b data-count="72" data-suffix="h">0</b><small>Primer prototipo navegable</small></div>
+      <div><b data-count="3">0</b><small>Capas por proyecto: web, portal y panel</small></div>
+      <div><b data-count="100" data-suffix="%">0</b><small>Proyectos entregados en producción</small></div>
+      <div><b data-count="1">0</b><small>Responsable directo, sin intermediarios</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ══════════════════════════════════════════════════════════ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Next.js</span><span>React</span><span>TypeScript</span><span>Supabase</span>
+    <span>Cloudflare</span><span>Claude API</span><span>Resend</span><span>PostgreSQL</span>
+    <span>TailwindCSS</span><span>Edge Functions</span>
+    <span>Next.js</span><span>React</span><span>TypeScript</span><span>Supabase</span>
+    <span>Cloudflare</span><span>Claude API</span><span>Resend</span><span>PostgreSQL</span>
+    <span>TailwindCSS</span><span>Edge Functions</span>
+  </div>
+</div>
+
+<!-- ══ CAPACIDADES ══════════════════════════════════════════════════════ -->
+<section class="sec band" id="capacidades">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">Posicionamiento</span>
+      <h2 class="h-lg rv">No vendemos páginas.<br>Construimos herramientas que hacen crecer negocios.</h2>
+      <p class="lead rv">Nuestro proceso combina IA con criterio humano. La IA acelera el trabajo repetitivo; las decisiones importantes las toma una persona. Más velocidad, más calidad, mejor experiencia.</p>
+    </div>
+
+    <div class="grid g-3">
+      <article class="card rv" data-spot>
+        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg></div>
+        <h3>Webs de alto nivel</h3>
+        <p>Sitios que cargan rápido, posicionan y convierten. Diseño a medida, sin plantillas ni constructores genéricos.</p>
+      </article>
+
+      <article class="card rv" data-spot>
+        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12v10M12 12L3 7"/></svg></div>
+        <h3>Plataformas SaaS</h3>
+        <p>Producto completo: autenticación, planes, base de datos y panel. Preparado para escalar desde el primer usuario.</p>
+      </article>
+
+      <article class="card rv" data-spot>
+        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6"/></svg></div>
+        <h3>Sistemas internos</h3>
+        <p>Herramientas que sustituyen hojas de cálculo y procesos manuales. Menos tiempo perdido, menos errores.</p>
+      </article>
+
+      <article class="card rv" data-spot>
+        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <h3>Portales para clientes</h3>
+        <p>Cada cliente entra con su cuenta y ve solo lo suyo: seguimiento, documentos y actualizaciones en tiempo real.</p>
+      </article>
+
+      <article class="card rv" data-spot>
+        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <h3>Aplicaciones web</h3>
+        <p>Apps que funcionan en cualquier dispositivo sin pasar por una tienda. Instalables y utilizables sin conexión.</p>
+      </article>
+
+      <article class="card rv" data-spot>
+        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+        <h3>Automatizaciones con IA</h3>
+        <p>Asistentes que responden, clasifican y resumen dentro de tu producto — con límites claros y datos reales.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SOBRE ════════════════════════════════════════════════════════════ -->
+<section class="sec" id="sobre">
+  <div class="wrap about">
+    <div class="about-copy">
+      <span class="eyebrow rv">Sobre TA Labs</span>
+      <h2 class="h-lg rv">Desarrollar software no tiene por qué ser lento.</h2>
+      <p class="rv">TA Labs nació para demostrarlo. Utilizamos <strong>IA para acelerar el trabajo repetitivo</strong> — el código de andamiaje, las primeras versiones de interfaz, la documentación — y <strong>desarrollo humano para tomar las decisiones importantes</strong>: qué construir, cómo estructurarlo y qué dejar fuera.</p>
+      <p class="rv">El resultado es un ciclo de entrega corto sin la deuda técnica que suele acompañarlo. Un primer prototipo navegable en días, no en semanas, y un producto que sigue siendo mantenible cuando el negocio crece.</p>
+      <p class="rv">Trabajamos con pocos clientes a la vez. Cada proyecto tiene una persona responsable de principio a fin, y esa persona es quien responde cuando hay que cambiar algo.</p>
+    </div>
+
+    <aside class="founder rv">
+      <div class="founder-top">
+        <div class="avatar" aria-hidden="true">TA</div>
+        <div>
+          <b>Tomás Attanzio</b>
+          <small>Fundador y desarrollador</small>
+        </div>
+      </div>
+      <p>Tomás comenzó construyendo productos reales a los 15 años. Actualmente desarrolla webs, plataformas y sistemas completos para empresas, desde la base de datos hasta la interfaz.</p>
+      <ul>
+        <li>Producto en producción con backend, portal privado y panel administrativo</li>
+        <li>Responsable directo del proyecto: sin intermediarios ni gestores de cuenta</li>
+        <li>Mantenimiento continuo con soporte asistido por IA</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ══ CASO DE ESTUDIO ══════════════════════════════════════════════════ -->
+<section class="sec" id="estudio">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">Caso de estudio</span>
+      <h2 class="h-lg rv">Tierra VIP</h2>
+      <p class="lead rv">Desarrolladora inmobiliaria con varios proyectos activos. No necesitaba una web: necesitaba un sistema donde sus clientes pudieran seguir el avance de su obra y su equipo pudiera gestionarlo todo desde un único panel.</p>
+    </div>
+
+    <div class="devices rv" data-devices>
+      <div class="dev dev-desktop" data-par="0.03">
+        <img src="/assets/img/tierra-desktop.webp" alt="Portada de tierra.vip vista en un navegador de escritorio" width="1600" height="1000" loading="lazy" decoding="async">
+      </div>
+      <div class="dev dev-tablet" data-par="0.07">
+        <img src="/assets/img/tierra-tablet.webp" alt="tierra.vip adaptado a una tablet" width="900" height="1200" loading="lazy" decoding="async">
+      </div>
+      <div class="dev dev-mobile" data-par="0.1">
+        <img src="/assets/img/tierra-mobile.webp" alt="tierra.vip adaptado a un teléfono móvil" width="560" height="1213" loading="lazy" decoding="async">
+      </div>
+    </div>
+
+    <div class="case-grid">
+      <article class="case-block rv">
+        <h3>Problema</h3>
+        <p>Los compradores preguntaban por el avance de su obra por teléfono y WhatsApp. Cada consulta ocupaba tiempo del equipo, y la información vivía dispersa entre carpetas y conversaciones.</p>
+      </article>
+      <article class="case-block rv">
+        <h3>Proceso</h3>
+        <p>Se definió el modelo de datos primero y la interfaz después. La IA generó la base de las pantallas repetitivas; las decisiones de arquitectura, permisos y experiencia se tomaron a mano.</p>
+      </article>
+      <article class="case-block rv">
+        <h3>Resultado</h3>
+        <p>Tres capas en producción: la web pública, un portal privado donde cada cliente ve el avance de su propiedad, y un panel administrativo para gestionar proyectos, clientes y actualizaciones.</p>
+      </article>
+    </div>
+
+    <div class="chips rv" aria-label="Tecnologías utilizadas">
+      <span class="chip">Next.js</span>
+      <span class="chip">React</span>
+      <span class="chip">Supabase</span>
+      <span class="chip">Cloudflare</span>
+      <span class="chip">Claude API</span>
+      <span class="chip">Resend</span>
+      <span class="chip">PostgreSQL</span>
+    </div>
+
+    <p class="note rv">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>Proyecto en producción en <a href="https://tierra.vip" target="_blank" rel="noopener" style="color:var(--violet-2)">tierra.vip</a>. El portal y el panel son privados: se muestran bajo demanda en una llamada.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ══ SERVICIOS ════════════════════════════════════════════════════════ -->
+<section class="sec band" id="servicios">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">Servicios</span>
+      <h2 class="h-lg rv">Cuatro formas de trabajar juntos.</h2>
+    </div>
+
+    <div class="grid g-4">
+      <article class="card svc rv" data-spot>
+        <div>
+          <h3>Web Corporativa</h3>
+          <p style="margin-top:6px">Presencia profesional que carga rápido y posiciona.</p>
+        </div>
+        <div class="svc-price"><small>desde</small><b>500 €</b></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Diseño a medida</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>SEO técnico completo</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Formularios y analítica</li>
+        </ul>
+      </article>
+
+      <article class="card svc featured rv" data-spot>
+        <span class="svc-tag">Más solicitado</span>
+        <div>
+          <h3>Sistema a medida</h3>
+          <p style="margin-top:6px">Backend, panel y lógica propia de tu negocio.</p>
+        </div>
+        <div class="svc-price"><small>desde</small><b>1.200 €</b></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Base de datos y cuentas</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Panel administrativo</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Portal privado de cliente</li>
+        </ul>
+      </article>
+
+      <article class="card svc rv" data-spot>
+        <div>
+          <h3>Aplicación Web</h3>
+          <p style="margin-top:6px">Producto completo, pensado para escalar.</p>
+        </div>
+        <div class="svc-price"><b style="font-size:1.35rem">A medida</b></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Arquitectura escalable</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Pagos e integraciones</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Automatizaciones con IA</li>
+        </ul>
+      </article>
+
+      <article class="card svc rv" data-spot>
+        <div>
+          <h3>Mantenimiento</h3>
+          <p style="margin-top:6px">Tu producto vivo, con cambios cada mes.</p>
+        </div>
+        <div class="svc-price"><b>150–400 €</b><small>/mes</small></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Cambios y mejoras continuas</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Monitorización y copias</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Soporte asistido por IA</li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="note rv">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>Precios orientativos. Cada proyecto se cotiza individualmente según su alcance real — la calculadora de abajo da un rango en menos de un minuto.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ══ CALCULADORA ══════════════════════════════════════════════════════ -->
+<section class="sec" id="calculadora">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">Calculadora</span>
+      <h2 class="h-lg rv">¿Cuánto costaría tu proyecto?</h2>
+      <p class="lead rv">Cuatro pasos, un rango estimado y una propuesta cerrada en tu correo. Sin compromiso.</p>
+    </div>
+
+    <div class="wizard rv" id="wizard">
+      <div class="wiz-bar"><i id="wizBar"></i></div>
+
+      <div class="wiz-head">
+        <b id="wizTitle">Tipo de proyecto</b>
+        <span class="wiz-step"><span id="wizNum">1</span> / 4</span>
+      </div>
+
+      <div class="wiz-body">
+        <!-- Paso 1 -->
+        <div class="wiz-pane on" data-pane="1">
+          <p class="wiz-q">¿Qué necesitas construir?</p>
+          <div class="opts" data-group="tipo" data-mode="one">
+            <button type="button" class="opt" data-val="web" data-base="700" data-label="Web corporativa">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Web corporativa</b><small>Presencia profesional, formularios y SEO</small>
+            </button>
+            <button type="button" class="opt" data-val="sistema" data-base="1600" data-label="Sistema a medida">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Sistema a medida</b><small>Backend, panel y lógica propia</small>
+            </button>
+            <button type="button" class="opt" data-val="app" data-base="2800" data-label="Aplicación web">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Aplicación web</b><small>Producto completo, pensado para escalar</small>
+            </button>
+            <button type="button" class="opt" data-val="no-se" data-base="900" data-label="Aún por definir">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Aún no lo sé</b><small>Lo definimos juntos en la llamada</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="wiz-pane" data-pane="2">
+          <p class="wiz-q">¿Qué funcionalidades necesita? Puedes elegir varias.</p>
+          <div class="opts" data-group="funcs" data-mode="many">
+            <button type="button" class="opt" data-val="cuentas" data-add="450" data-label="Cuentas de usuario">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Cuentas de usuario</b><small>Registro, acceso y permisos</small>
+            </button>
+            <button type="button" class="opt" data-val="panel" data-add="600" data-label="Panel administrativo">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Panel administrativo</b><small>Gestión interna de contenidos y datos</small>
+            </button>
+            <button type="button" class="opt" data-val="portal" data-add="550" data-label="Portal de cliente">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Portal de cliente</b><small>Cada cliente ve solo lo suyo</small>
+            </button>
+            <button type="button" class="opt" data-val="pagos" data-add="500" data-label="Pagos online">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Pagos online</b><small>Cobros únicos o suscripciones</small>
+            </button>
+            <button type="button" class="opt" data-val="reservas" data-add="400" data-label="Reservas o citas">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Reservas o citas</b><small>Calendario y confirmaciones</small>
+            </button>
+            <button type="button" class="opt" data-val="multi" data-add="350" data-label="Multi-idioma">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Multi-idioma</b><small>Dos o más idiomas</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="wiz-pane" data-pane="3">
+          <p class="wiz-q">¿Necesita conectarse con algo más?</p>
+          <div class="opts" data-group="integra" data-mode="many">
+            <button type="button" class="opt" data-val="ia" data-add="700" data-label="Asistente con IA">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Asistente con IA</b><small>Chat que responde con tus datos reales</small>
+            </button>
+            <button type="button" class="opt" data-val="emails" data-add="200" data-label="Emails automáticos">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Emails automáticos</b><small>Confirmaciones y notificaciones</small>
+            </button>
+            <button type="button" class="opt" data-val="crm" data-add="400" data-label="CRM o herramientas externas">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>CRM o herramientas externas</b><small>Conectar con lo que ya usas</small>
+            </button>
+            <button type="button" class="opt" data-val="mant" data-add="0" data-label="Mantenimiento mensual">
+              <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <b>Mantenimiento mensual</b><small>Cambios continuos tras la entrega</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="wiz-pane" data-pane="4">
+          <div class="wiz-result">
+            <div>
+              <p class="wiz-q" style="margin-bottom:6px">Rango estimado para tu proyecto</p>
+              <div class="wiz-amount" id="wizAmount">—</div>
+              <p style="font-size:.82rem;color:var(--ink-3);margin-top:6px" id="wizMonthly"></p>
+            </div>
+
+            <div class="wiz-recap" id="wizRecap"></div>
+
+            <form class="wiz-form" id="leadForm" novalidate>
+              <div class="field">
+                <label for="lName">Tu nombre</label>
+                <input id="lName" name="nombre" type="text" required autocomplete="name" placeholder="Nombre y apellidos">
+              </div>
+              <div class="field">
+                <label for="lEmail">Tu correo</label>
+                <input id="lEmail" name="email" type="email" required autocomplete="email" placeholder="tu@empresa.com">
+              </div>
+              <div class="field">
+                <label for="lNote">Cuéntame el proyecto <span style="color:var(--ink-3)">(opcional)</span></label>
+                <textarea id="lNote" name="nota" placeholder="Qué haces, qué necesitas y para cuándo."></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit" id="leadBtn" style="width:100%;justify-content:center">
+                Recibir propuesta detallada
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <p class="msg" id="leadMsg" role="status" aria-live="polite"></p>
+              <p style="font-size:.76rem;color:var(--ink-3);text-align:center">Sin spam. Solo la propuesta y una respuesta por correo.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="wiz-foot">
+        <button class="btn btn-ghost btn-sm" id="wizBack" disabled>Atrás</button>
+        <button class="btn btn-primary btn-sm" id="wizNext">
+          Continuar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AGENDA ═══════════════════════════════════════════════════════════ -->
+<section class="sec band" id="agenda">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">Agenda</span>
+      <h2 class="h-lg rv">Hablemos 30 minutos.</h2>
+      <p class="lead rv">Sin presentación comercial: me cuentas qué necesitas y te digo si puedo ayudarte, cuánto costaría y cuánto tardaría.</p>
+    </div>
+
+    <div class="book">
+      <div class="cal rv">
+        <div class="cal-head">
+          <b id="calMonth">—</b>
+          <div class="cal-nav">
+            <button type="button" id="calPrev" aria-label="Mes anterior" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button type="button" id="calNext" aria-label="Mes siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+        <div class="cal-grid" id="calGrid" role="group" aria-label="Elegir día"></div>
+        <div class="slots" id="calSlots" role="group" aria-label="Elegir hora"></div>
+      </div>
+
+      <form class="book-form rv" id="bookForm" novalidate>
+        <div class="book-when" id="bookWhen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <span>Elige un día y una hora en el calendario</span>
+        </div>
+        <div class="field">
+          <label for="bName">Tu nombre</label>
+          <input id="bName" name="nombre" type="text" required autocomplete="name" placeholder="Nombre y apellidos">
+        </div>
+        <div class="field">
+          <label for="bEmail">Tu correo</label>
+          <input id="bEmail" name="email" type="email" required autocomplete="email" placeholder="tu@empresa.com">
+        </div>
+        <div class="field">
+          <label for="bNote">¿De qué quieres hablar? <span style="color:var(--ink-3)">(opcional)</span></label>
+          <textarea id="bNote" name="nota" placeholder="Un par de líneas sobre tu proyecto."></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit" id="bookBtn" disabled style="width:100%;justify-content:center">
+          Confirmar reunión
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="msg" id="bookMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ════════════════════════════════════════════════════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-final rv">
+      <span class="eyebrow" style="justify-content:center">Empecemos</span>
+      <h2 class="h-lg">¿Construimos el próximo<br>software de tu empresa?</h2>
+      <p class="lead" style="text-align:center;margin-inline:auto">Cuéntame qué necesitas. Si no es algo que pueda hacer bien, te lo diré directamente.</p>
+      <div class="hero-cta" style="justify-content:center">
+        <a class="btn btn-primary" href="#calculadora">
+          Solicitar propuesta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#agenda">Agendar una llamada</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="logo" href="#top">
+          <span class="logo-mark" aria-hidden="true">TA</span>
+          <span>TA Labs</span>
+        </a>
+        <p>Webs, plataformas y sistemas a medida. Inteligencia Artificial y desarrollo humano.</p>
+      </div>
+
+      <div class="foot-cols">
+        <div class="foot-col">
+          <b>Servicios</b>
+          <a href="#servicios">Web corporativa</a>
+          <a href="#servicios">Sistema a medida</a>
+          <a href="#servicios">Aplicación web</a>
+          <a href="#servicios">Mantenimiento</a>
+        </div>
+        <div class="foot-col">
+          <b>Empresa</b>
+          <a href="#sobre">Sobre TA Labs</a>
+          <a href="#estudio">Caso de estudio</a>
+          <a href="#calculadora">Calculadora</a>
+        </div>
+        <div class="foot-col">
+          <b>Contacto</b>
+          <a href="#agenda">Agendar llamada</a>
+          <a href="https://tierra.vip" target="_blank" rel="noopener">tierra.vip</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bot">
+      <span>© <span id="year">2026</span> TA Labs. Todos los derechos reservados.</span>
+      <span>Hecho con IA y criterio humano.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ CHAT ═════════════════════════════════════════════════════════════ -->
+<button class="chat-fab" id="chatFab" aria-label="Abrir el asistente de TA Labs" aria-expanded="false" aria-controls="chat">
+  <svg class="c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 01-9 8.4 8.9 8.9 0 01-4-.9L3 21l1.9-4.9a8.4 8.4 0 01-.9-4 8.4 8.4 0 018.5-8.4h.5a8.4 8.4 0 018 8v.8z"/></svg>
+  <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+</button>
+
+<div class="chat" id="chat" role="dialog" aria-label="Asistente de TA Labs" aria-modal="false">
+  <div class="chat-head">
+    <span class="avatar" style="width:36px;height:36px;border-radius:11px;font-size:.78rem" aria-hidden="true">TA</span>
+    <div>
+      <b>Asistente de TA Labs</b>
+      <small><i class="dot" aria-hidden="true"></i> Responde al instante</small>
+    </div>
+  </div>
+
+  <div class="chat-log" id="chatLog">
+    <div class="bub ai">Hola 👋 Soy el asistente de TA Labs. Puedo contarte sobre servicios, precios, tecnologías y el caso de Tierra VIP. ¿Qué te gustaría saber?</div>
+  </div>
+
+  <div class="chat-sug" id="chatSug">
+    <button type="button">¿Cuánto cuesta una web?</button>
+    <button type="button">¿Qué es Tierra VIP?</button>
+    <button type="button">¿Cuánto tardáis?</button>
+  </div>
+
+  <form class="chat-in" id="chatForm">
+    <label for="chatInput" class="skip">Escribe tu mensaje</label>
+    <input id="chatInput" type="text" placeholder="Escribe tu pregunta…" autocomplete="off" maxlength="600">
+    <button type="submit" id="chatSend" aria-label="Enviar mensaje">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </form>
+</div>
+
+<!-- Auto-alojados a propósito: sin CDN de terceros no hay handshake extra,
+     ni dependencia de que un dominio ajeno siga en pie, ni fuga de IPs de
+     los visitantes. También hace que la web funcione con la red caída. -->
+<script src="/assets/vendor/gsap.min.js" defer></script>
+<script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/lenis.min.js" defer></script>
+<script src="/assets/ta.js?v=2" defer></script>
+</body>
+</html>
