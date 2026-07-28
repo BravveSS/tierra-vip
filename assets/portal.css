@@ -124,6 +124,13 @@ a{color:var(--gold);text-decoration:none}
 .row:last-child{border-bottom:none}
 .row .t{font-size:15px;color:var(--cream)}
 .row .s{font-size:12.5px;color:rgba(242,238,228,.55);margin-top:2px}
+/* Aviso de frescura por obra: verde si va al día, ámbar a partir de una semana
+   y rojo a partir de dos. Es lo que se pierde de vista con varias obras. */
+.stale{display:inline-block;margin-left:8px;font-size:11px;letter-spacing:.04em;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.stale.ok{color:#7fd6a0;background:rgba(127,214,160,.11)}
+.stale.warn{color:#e0b457;background:rgba(224,180,87,.12)}
+.stale.bad{color:#e08a6f;background:rgba(224,138,111,.13)}
+@media(max-width:720px){.stale{display:block;margin:5px 0 0;width:fit-content}}
 .row .acts{display:flex;align-items:center;gap:6px;flex-shrink:0}
 
 /* dropzone */

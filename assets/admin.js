@@ -176,15 +176,46 @@
   });
 
   // ══ PROYECTOS ══
+  // Días desde el último avance publicado, por obra. Con varias obras en marcha
+  // es lo primero que se pierde de vista, y el cliente lo nota antes que nadie.
+  function diasSinAvance() {
+    return sb.from('updates').select('project_id, date').then(function (r) {
+      var ultimo = {};
+      (r.data || []).forEach(function (u) {
+        if (!u.date) return;
+        if (!ultimo[u.project_id] || u.date > ultimo[u.project_id]) ultimo[u.project_id] = u.date;
+      });
+      var hoy = new Date(); var out = {};
+      Object.keys(ultimo).forEach(function (pid) {
+        var d = new Date(ultimo[pid] + 'T12:00:00');
+        out[pid] = { dias: Math.floor((hoy - d) / 86400000), fecha: ultimo[pid] };
+      });
+      return out;
+    }, function () { return {}; });
+  }
+
   function loadProjects() {
-    sb.from('projects').select('*').order('created_at', { ascending: false }).then(function (r) {
+    Promise.all([
+      sb.from('projects').select('*').order('created_at', { ascending: false }),
+      diasSinAvance()
+    ]).then(function (res) {
+      var r = res[0], frescura = res[1];
       PROJECTS = r.data || [];
       var list = $('#p_list'); list.innerHTML = '';
       if (!PROJECTS.length) list.innerHTML = '<li class="muted" style="padding:10px 0">Aún no hay proyectos. Crea el primero a la izquierda.</li>';
       PROJECTS.forEach(function (p) {
         var li = document.createElement('li'); li.className = 'row';
         var info = document.createElement('div');
-        info.innerHTML = '<div class="t">' + esc(p.name) + '</div><div class="s">' + [p.client_name, p.location].filter(Boolean).map(esc).join(' · ') + '</div>';
+        var f = frescura[p.id];
+        var aviso = '';
+        if (p.status === 'en_progreso') {
+          if (!f) aviso = '<span class="stale bad">sin avances aún</span>';
+          else if (f.dias >= 14) aviso = '<span class="stale bad">' + f.dias + ' días sin avance</span>';
+          else if (f.dias >= 8) aviso = '<span class="stale warn">' + f.dias + ' días sin avance</span>';
+          else aviso = '<span class="stale ok">al día</span>';
+        }
+        info.innerHTML = '<div class="t">' + esc(p.name) + '</div><div class="s">' +
+          [p.client_name, p.location].filter(Boolean).map(esc).join(' · ') + aviso + '</div>';
         var acts = document.createElement('div'); acts.className = 'acts';
         var chip = document.createElement('span'); chip.className = 'chip ' + (p.status || ''); chip.textContent = STATUS[p.status] || p.status;
         var ed = document.createElement('button'); ed.className = 'iconbtn'; ed.title = 'Editar'; ed.textContent = '✎';
@@ -488,33 +519,49 @@
     });
   });
   function loadAdmins() {
-    sb.from('admin_allowlist').select('*').order('role', { ascending: true }).then(function (r) {
+    // La allowlist son los correos AUTORIZADOS. La cuenta solo existe cuando la
+    // persona entra por primera vez, así que se cruza con profiles para poder
+    // decir cuáles todavía no tienen cuenta — sin esto parecía que el panel
+    // mentía al fallar el cambio de contraseña.
+    Promise.all([
+      sb.from('admin_allowlist').select('*').order('role', { ascending: true }),
+      sb.from('profiles').select('email, role').in('role', ['admin', 'superadmin'])
+    ]).then(function (res) {
+      var conCuenta = {};
+      (res[1].data || []).forEach(function (p) { if (p.email) conCuenta[p.email.toLowerCase()] = true; });
       var list = $('#ad_list'); list.innerHTML = '';
-      (r.data || []).forEach(function (a) {
+      (res[0].data || []).forEach(function (a) {
+        var tiene = !!conCuenta[String(a.email).toLowerCase()];
         var li = document.createElement('li'); li.className = 'row';
-        li.innerHTML = '<div><div class="t">' + esc(a.email) + '</div></div>';
+        li.innerHTML = '<div><div class="t">' + esc(a.email) + '</div>' +
+          (tiene ? '' : '<div class="s">Autorizado · aún sin cuenta</div>') + '</div>';
         var acts = document.createElement('div'); acts.className = 'acts';
         var chip = document.createElement('span'); chip.className = 'chip'; chip.textContent = a.role;
         acts.appendChild(chip);
         if (a.role !== 'superadmin') {
           // Enviarle el enlace es la vía preferente: el admin elige su propia
           // contraseña y el superadmin nunca llega a conocerla.
-          var link = document.createElement('button'); link.className = 'iconbtn';
-          link.title = 'Enviarle un enlace para restablecer su contraseña'; link.textContent = '✉';
-          link.addEventListener('click', function () {
-            if (!confirm('¿Enviar a ' + a.email + ' un enlace para que elija una contraseña nueva?')) return;
-            link.disabled = true;
-            sb.auth.resetPasswordForEmail(a.email, { redirectTo: location.origin + '/admin' }).then(function (r) {
-              link.disabled = false;
-              if (r.error) { toast(human(r.error), 'err'); return; }
-              toast('Enlace enviado a ' + a.email, 'ok');
+          // Sin cuenta todavía no hay a quién mandarle un enlace: solo se le
+          // puede dar de alta con una contraseña.
+          if (tiene) {
+            var link = document.createElement('button'); link.className = 'iconbtn';
+            link.title = 'Enviarle un enlace para restablecer su contraseña'; link.textContent = '✉';
+            link.addEventListener('click', function () {
+              if (!confirm('¿Enviar a ' + a.email + ' un enlace para que elija una contraseña nueva?')) return;
+              link.disabled = true;
+              sb.auth.resetPasswordForEmail(a.email, { redirectTo: location.origin + '/admin' }).then(function (r) {
+                link.disabled = false;
+                if (r.error) { toast(human(r.error), 'err'); return; }
+                toast('Enlace enviado a ' + a.email, 'ok');
+              });
             });
-          });
-          acts.appendChild(link);
+            acts.appendChild(link);
+          }
 
           var key = document.createElement('button'); key.className = 'iconbtn';
-          key.title = 'Ponerle una contraseña temporal'; key.textContent = '🔑';
-          key.addEventListener('click', function () { abrirTemporal(a.email); });
+          key.title = tiene ? 'Ponerle una contraseña temporal' : 'Crear su cuenta con una contraseña';
+          key.textContent = tiene ? '🔑' : '＋';
+          key.addEventListener('click', function () { abrirTemporal(a.email, tiene); });
           acts.appendChild(key);
 
           var del = document.createElement('button'); del.className = 'iconbtn'; del.title = 'Quitar'; del.textContent = '🗑';
@@ -534,9 +581,12 @@
   // Contraseña temporal para otro admin. La pone el servidor con la service_role
   // y deja marcada la cuenta para que su dueño tenga que cambiarla al entrar.
   var AP_EMAIL = '';
-  function abrirTemporal(email) {
+  function abrirTemporal(email, tieneCuenta) {
     AP_EMAIL = email;
-    $('#ap_who').textContent = 'Para ' + email;
+    $('#apTitle').textContent = tieneCuenta ? 'Contraseña temporal' : 'Crear la cuenta';
+    $('#ap_who').textContent = tieneCuenta
+      ? 'Para ' + email
+      : email + ' está autorizado pero nunca ha entrado. Al guardar se crea su cuenta con esta contraseña.';
     $('#ap_pass').value = ''; $('#ap_msg').textContent = '';
     $('#apModal').classList.add('on');
   }

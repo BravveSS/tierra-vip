@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portal.css?v=9">
+<link rel="stylesheet" href="assets/portal.css?v=10">
 </head>
 <body>
 <header class="pt-bar">
@@ -291,11 +291,11 @@
 <!-- Contraseña temporal para otro administrador (solo superadmin) -->
 <div class="modal" id="apModal">
   <div class="card">
-    <h2>Contraseña temporal</h2>
+    <h2 id="apTitle">Contraseña temporal</h2>
     <div class="sub" id="ap_who"></div>
     <div class="field"><label>Nueva contraseña (mínimo 10 caracteres)</label><input type="password" id="ap_pass" autocomplete="new-password"></div>
     <div class="msg" id="ap_msg"></div>
-    <p class="muted" style="font-size:12px;line-height:1.6;margin:4px 0 0">Se le pedirá cambiarla la próxima vez que entre. Pásasela por un medio seguro, nunca por correo.</p>
+    <p class="muted" style="font-size:12px;line-height:1.6;margin:4px 0 0">Se le pedirá cambiarla la primera vez que entre. Pásasela en persona o por WhatsApp, nunca por correo.</p>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
       <button class="btn ghost sm" id="ap_cancel">Cancelar</button>
       <button class="btn sm" id="ap_save">Guardar</button>
@@ -308,6 +308,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="assets/portal-config.js?v=2"></script>
-<script src="assets/admin.js?v=14"></script>
+<script src="assets/admin.js?v=15"></script>
 </body>
 </html>
