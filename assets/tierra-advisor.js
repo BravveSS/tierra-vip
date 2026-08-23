@@ -230,21 +230,45 @@
  });
  }
 
+ var handoffHecho = false;
+
  function showAiInput() {
  var old = els.body.querySelector('.tadv-ai'); if (old) old.remove();
+ var wrap = document.createElement('div');
+ wrap.className = 'tadv-ai';
+
  var f = document.createElement('form');
- f.className = 'tadv-form tadv-ai';
+ f.className = 'tadv-form';
  f.innerHTML =
  '<input name="q" type="text" autocomplete="off" placeholder="' + t('Tu pregunta…', 'Your question…') + '">' +
  '<button type="submit" aria-label="' + t('Enviar', 'Send') + '">→</button>';
- els.body.appendChild(f); scroll();
+ wrap.appendChild(f);
+
+ // Salida directa: en cualquier momento puede saltarse las preguntas y pasar
+ // con una persona. La IA arma igual su mensaje con lo que ya sepa de él.
+ if (!handoffHecho) {
+ var salto = document.createElement('button');
+ salto.type = 'button';
+ salto.className = 'tadv-skip';
+ salto.textContent = t('Prefiero hablar con un asesor', 'I\'d rather talk to an advisor');
+ salto.addEventListener('click', function () {
+ preguntar(t('Prefiero hablar directamente con un asesor.', 'I\'d rather talk directly with an advisor.'));
+ });
+ wrap.appendChild(salto);
+ }
+
+ els.body.appendChild(wrap); scroll();
  f.q.focus();
 
  f.addEventListener('submit', function (e) {
  e.preventDefault();
  var q = f.q.value.trim();
- if (!q) return;
- f.remove();
+ if (q) preguntar(q);
+ });
+ }
+
+ function preguntar(q) {
+ var caja = els.body.querySelector('.tadv-ai'); if (caja) caja.remove();
  userSay(q);
  aiHistory.push({ role: 'user', content: q });
  aiTurns++;
@@ -255,7 +279,7 @@
  els.body.appendChild(typing); scroll();
 
  var ctrl = ('AbortController' in window) ? new AbortController() : null;
- var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 20000);
+ var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 30000);
 
  fetch(AI_ENDPOINT, {
  method: 'POST',
@@ -272,13 +296,16 @@
  m.className = 'tadv-msg bot';
  m.innerHTML = richText(d.reply);
  els.body.appendChild(m); scroll();
- if (d.listo && d.resumen) handoff(d.resumen);
+
+ if (d.listo && d.resumen) { handoffHecho = true; handoff(d.resumen); }
+ if (typeof window.gtag === 'function') {
+ window.gtag('event', 'advisor_turno', { event_category: 'lead', interes: d.interes || 'bajo', turno: aiTurns });
+ }
  showAiInput();
  })
  .catch(function () {
  clearTimeout(to); typing.remove();
  aiFallback(q);
- });
  });
  }
 
@@ -460,16 +487,203 @@
  document.addEventListener('mouseout', onOut);
  }
 
+ /* ---------- Menú del botón de WhatsApp ----------
+    Las preguntas que la gente hace de verdad, ya escritas: el visitante toca
+    una y el mensaje sale redactado. Se reconstruye aquí (y no en el HTML de
+    cada página) para que las diez páginas compartan la misma lista. */
+ var WA_FAQ = [
+ ['¿Cuánto cuestan los terrenos?', 'How much do the lots cost?',
+  'Hola, me interesan sus terrenos. ¿Me pasan precios y disponibilidad?',
+  'Hi, I\'m interested in your lots. Could you send me prices and availability?'],
+ ['¿Puedo pagar en mensualidades?', 'Can I pay in installments?',
+  'Hola, quiero saber cómo son los planes de pago: enganche y mensualidades.',
+  'Hi, I\'d like to know how your payment plans work: down payment and installments.'],
+ ['¿Los lotes tienen papeles en regla?', 'Are the lots properly titled?',
+  'Hola, tengo dudas sobre la certeza jurídica y los papeles de los lotes.',
+  'Hi, I have questions about legal certainty and the paperwork of the lots.'],
+ ['¿Cuánto cuesta construir una casa?', 'How much does it cost to build?',
+  'Hola, quiero construir una casa en la costa. ¿Cuánto cuesta y cómo es el proceso?',
+  'Hi, I want to build a house on the coast. How much does it cost and how does it work?'],
+ ['Quiero agendar una visita', 'I want to book a visit',
+  'Hola, quiero agendar una visita a la costa para conocer los proyectos.',
+  'Hi, I\'d like to book a visit to the coast to see the projects.'],
+ ['Soy extranjero, ¿puedo comprar?', 'I\'m a foreigner, can I buy?',
+  'Hola, soy extranjero y quiero saber si puedo comprar un terreno en la costa de Oaxaca.',
+  'Hi, I\'m a foreigner and I\'d like to know if I can buy land on the Oaxaca coast.']
+ ];
+
+ var WA_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>';
+
+ /* El botón y el menú solo existían en el home y su interruptor vivía dentro
+    del bundle grande: si ese script fallaba, el menú no abría. Aquí se crea
+    donde falte y se queda con su propio interruptor, sin depender de nada. */
+ var waListo = false;
+
+ function waMenu() {
+ var menu = document.getElementById('wa-menu');
+ if (waListo) { waPintar(menu); return; }
+ waListo = true;
+ var fab = document.getElementById('wa-fab');
+
+ if (!menu) {
+ menu = document.createElement('div');
+ menu.id = 'wa-menu';
+ menu.setAttribute('role', 'menu');
+ document.body.appendChild(menu);
+ }
+ if (!fab) {
+ fab = document.createElement('button');
+ fab.id = 'wa-fab';
+ fab.type = 'button';
+ fab.innerHTML = WA_SVG;
+ document.body.appendChild(fab);
+ }
+ menu.setAttribute('aria-label', t('Preguntas frecuentes por WhatsApp', 'Frequent questions on WhatsApp'));
+ fab.setAttribute('aria-label', t('Contactar por WhatsApp', 'Contact on WhatsApp'));
+ fab.setAttribute('aria-haspopup', 'menu');
+ fab.setAttribute('aria-controls', 'wa-menu');
+
+ // el clon se lleva los listeners viejos: el interruptor queda solo aquí
+ var nuevoFab = fab.cloneNode(true);
+ fab.parentNode.replaceChild(nuevoFab, fab);
+ nuevoFab.addEventListener('click', function (e) {
+ e.stopPropagation();
+ menu.classList.toggle('open');
+ nuevoFab.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+ });
+ document.addEventListener('click', function (e) {
+ if (!nuevoFab.contains(e.target) && !menu.contains(e.target)) {
+ menu.classList.remove('open');
+ nuevoFab.setAttribute('aria-expanded', 'false');
+ }
+ });
+ document.addEventListener('keydown', function (e) {
+ if (e.key === 'Escape') menu.classList.remove('open');
+ });
+
+ waPintar(menu);
+ }
+
+ function waPintar(menu) {
+ if (!menu) return;
+ menu.innerHTML = '';
+ var ttl = document.createElement('div');
+ ttl.className = 't';
+ ttl.textContent = t('¿Qué te gustaría preguntar?', 'What would you like to ask?');
+ menu.appendChild(ttl);
+ WA_FAQ.forEach(function (q) {
+ var b = document.createElement('button');
+ b.type = 'button';
+ b.setAttribute('role', 'menuitem');
+ b.innerHTML = '<span>◆</span> ';
+ b.appendChild(document.createTextNode(isEN() ? q[1] : q[0]));
+ b.addEventListener('click', function () {
+ if (typeof window.gtag === 'function') {
+ window.gtag('event', 'wa_pregunta', { event_category: 'lead', event_label: q[0] });
+ }
+ window.open(WA + '?text=' + encodeURIComponent(isEN() ? q[3] : q[2]), '_blank', 'noopener');
+ menu.classList.remove('open');
+ });
+ menu.appendChild(b);
+ });
+ }
+
+ /* ---------- Móvil: hoja inferior con las mismas preguntas ----------
+    En móvil el FAB de WhatsApp está oculto (lo sustituye la barra fija de
+    abajo), así que el botón de esa barra abre esta hoja en lugar de saltar
+    directo a WhatsApp: la persona elige su pregunta y llega escrita. */
+ var hoja = null;
+
+ function cerrarHoja() {
+ if (!hoja) return;
+ hoja.back.classList.remove('open');
+ hoja.el.classList.remove('open');
+ document.body.classList.remove('twq-abierta');
+ setTimeout(function () {
+ if (hoja) { hoja.back.remove(); hoja.el.remove(); hoja = null; }
+ }, 320);
+ }
+
+ function abrirHoja() {
+ if (hoja) return;
+ var back = document.createElement('div');
+ back.className = 'twq-back';
+
+ var el = document.createElement('div');
+ el.className = 'twq-sheet';
+ el.setAttribute('role', 'dialog');
+ el.setAttribute('aria-modal', 'true');
+ el.setAttribute('aria-label', t('Preguntas frecuentes por WhatsApp', 'Frequent questions on WhatsApp'));
+
+ var hd = document.createElement('div');
+ hd.className = 'twq-hd';
+ hd.innerHTML = '<span class="twq-grip" aria-hidden="true"></span>';
+ var ttl = document.createElement('div');
+ ttl.className = 'twq-ttl';
+ ttl.textContent = t('¿Qué te gustaría preguntar?', 'What would you like to ask?');
+ hd.appendChild(ttl);
+ el.appendChild(hd);
+
+ WA_FAQ.forEach(function (q, i) {
+ var b = document.createElement('button');
+ b.type = 'button';
+ b.className = 'twq-op';
+ b.style.setProperty('--i', i);
+ b.innerHTML = '<span class="twq-d" aria-hidden="true">◆</span>';
+ b.appendChild(document.createTextNode(isEN() ? q[1] : q[0]));
+ b.addEventListener('click', function () {
+ if (typeof window.gtag === 'function') {
+ window.gtag('event', 'wa_pregunta', { event_category: 'lead', event_label: q[0] });
+ }
+ window.open(WA + '?text=' + encodeURIComponent(isEN() ? q[3] : q[2]), '_blank', 'noopener');
+ cerrarHoja();
+ });
+ el.appendChild(b);
+ });
+
+ var otra = document.createElement('button');
+ otra.type = 'button';
+ otra.className = 'twq-otra';
+ otra.style.setProperty('--i', WA_FAQ.length);
+ otra.textContent = t('Escribir otra cosa', 'Write something else');
+ otra.addEventListener('click', function () {
+ window.open(WA + '?text=' + encodeURIComponent(t('Hola, me gustaría hablar con un asesor de Tierra Desarrollos.', 'Hi, I\'d like to talk to a Tierra Desarrollos advisor.')), '_blank', 'noopener');
+ cerrarHoja();
+ });
+ el.appendChild(otra);
+
+ document.body.appendChild(back);
+ document.body.appendChild(el);
+ document.body.classList.add('twq-abierta');
+ hoja = { el: el, back: back };
+
+ back.addEventListener('click', cerrarHoja);
+ requestAnimationFrame(function () { back.classList.add('open'); el.classList.add('open'); });
+ }
+
+ document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarHoja(); });
+
+ // El botón de WhatsApp de la barra móvil abre la hoja; si algo fallara,
+ // el enlace original sigue funcionando porque no lo tocamos.
+ document.addEventListener('click', function (e) {
+ if (!e.target.closest) return;
+ var a = e.target.closest('.tmbar .tm-wa');
+ if (!a || !window.matchMedia('(max-width: 768px)').matches) return;
+ try {
+ e.preventDefault();
+ abrirHoja();
+ } catch (_err) { window.open(a.href, '_blank', 'noopener'); }
+ }, true);
+
  /* ---------- Init ---------- */
  function init() {
  // Ocultar el asesor simulado viejo si existe (evita duplicados)
  ['ai-fab', 'ai-panel'].forEach(function (id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
  build();
  exitIntent();
- // re-traducir etiquetas fijas si cambia idioma antes de abrir
- new MutationObserver(function () {
- if (!started && els.name) { /* labels se recalculan al abrir */ }
- }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+ waMenu();
+ // al cambiar de idioma se rehace el menú de WhatsApp con las preguntas traducidas
+ new MutationObserver(waMenu).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
  }
 
  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

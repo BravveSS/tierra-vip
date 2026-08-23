@@ -75,3 +75,69 @@
 @media (prefers-reduced-motion: reduce) {
   .tmbar { transition: none; }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   EXPERIENCIA MÓVIL — pulido y animaciones
+   Todo lo de aquí anima solo transform y opacity (compositor), que
+   es lo único que el táctil mueve a 60fps sin tirones. Nada ligado
+   al scroll por frame: eso ya se descartó por causar saltos.
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* -- Nada se desborda de lado: el scroll horizontal se acaba -- */
+  html, body { overflow-x: hidden; max-width: 100%; }
+
+  /* -- Respuesta al toque: todo lo pulsable se hunde un poco -- */
+  .btn, .btn-solid, .pcard, .tmbar a, .card, .tk, .fa-q,
+  button, [role="button"], .lang-btn, summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active, .btn-solid:active, button:active, summary:active {
+    transform: scale(.975);
+    transition: transform .1s ease;
+  }
+  .pcard:active, .card:active { transform: scale(.99); transition: transform .12s ease; }
+
+  /* -- Reveal más corto y con menos recorrido: en una pantalla
+        pequeña, 34px de desplazamiento se siente lento -- */
+  .reveal { transform: translateY(20px); transition-duration: .72s; }
+  .reveal.d1 { transition-delay: .06s; }
+  .reveal.d2 { transition-delay: .12s; }
+  .reveal.d3 { transition-delay: .18s; }
+
+  /* -- Entrada en cascada de tarjetas y galerías -- */
+  .grid figure.reveal:nth-child(n),
+  .pcard.reveal:nth-child(n) { transition-duration: .66s; }
+  .pcard.reveal:nth-child(2) { transition-delay: .07s; }
+  .pcard.reveal:nth-child(3) { transition-delay: .14s; }
+  .pcard.reveal:nth-child(4) { transition-delay: .21s; }
+
+  /* -- Títulos de sección: el dorado entra un instante después -- */
+  .eyebrow.reveal { transition-duration: .5s; }
+
+  /* -- Acordeones de preguntas: se abren con suavidad -- */
+  details.fa > summary { min-height: 52px; display: flex; align-items: center; }
+  details.fa[open] .fa-a { animation: tmFade .34s ease both; }
+  @keyframes tmFade { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+  /* -- Scroll horizontal con encaje: las galerías se detienen
+        centradas en cada foto en vez de quedar a medias -- */
+  .g3d-track, .cmp-scroll, .gal-track {
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .g3d-track::-webkit-scrollbar, .cmp-scroll::-webkit-scrollbar { display: none; }
+  .g3d-track > *, .cmp-scroll > *, .gal-track > * { scroll-snap-align: center; }
+
+  /* -- El texto no se corta en pantallas estrechas -- */
+  h1, h2, h3, .h2 { overflow-wrap: break-word; hyphens: auto; }
+}
+
+/* Quien pide menos movimiento, recibe menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  .tmbar { transition: none; }
+  details.fa[open] .fa-a { animation: none; }
+  .btn:active, .btn-solid:active, button:active,
+  .pcard:active, .card:active, summary:active { transform: none; }
+}

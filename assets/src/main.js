@@ -1120,7 +1120,7 @@ function aipBuildReply(intent, userMsg) {
       'El proceso de compra con Tierra Desarrollos es seguro y acompañado:\n\n1️⃣ Asesoría inicial — conocemos tu perfil\n2️⃣ Visita al terreno (presencial o virtual)\n3️⃣ Firma de promesa de compraventa\n4️⃣ Plan de pago acordado\n5️⃣ Título de posesión\n6️⃣ Entrega de terreno\n\nTodo con acompañamiento legal desde el día uno. ¿Tienes alguna duda sobre alguno de estos pasos?'
     ],
     financiamiento: [
-      'Sí, ofrecemos planes de pago flexibles — no necesitas pagar todo de contado.\n\nContamos con esquemas de enganche + mensualidades adaptados a cada cliente. Los detalles específicos los maneja nuestro equipo de ventas según tu capacidad de inversión.\n\n¿Prefieres que te contacte un asesor por WhatsApp para ver opciones concretas?'
+      'Sí, ofrecemos planes de pago flexibles — no necesitas pagar todo de contado.\n\nContamos con esquemas de enganche + mensualidades hasta 24 meses, adaptados a cada cliente. Los detalles específicos los maneja nuestro equipo de ventas según tu capacidad de inversión.\n\n¿Prefieres que te contacte un asesor por WhatsApp para ver opciones concretas?'
     ],
     ubicacion: [
       'Todos nuestros proyectos están en la Costa de Oaxaca, Pacífico mexicano:\n\n📍 **Azimut** — Mazunte\n📍 **Nabani** — Puerto Ángel (frente al mar)\n📍 **Aldea Tao** — La Boquilla (acantilado)\n📍 **Serena** — Mazunte (bosque)\n📍 **Depas Kora** — Puerto Ángel (próximamente)\n\nLa zona está a ~7h de CDMX por carretera o ~1h en vuelo a Huatulco. ¿Quieres información de cómo llegar?'
