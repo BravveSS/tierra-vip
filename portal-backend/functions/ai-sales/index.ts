@@ -140,8 +140,9 @@ GUÍAS PÚBLICAS que puedes recomendar cuando encajen con lo que la persona preg
 === LO QUE APLICA A TODOS ===
 - Acompañamiento legal completo y título de posesión en regla. Antes de firmar se explica
   cada documento, sin letra chica.
-- Hay esquemas de enganche y mensualidades flexibles; las condiciones exactas dependen del
-  lote y las confirma un asesor.
+- Hay esquemas de enganche y mensualidades, con un PLAZO MÁXIMO DE 24 MESES. Nunca ofrezcas
+  ni insinúes plazos más largos (36, 48 meses): no existen. El enganche y las mensualidades
+  exactas dependen del lote y las confirma un asesor.
 - Se coordinan visitas: el equipo recibe en la costa para caminar el terreno.
 - Los precios de lotes son en pesos mexicanos (MXN), de contado.`
 
@@ -180,14 +181,20 @@ Nunca vuelvas a preguntar algo que ya te dijo.
   la duda, luego responde con hechos, y luego retoma tu pregunta.
 - Si preguntan algo ajeno a Tierra o a bienes raíces en Oaxaca, redirige con amabilidad.
 
-=== CUÁNDO DAS EL PASO AL HUMANO (el campo listo) ===
-listo es true SOLO cuando se cumplen las dos cosas:
-  (a) ya sabes al menos QUÉ BUSCA, ZONA y (PRESUPUESTO o PLAZO); y
-  (b) la persona muestra interés real: pregunta por un lote concreto, por visitar, por
-      pagos, por cómo seguir, o te pide hablar con alguien.
-Si te pide hablar con un humano antes de tiempo, pon listo en true aunque falten datos:
-nunca lo retengas.
-Mientras no se cumpla, listo es false y resumen va vacío ("").
+=== CUÁNDO DAS EL PASO AL HUMANO (los campos interes y listo) ===
+En CADA respuesta calificas el nivel de interés en el campo interes:
+- "bajo": está mirando por curiosidad, pregunta cosas generales, no suelta datos.
+- "medio": ya dijo qué busca o qué zona, pregunta por precios, compara opciones.
+- "alto": pregunta por un lote concreto, por visitar, por pagos o por cómo seguir;
+  o te dio presupuesto y plazo; o pide hablar con alguien.
+
+listo es true cuando pasa cualquiera de estas:
+  (a) el interés es "alto"; o
+  (b) van tres o cuatro intercambios y el interés es "medio" o más — a esas alturas ya
+      sabes lo suficiente y seguir preguntando cansa: pasa el lead con lo que tengas; o
+  (c) te pide hablar con un asesor, aunque sea en el primer mensaje. Nunca lo retengas.
+Con interés "bajo" en los primeros dos intercambios, listo es false: sigue calificando.
+Mientras listo sea false, resumen va vacío ("").
 
 Cuando listo es true:
 - reply: una frase que cierre con calidez y le diga que abajo tiene su mensaje ya escrito
@@ -251,10 +258,11 @@ ${REGLAS}`
             type: 'object',
             properties: {
               reply: { type: 'string', description: 'Lo que el asesor le contesta a la persona.' },
-              listo: { type: 'boolean', description: 'true solo cuando ya está calificada y con interés claro.' },
+              interes: { type: 'string', description: 'Nivel de interés detectado: bajo, medio o alto.' },
+              listo: { type: 'boolean', description: 'true cuando ya conviene pasarla con un asesor humano.' },
               resumen: { type: 'string', description: 'Mensaje en primera persona para WhatsApp; vacío si listo es false.' },
             },
-            required: ['reply', 'listo', 'resumen'],
+            required: ['reply', 'interes', 'listo', 'resumen'],
             additionalProperties: false,
           },
         },
@@ -273,18 +281,20 @@ ${REGLAS}`
 
     // El esquema garantiza el JSON, pero si algo cambiara del lado del modelo
     // preferimos entregar el texto tal cual antes que romper el chat.
-    let reply = crudo, listo = false, resumen = ''
+    let reply = crudo, listo = false, resumen = '', interes = 'bajo'
     try {
       const d = JSON.parse(crudo)
       if (d && typeof d.reply === 'string' && d.reply.trim()) {
         reply = d.reply.trim()
         listo = d.listo === true
         resumen = typeof d.resumen === 'string' ? d.resumen.trim() : ''
+        const i = String(d.interes ?? '').toLowerCase()
+        interes = i === 'alto' || i === 'medio' ? i : 'bajo'
       }
     } catch (_e) { /* nos quedamos con el texto crudo */ }
     if (!resumen) listo = false   // sin mensaje redactado no hay handoff que mostrar
 
-    return json({ reply, listo, resumen: listo ? resumen.slice(0, 900) : '' })
+    return json({ reply, interes, listo, resumen: listo ? resumen.slice(0, 900) : '' })
   } catch (_e) {
     return json({ error: 'error_interno' }, 500)
   }
