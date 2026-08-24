@@ -1,0 +1,117 @@
+# ============================================================================
+# Despliega las Edge Functions de Supabase al hacer merge en main.
+#
+# Por qué existe: el código de las funciones vive en portal-backend/functions,
+# pero subirlo dependía de tener el panel de Supabase a mano. Con esto, lo que
+# se mergea en main es lo que corre.
+#
+# Requiere UN secreto en el repo (Settings → Secrets and variables → Actions):
+#   SUPABASE_ACCESS_TOKEN  →  se genera en supabase.com/dashboard/account/tokens
+# Sin él el job no falla: avisa y se detiene.
+# ============================================================================
+name: Desplegar Edge Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'portal-backend/functions/**'
+      - '.github/workflows/desplegar-funciones.yml'
+  workflow_dispatch:
+    inputs:
+      funcion:
+        description: 'Función a desplegar (vacío = todas)'
+        required: false
+        default: ''
+
+env:
+  PROJECT_REF: hgdccmkpepjcmrrnpdms
+
+jobs:
+  desplegar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2          # hace falta para ver qué cambió en el push
+
+      - name: Comprobar que existe el token
+        id: token
+        env:
+          TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "hay=no" >> "$GITHUB_OUTPUT"
+            echo "::warning::Falta el secreto SUPABASE_ACCESS_TOKEN. Se genera en supabase.com/dashboard/account/tokens y se guarda en Settings → Secrets and variables → Actions."
+          else
+            echo "hay=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Decidir qué funciones desplegar
+        if: steps.token.outputs.hay == 'si'
+        id: lista
+        env:
+          MANUAL: ${{ github.event.inputs.funcion }}
+          EVENTO: ${{ github.event_name }}
+          ANTES: ${{ github.event.before }}
+          AHORA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -n "${MANUAL:-}" ]; then
+            fns="$MANUAL"
+          elif [ "$EVENTO" = "workflow_dispatch" ]; then
+            fns=$(ls portal-backend/functions | tr '\n' ' ')
+          else
+            # solo las que tocó este push
+            fns=$(git diff --name-only "$ANTES" "$AHORA" -- portal-backend/functions \
+                  | cut -d/ -f3 | sort -u | tr '\n' ' ' || true)
+          fi
+          fns=$(echo "${fns:-}" | tr -s ' ' | sed 's/^ *//;s/ *$//')
+          echo "Se desplegarán: ${fns:-ninguna}"
+          echo "fns=$fns" >> "$GITHUB_OUTPUT"
+
+      - uses: supabase/setup-cli@v1
+        if: steps.token.outputs.hay == 'si' && steps.lista.outputs.fns != ''
+        with:
+          version: latest
+
+      - name: Desplegar
+        if: steps.token.outputs.hay == 'si' && steps.lista.outputs.fns != ''
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          FNS: ${{ steps.lista.outputs.fns }}
+        run: |
+          set -euo pipefail
+          # la CLI espera las funciones en supabase/functions
+          mkdir -p supabase/functions
+          cp -R portal-backend/functions/. supabase/functions/
+          printf 'project_id = "%s"\n' "$PROJECT_REF" > supabase/config.toml
+
+          for fn in $FNS; do
+            if [ ! -f "supabase/functions/$fn/index.ts" ]; then
+              echo "::warning::$fn no existe, se omite"; continue
+            fi
+            # ai-sales es el asesor público del sitio: se llama sin sesión.
+            # Las demás validan el JWT de quien llama, así que van por defecto.
+            extra=""
+            if [ "$fn" = "ai-sales" ]; then extra="--no-verify-jwt"; fi
+            echo "── desplegando $fn $extra"
+            supabase functions deploy "$fn" --project-ref "$PROJECT_REF" $extra
+          done
+
+      - name: Comprobar que el asesor responde
+        if: steps.token.outputs.hay == 'si' && contains(steps.lista.outputs.fns, 'ai-sales')
+        env:
+          CLAVE: sb_publishable_qp0nJ5AWwCFgekGkG01cEg_XQ4sP66m
+        run: |
+          set -euo pipefail
+          sleep 10
+          resp=$(curl -s -X POST "https://$PROJECT_REF.supabase.co/functions/v1/ai-sales" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $CLAVE" -H "Authorization: Bearer $CLAVE" \
+            -d '{"messages":[{"role":"user","content":"a cuantos meses puedo pagar un lote?"}]}')
+          echo "$resp" | head -c 700
+          echo
+          echo "$resp" | grep -q '"reply"' || { echo "::error::El asesor no devolvió respuesta"; exit 1; }
+          echo "$resp" | grep -qi '48 meses' && { echo "::error::Sigue ofreciendo 48 meses"; exit 1; }
+          echo "✓ el asesor respondió y no menciona 48 meses"
