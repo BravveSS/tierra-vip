@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tierra — precios y proyectos en la Costa de Oaxaca</title>
+<meta name="description" content="Todo lo que enseñamos en redes, en un solo lugar: precios de cada lote en Mazunte, Puerto Ángel y La Boquilla, guías para comprar terreno y contacto directo por WhatsApp.">
+<!-- Página puente de redes: no compite en buscadores con las páginas reales,
+     pero sí reparte autoridad hacia ellas (follow). -->
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://tierra.vip/redes">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tierra Desarrollos">
+<meta property="og:title" content="Tierra — precios y proyectos en la Costa de Oaxaca">
+<meta property="og:description" content="Precios públicos de cada lote, guías para comprar terreno y contacto directo. Mazunte · Zipolite · Puerto Ángel · La Boquilla.">
+<meta property="og:url" content="https://tierra.vip/redes">
+<meta property="og:image" content="https://tierra.vip/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/img/brand/tierra-logo.png">
+<link rel="apple-touch-icon" href="assets/img/brand/tierra-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Página autónoma: se carga desde el navegador de Instagram/TikTok, con
+     conexión de costa. Sin dependencias de CSS externo para que abra rápido. */
+  :root{
+    --black:#122019; --dark:#182C22; --earth:#1E3A2C; --cream:#F2EEE4;
+    --gold:#C9A96E; --gold-hi:#DCC38A; --muted:#8FA396;
+    --fh:'Cormorant Garamond',Georgia,serif; --fb:'DM Sans',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    margin:0; background:var(--black); color:var(--cream);
+    font-family:var(--fb); font-weight:300; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:32px 20px 56px}
+
+  /* ── Cabecera ─────────────────────────────────────────────── */
+  .head{text-align:center; margin-bottom:28px}
+  .head img{width:76px; height:auto; margin-bottom:14px}
+  .head h1{
+    font-family:var(--fh); font-weight:300; font-size:27px;
+    line-height:1.25; margin:0 0 8px; letter-spacing:.01em;
+  }
+  .head p{margin:0 0 10px; font-size:14px; color:var(--muted)}
+  .zonas{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold); margin:0;
+  }
+  .sellos{
+    display:flex; flex-wrap:wrap; gap:6px; justify-content:center;
+    margin:16px 0 0; padding:0; list-style:none;
+  }
+  .sellos li{
+    font-size:11px; letter-spacing:.05em; color:var(--cream);
+    border:1px solid rgba(201,169,110,.35); border-radius:999px;
+    padding:5px 11px; opacity:.9;
+  }
+
+  /* ── Bloques ──────────────────────────────────────────────── */
+  .sec{margin-top:30px}
+  .sec-t{
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 12px; padding-left:2px;
+  }
+
+  .card{
+    display:flex; align-items:center; gap:14px;
+    background:var(--dark); border:1px solid rgba(242,238,228,.08);
+    border-radius:14px; padding:15px 16px; margin-bottom:10px;
+    color:var(--cream); text-decoration:none;
+    transition:border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+  .card:hover,.card:focus-visible{
+    border-color:rgba(201,169,110,.5); background:var(--earth);
+    transform:translateY(-1px); outline:none;
+  }
+  .card .txt{flex:1; min-width:0}
+  .card .n{
+    font-family:var(--fh); font-size:19px; line-height:1.2;
+    display:block; margin-bottom:3px;
+  }
+  .card .d{font-size:12.5px; color:var(--muted); display:block}
+  .card .ar{color:var(--gold); font-size:17px; flex:none}
+  .tag{
+    font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    padding:3px 8px; border-radius:999px; flex:none; align-self:flex-start;
+    margin-top:2px;
+  }
+  .tag.ok{background:rgba(201,169,110,.16); color:var(--gold-hi)}
+  .tag.lim{background:rgba(214,138,90,.16); color:#E0A87C}
+  .tag.pre{background:rgba(143,163,150,.16); color:var(--muted)}
+
+  /* Destacado de la semana — se actualiza cada lunes con la campaña activa */
+  .destacado{
+    display:block; background:linear-gradient(135deg,var(--earth),var(--dark));
+    border:1px solid rgba(201,169,110,.45); border-radius:14px;
+    padding:18px 18px 16px; text-decoration:none; color:var(--cream);
+    margin-bottom:10px;
+  }
+  .destacado .kicker{
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold); display:block; margin-bottom:7px;
+  }
+  .destacado .n{font-family:var(--fh); font-size:22px; line-height:1.2; display:block}
+  .destacado .d{font-size:13px; color:var(--muted); margin-top:5px; display:block}
+
+  .wa{
+    background:#1f7a4d; border-color:transparent;
+  }
+  .wa:hover,.wa:focus-visible{background:#25955e; border-color:transparent}
+  .wa .d{color:rgba(242,238,228,.75)}
+
+  /* ── Redes y pie ──────────────────────────────────────────── */
+  .redes{
+    display:flex; gap:10px; justify-content:center; margin-top:26px;
+  }
+  .redes a{
+    flex:1; text-align:center; padding:12px 8px; border-radius:12px;
+    border:1px solid rgba(242,238,228,.12); color:var(--cream);
+    text-decoration:none; font-size:12.5px; letter-spacing:.04em;
+  }
+  .redes a:hover,.redes a:focus-visible{border-color:rgba(201,169,110,.5); outline:none}
+  .pie{
+    margin-top:30px; text-align:center; font-size:11.5px;
+    color:var(--muted); line-height:1.7;
+  }
+  .pie a{color:var(--muted)}
+  .nota{
+    margin-top:18px; font-size:11px; color:var(--muted);
+    text-align:center; line-height:1.6; opacity:.75;
+  }
+  @media (max-width:360px){
+    .card .n{font-size:17px}
+    .head h1{font-size:24px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .card{transition:none}
+    .card:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <header class="head">
+    <img src="assets/img/brand/tierra-logo.png" alt="Tierra Desarrollos y Construcción" width="76" height="76">
+    <h1>Terrenos y casas en la Costa de Oaxaca</h1>
+    <p>Desarrollamos y construimos. Precio y disponibilidad de cada lote, públicos.</p>
+    <p class="zonas">Mazunte · Zipolite · Puerto Ángel · La Boquilla</p>
+    <ul class="sellos">
+      <li>6+ años</li>
+      <li>+40 familias</li>
+      <li>Respaldo legal</li>
+      <li>Llave en mano</li>
+    </ul>
+  </header>
+
+  <!-- ── DESTACADO DE LA SEMANA ──────────────────────────────────────────
+       Cambiar cada lunes al tema de la campaña activa en redes.
+       Ver .claude/skills/redes-tierra/references/trafico-web.md -->
+  <section class="sec" aria-label="Destacado">
+    <a class="destacado" href="terrenos-en-mazunte.html" data-tierra-link data-campana="destacado">
+      <span class="kicker">Lo más preguntado</span>
+      <span class="n">¿Cuánto cuesta un terreno en Mazunte?</span>
+      <span class="d">Precios reales por m², qué documentos exigir y los errores más comunes al comprar en la costa.</span>
+    </a>
+  </section>
+
+  <!-- ── PROYECTOS ─────────────────────────────────────────────────────── -->
+  <section class="sec" aria-labelledby="t-proy">
+    <h2 class="sec-t" id="t-proy">Proyectos · precios públicos</h2>
+
+    <a class="card" href="azimut.html" data-tierra-link data-campana="proyectos">
+      <span class="txt">
+        <span class="n">Azimut</span>
+        <span class="d">Lotes en Mazunte · 422–1.299 m² · centro de bienestar</span>
+      </span>
+      <span class="tag ok">Disponible</span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="nabani.html" data-tierra-link data-campana="proyectos">
+      <span class="txt">
+        <span class="n">Nabani</span>
+        <span class="d">Puerto Ángel · vista al mar · playas caminando</span>
+      </span>
+      <span class="tag ok">Disponible</span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="aldea-tao.html" data-tierra-link data-campana="proyectos">
+      <span class="txt">
+        <span class="n">Aldea Tao</span>
+        <span class="d">La Boquilla · acantilado sobre el Pacífico · calas privadas</span>
+      </span>
+      <span class="tag lim">Limitado</span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="depas-kora.html" data-tierra-link data-campana="proyectos">
+      <span class="txt">
+        <span class="n">Depas Kora</span>
+        <span class="d">Departamentos en Puerto Ángel · preventa</span>
+      </span>
+      <span class="tag pre">Próximamente</span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="serena.html" data-tierra-link data-campana="lista-serena">
+      <span class="txt">
+        <span class="n">Serena</span>
+        <span class="d">Comunidad eco junto a Mazunte · lista de espera abierta</span>
+      </span>
+      <span class="tag pre">Próximamente</span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <!-- ── ANTES DE COMPRAR ──────────────────────────────────────────────── -->
+  <section class="sec" aria-labelledby="t-guias">
+    <h2 class="sec-t" id="t-guias">Antes de comprar</h2>
+
+    <a class="card" href="terrenos-en-mazunte.html" data-tierra-link data-campana="guias">
+      <span class="txt">
+        <span class="n">Guía: comprar terreno en la costa</span>
+        <span class="d">Precios por zona, documentos a revisar y errores comunes</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="construir-en-la-costa-de-oaxaca.html" data-tierra-link data-campana="guias">
+      <span class="txt">
+        <span class="n">Cuánto cuesta construir aquí</span>
+        <span class="d">El costo de una obra, partida por partida</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="construccion.html" data-tierra-link data-campana="guias">
+      <span class="txt">
+        <span class="n">Construcción llave en mano</span>
+        <span class="d">Obras entregadas, el proceso y la calculadora de enganche</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <!-- ── HABLAR CON ALGUIEN ────────────────────────────────────────────── -->
+  <section class="sec" aria-labelledby="t-contacto">
+    <h2 class="sec-t" id="t-contacto">Hablar con nosotros</h2>
+
+    <a class="card wa" href="https://wa.me/529581087977?text=Hola%2C%20los%20vi%20en%20redes%20y%20quiero%20informaci%C3%B3n%20de%20los%20proyectos." rel="noopener">
+      <span class="txt">
+        <span class="n">WhatsApp</span>
+        <span class="d">Te contesta un asesor, sin bots</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="https://wa.me/529581087977?text=Hola%2C%20quiero%20agendar%20una%20visita%20a%20la%20costa." rel="noopener">
+      <span class="txt">
+        <span class="n">Agendar una visita</span>
+        <span class="d">Presencial o virtual · caminar la tierra lo cambia todo</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="nosotros.html" data-tierra-link data-campana="marca">
+      <span class="txt">
+        <span class="n">Quiénes somos</span>
+        <span class="d">6 años en la costa, +40 familias, proyectos entregados</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="portal.html">
+      <span class="txt">
+        <span class="n">Mi obra</span>
+        <span class="d">Portal de clientes: avances y costos semana a semana</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <nav class="redes" aria-label="Redes sociales">
+    <a href="https://www.instagram.com/tierra_desarrollos/" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@tierra_desarrollos" rel="noopener">TikTok</a>
+    <a href="index.html">tierra.vip</a>
+  </nav>
+
+  <p class="nota">
+    Los precios y la disponibilidad de cada lote están publicados en la página de
+    cada proyecto. Las condiciones finales las confirma un asesor.
+  </p>
+
+  <footer class="pie">
+    Tierra — Desarrollo y Construcción<br>
+    Costa de Oaxaca, México<br>
+    <a href="mailto:ventas@tierra.vip">ventas@tierra.vip</a> ·
+    <a href="tel:+529581087977">958 108 7977</a>
+  </footer>
+
+</main>
+
+<script>
+/* Propaga el origen de la visita a los enlaces internos.
+   Si alguien llega desde la bio de TikTok (?utm_source=tiktok), sus clics a
+   /azimut, /nabani, etc. también llegan marcados como tiktok. Sin esto, GA4
+   solo ve la primera página y el resto queda como navegación interna. */
+(function () {
+  'use strict';
+  var q = new URLSearchParams(location.search);
+  var source = (q.get('utm_source') || '').toLowerCase();
+  var VALIDAS = ['instagram', 'tiktok', 'youtube', 'facebook'];
+  if (VALIDAS.indexOf(source) === -1) return;
+
+  var links = document.querySelectorAll('a[data-tierra-link]');
+  for (var i = 0; i < links.length; i++) {
+    var a = links[i];
+    var url = new URL(a.getAttribute('href'), location.href);
+    url.searchParams.set('utm_source', source);
+    url.searchParams.set('utm_medium', 'hub');
+    url.searchParams.set('utm_campaign', a.dataset.campana || 'redes');
+    a.setAttribute('href', url.pathname + url.search);
+  }
+})();
+</script>
+<script src="assets/tierra-analytics.js?v=3" defer></script>
+</body>
+</html>
