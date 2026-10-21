@@ -53,3 +53,9 @@
 
 /construir-en-la-costa-de-oaxaca.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/aviso-de-privacidad
+  Cache-Control: public, max-age=0, must-revalidate
+
+/aviso-de-privacidad.html
+  Cache-Control: public, max-age=0, must-revalidate

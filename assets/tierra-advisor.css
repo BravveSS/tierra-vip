@@ -299,3 +299,11 @@ body.twq-abierta { overflow: hidden; }
   .twq-sheet { transition: none; }
   .twq-op, .twq-otra { animation: none; opacity: 1; transform: none; }
 }
+
+/* ---- Aviso de privacidad junto a cada formulario ---- */
+.t-priv {
+  margin: 10px 0 0; font-size: 11.5px; line-height: 1.5; letter-spacing: .01em;
+  color: rgba(242,238,228,.5); text-align: center;
+}
+.t-priv a { color: var(--tadv-gold); border-bottom: 1px solid rgba(201,169,110,.35); text-decoration: none; }
+.tadv-form .t-priv { text-align: left; margin-top: 4px; }

@@ -57,7 +57,9 @@
     b.innerHTML =
       '<p>' + (isEN()
         ? 'We use cookies to understand visits and improve the site. Do you accept?'
-        : 'Usamos cookies para entender las visitas y mejorar el sitio. ¿Aceptas?') + '</p>' +
+        : 'Usamos cookies para entender las visitas y mejorar el sitio. ¿Aceptas?') +
+      ' <a href="aviso-de-privacidad.html" style="color:#C9A96E;white-space:nowrap">' +
+      (isEN() ? 'Privacy Notice' : 'Aviso de privacidad') + '</a></p>' +
       '<div class="tc-btns">' +
         '<button class="tc-ok">' + (isEN() ? 'Accept' : 'Aceptar') + '</button>' +
         '<button class="tc-no">' + (isEN() ? 'No, thanks' : 'No, gracias') + '</button>' +
