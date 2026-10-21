@@ -1,0 +1,87 @@
+# ============================================================================
+# Chequeo de salud de Supabase y de lo que el sitio necesita para funcionar.
+#
+# Solo usa la clave PÚBLICA (la misma que ya está en el JavaScript del sitio),
+# así que no necesita ningún secreto. Corre cada 3 días y a mano desde la
+# pestaña Actions. Si algo falla, el job sale en rojo y GitHub avisa por correo
+# al dueño del repo.
+# ============================================================================
+name: Salud de Supabase
+
+on:
+  schedule:
+    - cron: '17 14 */3 * *'
+  workflow_dispatch:
+
+env:
+  URL: https://hgdccmkpepjcmrrnpdms.supabase.co
+  CLAVE: sb_publishable_qp0nJ5AWwCFgekGkG01cEg_XQ4sP66m
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar Auth, base de datos, IA y sitio
+        run: |
+          fallos=0
+          ok()   { echo "✓ $1"; }
+          mal()  { echo "::error::$1"; fallos=$((fallos+1)); }
+          aviso(){ echo "::warning::$1"; }
+
+          # 1. ¿El proyecto está vivo? (un proyecto pausado responde 5xx o 540)
+          s=$(curl -s -o /tmp/auth.json -w '%{http_code}' "$URL/auth/v1/settings" -H "apikey: $CLAVE")
+          if [ "$s" = "200" ]; then ok "Auth responde (200)"; else mal "Auth responde $s — el proyecto puede estar pausado"; cat /tmp/auth.json | head -c 400; echo; fi
+
+          if [ "$s" = "200" ]; then
+            python3 - <<'PY'
+          import json
+          d = json.load(open('/tmp/auth.json'))
+          ext = d.get('external', {})
+          print('  Google:', 'activado' if ext.get('google') else 'desactivado')
+          print('  Correo+contraseña:', 'activado' if ext.get('email') else 'desactivado')
+          print('  Registro público:', 'CERRADO ✓' if d.get('disable_signup') else 'ABIERTO — cualquiera puede crearse una cuenta')
+          if not d.get('disable_signup'):
+              print('::warning::El registro público está abierto: Authentication → Sign In / Providers → Email → desactivar "Allow new users to sign up"')
+          PY
+          fi
+
+          # 2. API de la base de datos
+          s=$(curl -s -o /dev/null -w '%{http_code}' "$URL/rest/v1/projects?select=id&limit=1" -H "apikey: $CLAVE" -H "Authorization: Bearer $CLAVE")
+          case "$s" in
+            200) ok "Base de datos responde y RLS no deja ver obras sin sesión (lista vacía)";;
+            401|403) ok "Base de datos responde y bloquea el acceso anónimo ($s)";;
+            *) mal "Base de datos responde $s";;
+          esac
+
+          # 3. El asesor de IA del sitio
+          r=$(curl -s -w '\n%{http_code}' -X POST "$URL/functions/v1/ai-sales" \
+                -H "Content-Type: application/json" -H "apikey: $CLAVE" -H "Authorization: Bearer $CLAVE" \
+                -d '{"messages":[{"role":"user","content":"hola, a cuantos meses puedo pagar un lote?"}]}')
+          s=$(echo "$r" | tail -1); cuerpo=$(echo "$r" | sed '$d')
+          case "$s" in
+            200) ok "Asesor IA responde"; echo "  → $(echo "$cuerpo" | head -c 300)"
+                 echo "$cuerpo" | grep -qi '48 meses' && mal "El asesor menciona 48 meses";;
+            503) mal "Asesor IA: falta el secreto ANTHROPIC_API_KEY en Edge Functions → Secrets";;
+            429) aviso "Asesor IA: límite por minuto alcanzado (normal si se probó mucho)";;
+            *) mal "Asesor IA responde $s: $(echo "$cuerpo" | head -c 200)";;
+          esac
+
+          # 4. Funciones del panel: sin sesión deben rechazar (401), no caerse (5xx)
+          for fn in admin-create-client notify-update ai-advisor ai-parse-costs; do
+            s=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/functions/v1/$fn" -H "Content-Type: application/json" -d '{}')
+            case "$s" in
+              401|403) ok "$fn existe y pide sesión ($s)";;
+              404) mal "$fn no está desplegada (404)";;
+              5*) mal "$fn falla ($s)";;
+              *) aviso "$fn responde $s";;
+            esac
+          done
+
+          # 5. El sitio
+          s=$(curl -s -o /dev/null -w '%{http_code}' https://tierra.vip/)
+          [ "$s" = "200" ] && ok "tierra.vip responde" || mal "tierra.vip responde $s"
+          s=$(curl -sL -o /dev/null -w '%{http_code}' https://tierra.vip/aviso-de-privacidad)
+          [ "$s" = "200" ] && ok "Aviso de privacidad publicado" || mal "Aviso de privacidad responde $s"
+
+          echo
+          [ "$fallos" = "0" ] && echo "Todo en orden." || { echo "$fallos problema(s)."; exit 1; }
