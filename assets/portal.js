@@ -30,6 +30,19 @@
   var OTHER = '#8B8778';
   var STATUS = { en_progreso: 'En progreso', entregada: 'Entregada', pausada: 'En pausa' };
 
+
+  // Un fallo de red o del servidor NO es una contraseña mala: decirle a la
+  // persona "contraseña incorrecta" cuando Supabase no responde la hace dudar
+  // de algo que tiene bien.
+  function errLogin(e) {
+    var st = e && e.status;
+    if (!st || st >= 500 || (e.name === 'AuthRetryableFetchError') || /fetch|network/i.test((e && e.message) || ''))
+      return 'No pudimos conectar con el servidor. Intenta de nuevo en unos minutos; si sigue, escríbenos por WhatsApp al +52 958 108 7977.';
+    if (st === 429) return 'Demasiados intentos seguidos. Espera un minuto y vuelve a intentar.';
+    if (e.code === 'email_not_confirmed') return 'Tu correo aún no está confirmado. Revisa tu bandeja de entrada.';
+    return 'Correo o contraseña incorrectos.';
+  }
+
   // ── Login ──
   $('#loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -38,8 +51,12 @@
     sb.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#password').value })
       .then(function (r) {
         btn.disabled = false; btn.textContent = 'Entrar';
-        if (r.error) { msg.textContent = 'Correo o contraseña incorrectos.'; return; }
+        if (r.error) { msg.textContent = errLogin(r.error); return; }
         route();
+      })
+      .catch(function (err) {
+        btn.disabled = false; btn.textContent = 'Entrar';
+        msg.textContent = errLogin(err);
       });
   });
   logoutBtn.addEventListener('click', function () { sb.auth.signOut().then(function () { location.reload(); }); });
