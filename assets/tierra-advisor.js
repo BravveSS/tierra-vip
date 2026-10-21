@@ -386,6 +386,8 @@
  '<input name="phone" type="tel" required autocomplete="tel" placeholder="' + t('WhatsApp / Teléfono', 'WhatsApp / Phone') + '">' +
  '<input name="email" type="email" required autocomplete="email" placeholder="' + t('Tu correo', 'Your email') + '">' +
  '<button type="submit">' + t('Quiero que me contacten', 'Have someone contact me') + '</button>' +
+ '<p class="t-priv">' + t('Al enviar aceptas nuestro ', 'By submitting you accept our ') +
+ '<a href="aviso-de-privacidad.html" target="_blank" rel="noopener">' + t('Aviso de privacidad', 'Privacy Notice') + '</a>.</p>' +
  '<p class="tadv-status-msg" role="status"></p>';
  els.body.appendChild(f); scroll();
  f.querySelector('input').focus();
