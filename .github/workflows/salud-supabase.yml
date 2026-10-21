@@ -10,7 +10,7 @@ name: Salud de Supabase
 
 on:
   schedule:
-    - cron: '17 14 */3 * *'
+    - cron: '17 14 */2 * *'   # cada 2 días: muy por debajo de los 7 que tarda Supabase en pausar
   workflow_dispatch:
 
 env:
@@ -23,12 +23,24 @@ jobs:
     steps:
       - name: Revisar Auth, base de datos, IA y sitio
         run: |
+          set +e            # revisar todo aunque algo falle, y reportar al final
           fallos=0
           ok()   { echo "✓ $1"; }
           mal()  { echo "::error::$1"; fallos=$((fallos+1)); }
           aviso(){ echo "::warning::$1"; }
 
-          # 1. ¿El proyecto está vivo? (un proyecto pausado responde 5xx o 540)
+          # 0. ¿El dominio del proyecto existe? Un proyecto PAUSADO deja de resolver
+          #    (NXDOMAIN); uno eliminado, también, pero para siempre.
+          if ! getent hosts "${URL#https://}" >/dev/null; then
+            mal "El dominio del proyecto no resuelve: el proyecto está PAUSADO (o eliminado). Entra a supabase.com/dashboard y pulsa Restore/Resume project."
+            echo "Sin proyecto no tiene sentido seguir con Auth, base de datos ni funciones."
+            s=$(curl -s -o /dev/null -w '%{http_code}' https://tierra.vip/)
+            [ "$s" = "200" ] && ok "tierra.vip responde (el sitio sigue arriba; el chat deriva a WhatsApp)"
+            exit 1
+          fi
+          ok "El dominio del proyecto resuelve"
+
+          # 1. ¿El proyecto está vivo?
           s=$(curl -s -o /tmp/auth.json -w '%{http_code}' "$URL/auth/v1/settings" -H "apikey: $CLAVE")
           if [ "$s" = "200" ]; then ok "Auth responde (200)"; else mal "Auth responde $s — el proyecto puede estar pausado"; cat /tmp/auth.json | head -c 400; echo; fi
 
