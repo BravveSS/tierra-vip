@@ -14,17 +14,17 @@
    · Banner de promociones configurable (apagado) y enlace al aviso de
      privacidad en el footer si faltara.
 
-   GA4 ya se carga en assets/tierra-analytics.js (con Consent Mode v2). Este
-   archivo NO vuelve a cargarlo: usa el mismo `gtag`, así no se duplica nada.
-   El Pixel de Meta solo se carga si la persona aceptó cookies.
+   Este es el ÚNICO lugar donde se carga Google Analytics (antes vivía en
+   tierra-analytics.js; tenerlo en dos sitios contaría cada visita dos veces).
+   Consent Mode v2: sin permiso GA mide con pings anónimos sin cookies; al
+   aceptar en el banner pasa a medición completa. El Pixel de Meta solo se
+   carga con permiso.
    ========================================================================== */
 (function () {
   'use strict';
 
   var CONFIG = {
-    // Vacío = se usa solo el GA4 que ya tiene el sitio (tierra-analytics.js).
-    // Si se pone otro ID, los eventos también se envían a esa propiedad.
-    ga4: '',
+    ga4: 'G-X2MWFYSH0Y',
     // Vacío = el Pixel de Meta no se carga.
     pixel: '',
     whatsapp: '529581087977',
@@ -57,9 +57,78 @@
   function leer(k, sesion) { try { return (sesion ? sessionStorage : localStorage).getItem(k); } catch (_) { return null; } }
   function slug(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 
-  // gtag idéntico al estándar: si tierra-analytics aún no lo definió, los
-  // eventos esperan en dataLayer y gtag.js los procesa al cargar.
-  function gtag() { (window.dataLayer = window.dataLayer || []).push(arguments); }
+  // gtag estándar y GLOBAL: el chat, el comparador y el menú de WhatsApp
+  // envían sus propios eventos con window.gtag.
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  function gtag() { window.gtag.apply(window, arguments); }
+
+  /* ---------- Google Analytics 4 + consentimiento ---------- */
+  var CLAVE_CONSENT = 'tierra-consent';
+  function consintio() { return leer(CLAVE_CONSENT) === 'yes'; }
+
+  (function cargarGA() {
+    if (!CONFIG.ga4 || window.__gaLoaded) return;
+    window.__gaLoaded = true;
+    // El 'default' tiene que entrar en dataLayer antes que cualquier config o evento.
+    gtag('consent', 'default', {
+      analytics_storage: 'denied', ad_storage: 'denied',
+      ad_user_data: 'denied', ad_personalization: 'denied'
+    });
+    if (consintio()) gtag('consent', 'update', { analytics_storage: 'granted' });
+    gtag('js', new Date());
+    gtag('config', CONFIG.ga4, { anonymize_ip: true });
+    var sc = document.createElement('script');
+    sc.async = true;
+    sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4;
+    document.head.appendChild(sc);
+  })();
+
+  function aceptarCookies() {
+    guardar(CLAVE_CONSENT, 'yes');
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+    cargarPixel();
+  }
+
+  // Banner de cookies (mismo diseño que tenía el sitio)
+  function bannerCookies() {
+    var c = leer(CLAVE_CONSENT);
+    if (c === 'yes' || c === 'no' || document.getElementById('tierra-consent')) return;
+    var b = document.createElement('div');
+    b.id = 'tierra-consent';
+    b.innerHTML =
+      '<p>' + (isEN()
+        ? 'We use cookies to understand visits and improve the site. Do you accept?'
+        : 'Usamos cookies para entender las visitas y mejorar el sitio. ¿Aceptas?') +
+      ' <a href="aviso-de-privacidad.html" style="color:#C9A96E;white-space:nowrap">' +
+      (isEN() ? 'Privacy Notice' : 'Aviso de privacidad') + '</a></p>' +
+      '<div class="tc-btns">' +
+        '<button class="tc-ok">' + (isEN() ? 'Accept' : 'Aceptar') + '</button>' +
+        '<button class="tc-no">' + (isEN() ? 'No, thanks' : 'No, gracias') + '</button>' +
+      '</div>';
+    var css = document.createElement('style');
+    css.textContent =
+      '#tierra-consent{position:fixed;left:12px;right:12px;bottom:12px;z-index:990;max-width:420px;margin:0 auto;' +
+        'background:rgba(18,26,21,.97);border:1px solid rgba(201,169,110,.3);border-radius:14px;padding:16px 18px;' +
+        'box-shadow:0 18px 50px rgba(0,0,0,.45);backdrop-filter:blur(12px);font-family:\'DM Sans\',sans-serif;' +
+        'animation:tcIn .45s cubic-bezier(.16,1,.3,1) both}' +
+      '@media(min-width:769px){#tierra-consent{left:24px;right:auto;bottom:24px}}' +
+      /* en móvil, arriba de la barra fija de contacto */
+      '@media(max-width:768px){body.has-tmbar #tierra-consent{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}' +
+      '#tierra-consent p{margin:0 0 12px;font-size:13.5px;line-height:1.55;color:#F2EEE4;font-weight:300}' +
+      '#tierra-consent .tc-btns{display:flex;gap:8px}' +
+      '#tierra-consent button{flex:1;min-height:42px;border-radius:10px;font-family:inherit;font-size:12.5px;' +
+        'font-weight:600;letter-spacing:.06em;cursor:pointer;transition:filter .2s}' +
+      '#tierra-consent .tc-ok{background:#C9A96E;border:1px solid #C9A96E;color:#14110c}' +
+      '#tierra-consent .tc-no{background:none;border:1px solid rgba(242,238,228,.3);color:rgba(242,238,228,.75)}' +
+      '#tierra-consent button:hover{filter:brightness(1.1)}' +
+      '@keyframes tcIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}' +
+      '@media(prefers-reduced-motion:reduce){#tierra-consent{animation:none}}';
+    document.head.appendChild(css);
+    document.body.appendChild(b);
+    b.querySelector('.tc-ok').addEventListener('click', function () { b.remove(); aceptarCookies(); });
+    b.querySelector('.tc-no').addEventListener('click', function () { guardar(CLAVE_CONSENT, 'no'); b.remove(); });
+  }
 
   /* ---------- página y proyecto actual ---------- */
   // Se lee del canonical y no de la URL: los dominios de proyecto
@@ -144,7 +213,6 @@
     gtag('event', evento, p);   // va a todos los IDs configurados (el del sitio y CONFIG.ga4)
   }
 
-  function consintio() { return leer('tierra-consent') === 'yes'; }
   var colaPixel = [];
   function pixel(evento, params) {
     if (!CONFIG.pixel || !consintio()) return;
@@ -209,6 +277,7 @@
   function leadWhatsApp(url, el, via) {
     var pr = proyectoDeEnlace(url, el);
     ga('generate_lead', { method: 'whatsapp', via: via, proyecto: pr ? pr.id : 'general' });
+    ga('whatsapp_click', { location: location.pathname, proyecto: pr ? pr.id : 'general' });   // nombre histórico
     pixel('Contact', { content_name: pr ? pr.nombre : 'General' });
   }
 
@@ -270,6 +339,7 @@
     if (!f || f.tagName !== 'FORM' || !datosValidos(f)) return;
     var pr = proyectoDeFormulario(f);
     var id = pr ? pr.id : 'general';
+    ga('lead_form_submit', { formulario: f.getAttribute('data-origen') || 'asesor', proyecto: id });   // nombre histórico
     var clave = 'tierra-lead-form:' + id;
     if (leer(clave, true)) return;                 // uno por proyecto y por visita
     guardar(clave, '1', true);
@@ -336,16 +406,13 @@
   }
 
   /* ---------- arranque ---------- */
-  // Se espera a DOMContentLoaded: para entonces tierra-analytics.js (que va al
-  // final del body) ya fijó el consentimiento por defecto. Consent Mode exige
-  // que ese 'default' entre en dataLayer ANTES que cualquier 'config' o evento.
-  // Ojo: este archivo es defer y corre con readyState 'interactive' pero ANTES
-  // de DOMContentLoaded, así que no basta con mirar si sigue en 'loading'.
+  // GA ya quedó configurado arriba (con su consentimiento por delante). Lo que
+  // toca el DOM espera a DOMContentLoaded. Ojo: este archivo es defer y corre
+  // con readyState 'interactive' pero ANTES de DOMContentLoaded.
   var iniciado = false;
   function iniciar() {
     if (iniciado) return;
     iniciado = true;
-    if (CONFIG.ga4) gtag('config', CONFIG.ga4, { anonymize_ip: true });
     if (PROYECTO_PAGINA) {
       ga('view_item', { items: [{ item_id: PROYECTO_PAGINA.id, item_name: PROYECTO_PAGINA.nombre,
                                   item_category: 'Desarrollo', location_id: PROYECTO_PAGINA.zona }] });
@@ -353,11 +420,8 @@
     cargarPixel();
     promo();
     enlacePrivacidad();
+    setTimeout(bannerCookies, 1800);
   }
-  // tierra-analytics.js avisa cuando la persona acepta cookies
-  document.addEventListener('tierra-consent-granted', function () {
-    cargarPixel();
-  });
 
   if (document.readyState === 'complete') iniciar();
   else {
