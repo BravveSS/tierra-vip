@@ -59,3 +59,9 @@
 
 /aviso-de-privacidad.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/links
+  Cache-Control: public, max-age=0, must-revalidate
+
+/links.html
+  Cache-Control: public, max-age=0, must-revalidate

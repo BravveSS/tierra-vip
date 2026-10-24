@@ -13,6 +13,8 @@ const LANDING = {
   'grupotierra.net': '/construccion.html',
 };
 
+const PRIVADO = /^\/(portal-backend|\.github|\.claude|netlify|functions|node_modules)(\/|$)|^\/(server\.js|package(-lock)?\.json|README\.md|netlify\.toml|sw-verify\.mjs|\.gitignore|\.env.*)$/i;
+
 export async function onRequest(ctx) {
   const url = new URL(ctx.request.url);
   const host = url.hostname.replace(/^www\./, '');
@@ -20,6 +22,26 @@ export async function onRequest(ctx) {
   // www.tierra.vip → tierra.vip (concentra el SEO en el dominio principal)
   if (url.hostname === 'www.tierra.vip') {
     url.hostname = 'tierra.vip';
+    return Response.redirect(url.toString(), 301);
+  }
+
+  // El hosting publica la raíz del repo entera. El código del backend, los
+  // esquemas SQL (con los correos de los superadmins) y la configuración no
+  // son parte de la web: se responden como si no existieran.
+  if (PRIVADO.test(url.pathname)) {
+    return new Response('Not found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+  }
+
+  // Nombres alternativos que circulan en enlaces viejos o en material de redes.
+  // Conserva ?utm_… para no perder el origen de la visita.
+  const ALIAS = {
+    '/privacidad': '/aviso-de-privacidad',
+    '/privacidad.html': '/aviso-de-privacidad',
+    '/redes': '/links',
+  };
+  const destino = ALIAS[url.pathname];
+  if (destino) {
+    url.pathname = destino;
     return Response.redirect(url.toString(), 301);
   }
 
