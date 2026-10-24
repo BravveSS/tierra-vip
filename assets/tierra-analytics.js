@@ -49,6 +49,8 @@
     if (window.__gaGranted) return;
     window.__gaGranted = true;
     window.gtag && gtag('consent', 'update', { analytics_storage: 'granted' });
+    // medicion.js escucha esto para cargar el Pixel de Meta solo con permiso
+    try { document.dispatchEvent(new CustomEvent('tierra-consent-granted')); } catch (_) {}
   }
 
   function banner() {
