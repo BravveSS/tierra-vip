@@ -1032,7 +1032,7 @@ const TIERRA_CONTEXT = {
       ubicacion: 'Puerto Ángel, Oaxaca',
       descripcion: 'Terrenos frente al mar con vista al océano. Acceso caminando a varias playas (Estacahuite, Aguete y Puerto Ángel) y conexión con Mazunte, Zipolite y Puerto Ángel. Servicios de agua y luz y áreas comunes.',
       amenidades: ['Vista al mar', 'Playas caminando: Estacahuite, Aguete y Puerto Ángel', 'Arquitectura minimalista de autor', 'Beach Club con alberca privada', 'Área de hamaca y de tratamientos', 'Servicios de agua y luz'],
-      precio: 'Lotes desde ~$502,000 hasta ~$1,750,000 MXN · 25 lotes disponibles. Precios accesibles.',
+      precio: 'Lotes desde ~$502,000 hasta ~$1,750,000 MXN · 23 lotes disponibles. Precios accesibles.',
       ideal: 'Quienes quieren vivir frente al mar, con servicios y a pasos de las playas.'
     },
     aldea: {
@@ -1041,7 +1041,7 @@ const TIERRA_CONTEXT = {
       ubicacion: 'La Boquilla, Costa de Oaxaca',
       descripcion: 'Lotes sobre acantilados con vistas al mar espectaculares, acceso a playa semiprivada y contacto directo con el océano. Las mejores vistas de todo el portafolio.',
       amenidades: ['Vistas al mar espectaculares', 'Acceso a playa semiprivada', 'Contacto directo con el océano', 'Proyecto exclusivo y limitado'],
-      precio: 'El más exclusivo: lotes desde ~$825,000 hasta ~$2,200,000 MXN · 24 disponibles. Las mejores vistas, el proyecto más premium.',
+      precio: 'El más exclusivo: lotes desde ~$550,000 hasta ~$3,500,000 MXN · 25 disponibles. Las mejores vistas, el proyecto más premium.',
       ideal: 'Quienes buscan exclusividad, las mejores vistas y contacto directo con el mar.'
     },
     serena: {
@@ -1111,7 +1111,7 @@ function aipBuildReply(intent, userMsg) {
     ],
     precio: [
       `Estos son los rangos por proyecto (MXN), con lotes realmente disponibles:\n\n🧘 **Azimut** (Mazunte) — ${p.azimut.precio}\n🌊 **Nabani** (Puerto Ángel) — ${p.nabani.precio}\n💎 **Aldea Tao** (acantilado) — ${p.aldea.precio}\n🌳 **Serena** (bosque) — ${p.serena.precio}\n\n¿De cuál te muestro el mapa de lotes con precio por lote?`,
-      `Hay opciones para cada presupuesto:\n\n• Más accesible: **Azimut** y **Nabani** (desde ~$464,000–$502,000 MXN)\n• Comunidad en bosque: **Serena** (lotes amplios y accesibles)\n• Premium con las mejores vistas: **Aldea Tao** (hasta ~$2,200,000 MXN)\n\nCada landing tiene el mapa de lotes con el precio exacto de cada uno. ¿Cuál te interesa?`
+      `Hay opciones para cada presupuesto:\n\n• Más accesible: **Azimut** y **Nabani** (desde ~$464,000–$502,000 MXN)\n• Comunidad en bosque: **Serena** (lotes amplios y accesibles)\n• Premium con las mejores vistas: **Aldea Tao** (hasta ~$3,500,000 MXN)\n\nCada landing tiene el mapa de lotes con el precio exacto de cada uno. ¿Cuál te interesa?`
     ],
     inversion: [
       'La Costa de Oaxaca es una de las zonas con mayor plusvalía en México — todavía con precios accesibles antes del boom turístico masivo.\n\nNuestros proyectos ofrecen:\n✦ Plusvalía del terreno a largo plazo\n✦ Renta vacacional si construyes (Mazunte/Zipolite son destinos en auge)\n✦ Acompañamiento y respaldo legal completo\n\n¿Buscas invertir para construir, rentar o revender?'
@@ -1599,8 +1599,8 @@ aipGetReply = function(text){
   const _noProj = !/azimut|nabani|aldea|serena|kora/.test(t);
   if (_mar && _barato && _noProj){
     AIP.interests.push('Nabani'); aipLastIntent='nabani'; aipHistory.push({role:'user',text});
-    const r = LL(`Para **terreno con vista al mar y precio accesible**, tu mejor opción es **Nabani** (Puerto Ángel): terrenos frente al mar desde ~$502,000 MXN, con playas caminando y servicios de agua y luz. Hay 25 lotes disponibles.\n\n¿Te muestro el mapa de lotes con el precio de cada uno?`,
-                 `For **oceanview land at an accessible price**, your best fit is **Nabani** (Puerto Ángel): oceanfront lots from ~$502,000 MXN, beaches within walking distance, water & power. 25 lots available.\n\nShall I show you the lot map with each price?`);
+    const r = LL(`Para **terreno con vista al mar y precio accesible**, tu mejor opción es **Nabani** (Puerto Ángel): terrenos frente al mar desde ~$502,000 MXN, con playas caminando y servicios de agua y luz. Hay 23 lotes disponibles.\n\n¿Te muestro el mapa de lotes con el precio de cada uno?`,
+                 `For **oceanview land at an accessible price**, your best fit is **Nabani** (Puerto Ángel): oceanfront lots from ~$502,000 MXN, beaches within walking distance, water & power. 23 lots available.\n\nShall I show you the lot map with each price?`);
     aipHistory.push({role:'ai',text:r}); return r;
   }
   if (_barato && _noProj){
@@ -1611,8 +1611,8 @@ aipGetReply = function(text){
   }
   if (_mar && _noProj){
     AIP.interests.push('Nabani'); aipLastIntent='nabani'; aipHistory.push({role:'user',text});
-    const r = LL(`Para vivir **frente al mar** tienes dos caminos:\n\n🌊 **Nabani** (Puerto Ángel) — terrenos con vista al mar, accesibles (desde ~$502,000 MXN) y a pasos de varias playas.\n💎 **Aldea Tao** — lotes sobre acantilado con las mejores vistas del portafolio (premium, desde ~$825,000 MXN).\n\n¿Cuál te late: accesible o premium?`,
-                 `To live **by the sea** you have two paths:\n\n🌊 **Nabani** (Puerto Ángel) — oceanview lots, accessible (from ~$502,000 MXN), steps from several beaches.\n💎 **Aldea Tao** — clifftop lots with the best views (premium, from ~$825,000 MXN).\n\nAccessible or premium?`);
+    const r = LL(`Para vivir **frente al mar** tienes dos caminos:\n\n🌊 **Nabani** (Puerto Ángel) — terrenos con vista al mar, accesibles (desde ~$502,000 MXN) y a pasos de varias playas.\n💎 **Aldea Tao** — lotes sobre acantilado con las mejores vistas del portafolio (premium, desde ~$550,000 MXN).\n\n¿Cuál te late: accesible o premium?`,
+                 `To live **by the sea** you have two paths:\n\n🌊 **Nabani** (Puerto Ángel) — oceanview lots, accessible (from ~$502,000 MXN), steps from several beaches.\n💎 **Aldea Tao** — clifftop lots with the best views (premium, from ~$550,000 MXN).\n\nAccessible or premium?`);
     aipHistory.push({role:'ai',text:r}); return r;
   }
   if (_selva && _noProj && !/^\s*$/.test(t)){
