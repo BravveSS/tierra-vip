@@ -18,6 +18,16 @@
     return;
   }
 
+  // Si la librería de Supabase no llegó (sin señal, CDN caído), el portal se
+  // quedaría en "cargando" para siempre: mejor decirlo y ofrecer recargar.
+  if (!window.supabase || !window.supabase.createClient) {
+    loading.classList.add('hidden');
+    login.classList.remove('hidden');
+    $('#loginMsg').textContent = 'No pudimos cargar el portal. Revisa tu conexión y recarga la página.';
+    $('#loginForm').addEventListener('submit', function (e) { e.preventDefault(); location.reload(); });
+    return;
+  }
+
   // storageKey propio: así la sesión del cliente y la del panel de admin conviven
   // en el mismo navegador sin pisarse.
   var sb = window.supabase.createClient(
@@ -123,6 +133,12 @@
       if (!session) { show(login); return; }
       sb.from('profiles').select('role,full_name,project_id,email').eq('id', session.user.id).single()
         .then(function (pr) {
+          // Un fallo de red o del servidor no es "no tienes perfil": decirlo así
+          // haría pensar al cliente que su cuenta desapareció.
+          if (pr.error && (!pr.error.code || pr.status === 0 || pr.status >= 500 || /fetch|network/i.test(pr.error.message || ''))) {
+            renderMessage('No pudimos conectar', 'El portal no responde en este momento. Intenta de nuevo en unos minutos; si sigue, escríbenos por WhatsApp al +52 958 108 7977.');
+            return;
+          }
           var p = pr.data;
           var name = (p && (p.full_name || p.email)) || session.user.email;
           whoami.textContent = name;
@@ -138,7 +154,7 @@
           if (!p.project_id) { renderMessage('Aún no hay obra asignada', 'En cuanto tu obra empiece, la verás aquí con fotos de cada avance.'); return; }
           loadAll(p.project_id);
         });
-    });
+    }).catch(function () { show(login); });
   }
 
   var D = { proj: null, items: [], weeks: [] };   // estado del dashboard

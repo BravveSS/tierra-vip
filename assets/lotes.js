@@ -51,6 +51,10 @@
     }
   };
 
+  // Para otras páginas que muestran resúmenes del inventario (inversionistas):
+  // así toda cifra pública sale de esta única lista.
+  window.TIERRA_LOTES = LOTES;
+
   const EN = () => window.__LANG === 'en';
   const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
   const T = (es,en) => EN() ? en : es;

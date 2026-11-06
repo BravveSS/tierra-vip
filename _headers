@@ -65,3 +65,9 @@
 
 /links.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/inversionistas
+  Cache-Control: public, max-age=0, must-revalidate
+
+/inversionistas.html
+  Cache-Control: public, max-age=0, must-revalidate

@@ -107,7 +107,7 @@
   ];
 
   // títulos del hero (se re-splitean tras traducir)
-  const TITLE_PAIRS = new Map([['Lo que ya construimos.','What we have already built.']]);
+  const TITLE_PAIRS = new Map([['Lo que ya construimos.','What we have already built.'],['Invierte en la costa.','Invest on the coast.']]);
 
   // nodos de texto plano que participan en la traducción
   const SCOPE = document.querySelectorAll('.pnav-links a, .backlink, .btn, .eyebrow, .ftag, .stats .l, .vis-tab, .lead, .h2, .phero-sub, .phero-eyebrow, .feats li, .step h3, .step p, figcaption');
