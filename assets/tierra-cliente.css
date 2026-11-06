@@ -1,0 +1,91 @@
+/* ============================================================================
+   TIERRA — Acceso de clientes al portal de su obra
+   · Botón "Mi proyecto" destacado en el menú de todas las páginas.
+   · Sección "Entra a tu proyecto" del home.
+   ========================================================================== */
+
+/* ---- Botón del menú: se distingue del resto de enlaces ---- */
+body .nav-links a.t-mi-proyecto,
+body .pnav-links a.t-mi-proyecto {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 999px;
+  border: 1px solid rgba(201,169,110,.55);
+  color: var(--gold, #C9A96E);
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+body .nav-links a.t-mi-proyecto:hover,
+body .pnav-links a.t-mi-proyecto:hover {
+  background: var(--gold, #C9A96E); color: #14110c; border-color: var(--gold, #C9A96E);
+}
+body .nav-links a.t-mi-proyecto::after,
+body .pnav-links a.t-mi-proyecto::after { display: none; }      /* sin subrayado animado */
+.t-mi-proyecto svg { width: 13px; height: 13px; flex: 0 0 auto; }
+
+/* ---- Sección del home ---- */
+.mp {
+  background: var(--dark, #122019);
+  padding: 120px 56px;
+  border-top: 1px solid rgba(201,169,110,.12);
+}
+.mp-in {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.05fr .95fr; gap: 64px; align-items: center;
+}
+.mp-k {
+  font-family: var(--fb, 'DM Sans', sans-serif); font-size: 11px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--gold, #C9A96E); margin-bottom: 20px;
+}
+.mp-h {
+  font-family: var(--fh, 'Cormorant Garamond', Georgia, serif); font-weight: 300;
+  font-size: clamp(38px, 5vw, 62px); line-height: 1.05; color: var(--cream, #F2EEE4); margin: 0;
+}
+.mp-h em { display: block; font-style: italic; color: var(--gold, #C9A96E); font-size: .62em; line-height: 1.25; margin-top: 12px; }
+.mp-p {
+  font-family: var(--fb, 'DM Sans', sans-serif); font-weight: 300; font-size: 16px; line-height: 1.85;
+  color: rgba(242,238,228,.62); max-width: 520px; margin: 24px 0 0;
+}
+.mp-l { list-style: none; margin: 26px 0 0; padding: 0; }
+.mp-l li {
+  position: relative; padding: 11px 0 11px 24px;
+  font-family: var(--fb, 'DM Sans', sans-serif); font-size: 14.5px; color: rgba(242,238,228,.8);
+  border-top: 1px solid rgba(201,169,110,.14);
+}
+.mp-l li:last-child { border-bottom: 1px solid rgba(201,169,110,.14); }
+.mp-l li::before { content: '◆'; position: absolute; left: 0; top: 12px; font-size: 10px; color: var(--gold, #C9A96E); }
+.mp-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 34px; }
+.mp-btn {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 28px;
+  border-radius: 2px; background: var(--gold, #C9A96E); color: #14110c; text-decoration: none;
+  font-family: var(--fb, 'DM Sans', sans-serif); font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  transition: filter .2s ease, transform .15s ease;
+}
+.mp-btn:hover { filter: brightness(1.08); }
+.mp-btn:active { transform: scale(.98); }
+.mp-alt {
+  font-family: var(--fb, 'DM Sans', sans-serif); font-size: 13px; color: rgba(242,238,228,.6);
+  text-decoration: none; border-bottom: 1px solid rgba(201,169,110,.35); padding-bottom: 2px;
+}
+.mp-alt:hover { color: var(--gold, #C9A96E); }
+.mp-fig { position: relative; display: block; border-radius: 4px; overflow: hidden; aspect-ratio: 4 / 5; }
+.mp-fig img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(.16,1,.3,1); }
+.mp-fig:hover img { transform: scale(1.04); }
+.mp-fig::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(10,16,12,.7)); }
+.mp-badge {
+  position: absolute; z-index: 1; left: 18px; bottom: 18px;
+  display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px; border-radius: 999px;
+  background: rgba(18,26,21,.85); border: 1px solid rgba(201,169,110,.4);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-family: var(--fb, 'DM Sans', sans-serif); font-size: 12px; color: var(--cream, #F2EEE4);
+}
+.mp-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ac26b; box-shadow: 0 0 0 4px rgba(74,194,107,.18); }
+
+@media (max-width: 900px) {
+  .mp { padding: 84px 22px; }
+  .mp-in { grid-template-columns: 1fr; gap: 40px; }
+  .mp-fig { aspect-ratio: 4 / 3; order: -1; }
+  .mp-btn { width: 100%; justify-content: center; }
+  .mp-cta { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mp-fig img, .mp-btn { transition: none; }
+}

@@ -56,6 +56,7 @@
 <link rel="stylesheet" href="assets/tierra-anim.css?v=21">
 <link rel="stylesheet" href="assets/tierra-compare.css?v=1">
 <link rel="stylesheet" href="assets/tierra-advisor.css?v=6">
+<link rel="stylesheet" href="assets/tierra-cliente.css?v=1">
 <script src="assets/medicion.js?v=2" defer></script>
 </head>
 <body>
@@ -161,7 +162,7 @@
     <li><a href="#g3d" data-i18n="nav_galeria">Galería</a></li>
     <li><a href="#confianza" data-i18n="nav_confianza">Confianza</a></li>
     <li><a href="#chat" data-i18n="nav_contacto">Contacto</a></li>
-    <li><a href="portal.html" data-i18n="nav_portal">Mi obra</a></li>
+    <li><a class="t-mi-proyecto" href="portal.html" data-i18n="nav_portal">Mi proyecto</a></li>
     <li><div class="lang-sw" role="group" aria-label="Idioma"><button data-lang-btn="es" class="on" aria-label="Español">ES</button><button data-lang-btn="en" aria-label="English">EN</button></div></li>
   </ul>
   <button class="nav-ham" id="ham" aria-label="Menú"><span></span><span></span><span></span></button>
@@ -175,7 +176,7 @@
     <li><a href="#g3d" data-i18n="nav_galeria">Galería</a></li>
     <li><a href="#confianza" data-i18n="nav_confianza">Confianza</a></li>
     <li><a href="#chat" data-i18n="nav_contacto">Contacto</a></li>
-    <li><a href="portal.html" data-i18n="nav_portal">Mi obra</a></li>
+    <li><a class="t-mi-proyecto" href="portal.html" data-i18n="nav_portal">Mi proyecto</a></li>
     <li><div class="lang-sw" role="group" aria-label="Idioma" style="margin-top:10px"><button data-lang-btn="es" class="on" aria-label="Español">ES</button><button data-lang-btn="en" aria-label="English">EN</button></div></li>
   </ul>
 </div>
@@ -500,6 +501,7 @@
       <div class="inv-item"><h3>Certeza jurídica</h3><p>Acompañamiento y respaldo legal completo desde el día uno. Invertir aquí no es una apuesta: es patrimonio.</p></div>
       <div class="inv-item"><h3>Renta vacacional</h3><p>Construye y renta: la demanda de hospedaje boutique en Mazunte y Zipolite crece año tras año. Tu casa puede pagarse sola.</p></div>
     </div>
+    <a href="inversionistas.html" class="inv-more" data-es="Ver la página para inversionistas →" data-en="See the investor page →" style="display:inline-block;margin-top:36px;font-family:var(--fb);font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8B6F47;border-bottom:1px solid rgba(139,111,71,.45);padding-bottom:3px;text-decoration:none">Ver la página para inversionistas →</a>
   </div>
 </section>
 
@@ -528,6 +530,30 @@
 
 
 
+
+<!-- MI PROYECTO — acceso de clientes al portal de su obra -->
+<section id="mi-proyecto" class="mp">
+  <div class="mp-in">
+    <div class="mp-txt">
+      <div class="mp-k" data-es="Clientes de Tierra" data-en="Tierra clients">Clientes de Tierra</div>
+      <h2 class="mp-h"><span data-es="Entra a tu proyecto." data-en="Enter your project.">Entra a tu proyecto.</span><em data-es="Tu obra, al día, desde donde estés." data-en="Your build, up to date, wherever you are.">Tu obra, al día, desde donde estés.</em></h2>
+      <p class="mp-p" data-es="Cada cliente de construcción tiene acceso privado al portal de su obra: lo que se hizo cada semana, en fotos, y en qué se fue cada peso." data-en="Every construction client gets private access to their build's portal: what was done each week, in photos, and where every peso went.">Cada cliente de construcción tiene acceso privado al portal de su obra: lo que se hizo cada semana, en fotos, y en qué se fue cada peso.</p>
+      <ul class="mp-l">
+        <li data-es="Fotos del avance, semana a semana" data-en="Progress photos, week by week">Fotos del avance, semana a semana</li>
+        <li data-es="Desglose de costos y presupuesto restante" data-en="Cost breakdown and remaining budget">Desglose de costos y presupuesto restante</li>
+        <li data-es="Acceso con tu correo y contraseña" data-en="Sign in with your email and password">Acceso con tu correo y contraseña</li>
+      </ul>
+      <div class="mp-cta">
+        <a class="mp-btn" href="portal.html"><span data-es="Entrar a mi proyecto" data-en="Enter my project">Entrar a mi proyecto</span> <span aria-hidden="true">→</span></a>
+        <a class="mp-alt" href="construccion.html" data-es="¿Aún no eres cliente? Así construimos" data-en="Not a client yet? How we build">¿Aún no eres cliente? Así construimos</a>
+      </div>
+    </div>
+    <a class="mp-fig" href="portal.html" aria-label="Entrar a mi proyecto">
+      <img src="assets/img/construccion/yukee/img-4045.webp" alt="Casa Yuu'Kee, construida por Tierra en La Boquilla" loading="lazy">
+      <span class="mp-badge"><span class="mp-dot" aria-hidden="true"></span><span data-es="Portal de obra · acceso privado" data-en="Build portal · private access">Portal de obra · acceso privado</span></span>
+    </a>
+  </div>
+</section>
 
 <!-- PROCESO — movido desde Construcción (cómo conseguir tu terreno y hogar) -->
 <section id="proceso" class="scn" style="background:var(--black);padding:130px 56px;overflow:hidden">
@@ -701,6 +727,7 @@
         <li><a href="construir-en-la-costa-de-oaxaca.html">Cuánto cuesta construir</a></li>
         <li><a href="construccion.html">Construcción</a></li>
         <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="inversionistas.html">Inversionistas</a></li>
         <li><a href="aviso-de-privacidad.html">Aviso de privacidad</a></li>
       </ul>
     </div>
