@@ -295,7 +295,14 @@ ${REGLAS}`
     if (!resumen) listo = false   // sin mensaje redactado no hay handoff que mostrar
 
     return json({ reply, interes, listo, resumen: listo ? resumen.slice(0, 900) : '' })
-  } catch (_e) {
+  } catch (e) {
+    // Al visitante no se le muestra nada técnico (el chat lo pasa a WhatsApp),
+    // pero el motivo queda en los logs de la función para poder arreglarlo.
+    const err = e as { status?: number; message?: string; error?: { error?: { type?: string } } }
+    const tipo = err?.error?.error?.type ?? ''
+    console.error('ai-sales falló:', err?.status ?? '-', tipo, String(err?.message ?? e).slice(0, 300))
+    if (err?.status === 401 || tipo === 'authentication_error') return json({ error: 'ia_clave_invalida' }, 503)
+    if (/credit balance/i.test(String(err?.message ?? ''))) return json({ error: 'ia_sin_saldo' }, 503)
     return json({ error: 'error_interno' }, 500)
   }
 })
