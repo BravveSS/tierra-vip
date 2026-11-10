@@ -30,7 +30,11 @@
     var m = (err && (err.message || err)) + '';
     if (/row-level security|violates row/i.test(m)) return 'Tu sesión de administrador ya no es válida. Vuelve a entrar al panel.';
     if (/JWT|token is expired|invalid claim/i.test(m)) return 'Tu sesión expiró. Vuelve a entrar.';
-    if (/Failed to fetch|NetworkError/i.test(m)) return 'Sin conexión. Revisa tu internet e intenta de nuevo.';
+    // "Failed to fetch" casi nunca es el wifi de la persona: es el servidor que
+    // no responde (por ejemplo, el proyecto de Supabase pausado).
+    if (/Failed to fetch|NetworkError|AuthRetryableFetchError/i.test(m) || (err && err.name === 'AuthRetryableFetchError'))
+      return 'No pudimos conectar con el servidor. Si tu internet funciona, el proyecto de Supabase puede estar pausado: revisa supabase.com/dashboard.';
+    if (/rate limit/i.test(m)) return 'Ya se envió un correo hace poco. Revisa la bandeja (y spam) o espera unos minutos.';
     return m;
   }
 
@@ -103,7 +107,7 @@
       if (r.error) { msg.className = 'msg err'; msg.textContent = human(r.error); return; }
       msg.className = 'msg ok';
       msg.textContent = 'Listo: te mandamos un correo a ' + mail + ' para elegir una contraseña nueva.';
-    });
+    }).catch(function (err) { msg.className = 'msg err'; msg.textContent = human(err); });
   });
 
   // Supabase manda el enlace con #access_token=…&type=recovery
