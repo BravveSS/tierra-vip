@@ -524,7 +524,7 @@
             (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
               .then(function () { toast('Contraseña nueva ✓ Mensaje copiado para WhatsApp', 'ok'); },
                     function () { prompt('Copia el mensaje:', txt); });
-          });
+          }).catch(function (e) { toast(String(e), 'err'); });
         });
         var del = document.createElement('button'); del.className = 'iconbtn'; del.title = 'Borrar cuenta'; del.textContent = '🗑';
         del.addEventListener('click', function () {
@@ -532,7 +532,7 @@
           callFn('admin-create-client', { action: 'delete', user_id: c.id }).then(function (r) {
             if (!r.ok) { toast(r.j.error || 'No se pudo borrar.', 'err'); return; }
             toast('Cuenta borrada', 'ok'); loadClients(); loadStats();
-          });
+          }).catch(function (e) { toast(String(e), 'err'); });
         });
         acts.appendChild(chip); acts.appendChild(key); acts.appendChild(del); li.appendChild(acts);
         list.appendChild(li);
@@ -598,6 +598,20 @@
           key.addEventListener('click', function () { abrirTemporal(a.email, tiene); });
           acts.appendChild(key);
 
+          var up = document.createElement('button'); up.className = 'iconbtn';
+          up.title = 'Hacerlo superadministrador'; up.textContent = '⭐';
+          up.addEventListener('click', function () {
+            if (!confirm('¿Hacer superadministrador a ' + a.email + '?\n\nPodrá gestionar a los demás administradores y nadie más podrá cambiarle la contraseña.')) return;
+            up.disabled = true;
+            sb.from('admin_allowlist').update({ role: 'superadmin' }).eq('email', a.email).then(function (r) {
+              if (r.error) { up.disabled = false; toast(human(r.error), 'err'); return; }
+              sb.from('profiles').update({ role: 'superadmin' }).eq('email', a.email).then(function () {
+                toast(a.email + ' ahora es superadministrador ✓', 'ok'); loadAdmins();
+              });
+            });
+          });
+          acts.appendChild(up);
+
           var del = document.createElement('button'); del.className = 'iconbtn'; del.title = 'Quitar'; del.textContent = '🗑';
           del.addEventListener('click', function () {
             if (!confirm('¿Quitar acceso de admin a ' + a.email + '?')) return;
@@ -636,9 +650,9 @@
         msg.className = 'msg ok'; msg.textContent = 'Listo. Cópiala y pásasela en persona o por WhatsApp.';
         toast('Contraseña temporal puesta para ' + AP_EMAIL, 'ok');
       })
-      .catch(function () {
+      .catch(function (e) {
         btn.disabled = false; btn.textContent = 'Guardar';
-        msg.className = 'msg err'; msg.textContent = 'Sin conexión con el servidor.';
+        msg.className = 'msg err'; msg.textContent = String(e);
       });
   });
 
@@ -685,7 +699,9 @@
   $('#k_file_btn').addEventListener('click', function () { $('#k_file').click(); });
   $('#k_file').addEventListener('change', function (e) {
     var f = e.target.files[0]; if (!f) return;
+    if (typeof XLSX === 'undefined') { toast('El lector de Excel no cargó. Recarga la página (Ctrl+F5).', 'err'); e.target.value = ''; return; }
     var reader = new FileReader();
+    reader.onerror = function () { toast('No se pudo abrir el archivo.', 'err'); };
     reader.onload = function (ev) {
       try {
         var wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
@@ -753,6 +769,34 @@
       b.addEventListener('click', function () { KROWS.splice(parseInt(b.dataset.i, 10), 1); renderCostPreview(); });
     });
   }
+  // Lee un archivo y devuelve TODAS sus hojas: [{ name, grid }]
+  function readWorkbook(file) {
+    return new Promise(function (resolve, reject) {
+      if (typeof XLSX === 'undefined') { reject('El lector de Excel no cargó. Recarga la página (Ctrl+F5) y vuelve a intentarlo.'); return; }
+      var reader = new FileReader();
+      reader.onerror = function () { reject('No se pudo abrir el archivo.'); };
+      reader.onload = function (ev) {
+        try {
+          var wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+          resolve(wb.SheetNames.map(function (nm) {
+            return {
+              name: nm,
+              grid: XLSX.utils.sheet_to_json(wb.Sheets[nm], { header: 1, raw: false }).map(function (row) {
+                return (row || []).map(function (c) { return c == null ? '' : String(c); });
+              })
+            };
+          }));
+        } catch (err) { reject('No pude leer ese Excel: ' + (err && err.message || err)); }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  }
+  function sheetsToText(sheets) {
+    return sheets.map(function (s) {
+      return '### HOJA: ' + s.name + '\n' + s.grid.map(function (r) { return r.join('\t'); }).join('\n');
+    }).join('\n\n');
+  }
+
   // ══ Lector de rejilla: semanas en columnas, en varias bandas apiladas ══
   // Formato real de Tierra: cada semana ocupa 2 columnas (Descripción / Coste),
   // varias semanas lado a lado, y el bloque se repite hacia abajo.
@@ -797,6 +841,8 @@
         }
         if (/^descripci/i.test(concept) || /^coste$/i.test(concept)) continue;
         if (/^semana\s*\d/i.test(concept)) { closed = true; break; }
+        // "TOTAL" escrito como concepto también es el cierre del bloque, no un gasto
+        if (/^(sub)?total\b/i.test(concept)) { if (amount != null) declared = amount; closed = true; break; }
         if (amount == null) continue;
         items.push({ concept: concept, amount: amount });
       }
@@ -872,7 +918,7 @@
       // 1) Lector de rejilla propio: exacto y sin depender de la IA
       var found = [];
       sheets.forEach(function (s) { found = found.concat(parseGridWeeks(s.grid)); });
-      if (found.length >= 2) { finishHist(found, 'lector de columnas'); return null; }
+      if (found.length >= 1) { finishHist(found, 'lector de columnas'); return null; }
       // 2) Si el archivo no tiene esa forma, que lo interprete la IA
       histStep(35, sheets.length + ' hoja(s) · pidiendo ayuda a la IA…');
       return callFn('ai-parse-costs', { text: sheetsToText(sheets), multi: true }).then(function (r) {
@@ -892,7 +938,7 @@
     histStep(20, 'Leyendo lo que pegaste…');
     var grid = text.split(/\r?\n/).map(function (l) { return l.split('\t'); });
     var found = parseGridWeeks(grid);
-    if (found.length >= 2) { finishHist(found, 'lector de columnas'); return; }
+    if (found.length >= 1) { finishHist(found, 'lector de columnas'); return; }
     histStep(40, 'Formato no reconocido · pidiendo ayuda a la IA…');
     callFn('ai-parse-costs', { text: text, multi: true }).then(function (r) {
       var j = r.j || {};
@@ -1110,13 +1156,26 @@
   }
 
   // ══ helpers de funciones / correo ══
-  function callFn(name, body) {
+  // Con límite de tiempo: si la función no responde, el panel avisa en vez de
+  // quedarse "cargando" para siempre.
+  function callFn(name, body, ms) {
     return sb.auth.getSession().then(function (s) {
+      var ses = s && s.data && s.data.session;
+      if (!ses) throw 'Tu sesión caducó. Sal y vuelve a entrar al panel.';
+      var ctl = window.AbortController ? new AbortController() : null;
+      var t = ctl ? setTimeout(function () { ctl.abort(); }, ms || 60000) : null;
       return fetch(window.TIERRA_SUPABASE.url + '/functions/v1/' + name, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + s.data.session.access_token, 'apikey': window.TIERRA_SUPABASE.anonKey },
+        method: 'POST', signal: ctl ? ctl.signal : undefined,
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ses.access_token, 'apikey': window.TIERRA_SUPABASE.anonKey },
         body: JSON.stringify(body)
-      }).then(function (res) { return res.json().then(function (j2) { return { ok: res.ok, j: j2 }; }); });
+      }).then(function (res) {
+        if (t) clearTimeout(t);
+        return res.json().catch(function () { return {}; }).then(function (j2) { return { ok: res.ok, j: j2 }; });
+      }, function (e) {
+        if (t) clearTimeout(t);
+        if (e && e.name === 'AbortError') throw 'El servidor tardó demasiado en responder. Inténtalo de nuevo en un momento.';
+        throw human(e);
+      });
     });
   }
   function notify(pid, kind, title, extra) {
