@@ -315,7 +315,9 @@
     var weeks = D.weeks, proj = D.proj;
     if (!WEEK_ID || !weeks.some(function (w) { return w.id === WEEK_ID; })) WEEK_ID = weeks[0].id;
     var wk = weeks.find(function (w) { return w.id === WEEK_ID; });
-    var acumulado = weeks.reduce(function (n, w) { return n + w.total; }, 0);
+    var obra = weeks.reduce(function (n, w) { return n + w.total; }, 0);
+    var fee = feeDe(proj, obra);
+    var acumulado = obra + fee;   // Invertido = costo de obra + fee de Tierra
     var budget = Number(proj.budget_total || 0);
 
     var html = '<div class="weekbar"><label class="muted" style="font-size:13px">Semana:</label><select id="wksel">';
@@ -329,7 +331,9 @@
 
     html += '<div class="stats-row">' +
       tile('Gasto de la semana', money(wk.total), esc(wk.week_label)) +
-      tile('Invertido en tu obra', money(acumulado), weeks.length + (weeks.length === 1 ? ' semana registrada' : ' semanas registradas')) +
+      tile('Invertido en tu obra', money(acumulado), fee > 0
+        ? 'Obra ' + money(obra) + ' + fee ' + feeTxt(proj) + money(fee)
+        : weeks.length + (weeks.length === 1 ? ' semana registrada' : ' semanas registradas')) +
       (budget > 0 ? tile('Presupuesto restante', money(Math.max(budget - acumulado, 0)), 'de ' + money(budget)) : '') +
       '</div>';
 
@@ -372,6 +376,13 @@
       li.addEventListener('mouseleave', function () { donut.classList.remove('dim'); });
     });
   }
+  // Fee de Tierra: % sobre el costo de obra o monto fijo (columnas fee_type / fee_value)
+  function feeDe(proj, obra) {
+    var v = Number(proj && proj.fee_value || 0);
+    if (!(v > 0)) return 0;
+    return proj.fee_type === 'fixed' ? v : Math.round(obra * v) / 100;
+  }
+  function feeTxt(proj) { return proj.fee_type === 'fixed' ? '' : '(' + Number(proj.fee_value) + '%) '; }
   function tile(k, v, s) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : '') + '</div>'; }
 
   // ── Descargar todas las semanas en Excel ──
@@ -391,7 +402,13 @@
       acum += w.total;
       resumen.push([w.week_label, w.date_from || '', w.date_to || '', w.items.length, w.total]);
     });
-    resumen.push([], ['Total invertido', '', '', '', acum]);
+    var feeX = feeDe(proj, acum);
+    if (feeX > 0) {
+      resumen.push([], ['Costo de obra', '', '', '', acum]);
+      resumen.push(['Fee Tierra' + (proj.fee_type === 'fixed' ? '' : ' (' + Number(proj.fee_value) + '%)'), '', '', '', feeX]);
+      acum += feeX;
+      resumen.push(['Total invertido', '', '', '', acum]);
+    } else resumen.push([], ['Total invertido', '', '', '', acum]);
     if (proj.budget_total) resumen.push(['Presupuesto restante', '', '', '', Math.max(Number(proj.budget_total) - acum, 0)]);
     var wsR = XLSX.utils.aoa_to_sheet(resumen);
     wsR['!cols'] = [{ wch: 26 }, { wch: 13 }, { wch: 13 }, { wch: 11 }, { wch: 15 }];
