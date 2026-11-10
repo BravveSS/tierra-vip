@@ -53,6 +53,20 @@
     return 'Correo o contraseña incorrectos.';
   }
 
+  // Errores de recuperar o cambiar contraseña, en palabras de persona. Antes se
+  // mostraba el mensaje técnico de Supabase en crudo, en inglés.
+  function errAuth(e) {
+    var st = e && e.status, code = (e && e.code) || '', m = (e && e.message) || '';
+    if (!st || st >= 500 || e.name === 'AuthRetryableFetchError' || /fetch|network/i.test(m))
+      return 'No pudimos conectar con el servidor. Intenta de nuevo en unos minutos; si sigue, escríbenos por WhatsApp al +52 958 108 7977.';
+    if (code === 'over_email_send_rate_limit' || /rate limit/i.test(m)) return 'Ya te enviamos un correo hace poco. Revisa tu bandeja (y spam) o espera unos minutos.';
+    if (st === 429) return 'Demasiados intentos seguidos. Espera un minuto y vuelve a intentar.';
+    if (code === 'same_password' || /different from the old/i.test(m)) return 'La contraseña nueva tiene que ser distinta de la anterior.';
+    if (code === 'weak_password' || /weak|at least/i.test(m)) return 'Esa contraseña es muy débil: usa al menos 8 caracteres combinando letras y números.';
+    if (/expired|invalid.*(link|token)|otp/i.test(m)) return 'El enlace ya venció. Pide uno nuevo con «¿La olvidaste?».';
+    return 'No pudimos completar el cambio. Intenta de nuevo; si sigue, escríbenos por WhatsApp.';
+  }
+
   // ── Login ──
   $('#loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -79,10 +93,10 @@
     if (!mail) { msg.className = 'msg err'; msg.textContent = 'Escribe tu correo arriba y vuelve a tocar aquí.'; return; }
     msg.className = 'msg'; msg.textContent = 'Enviando…';
     sb.auth.resetPasswordForEmail(mail, { redirectTo: location.origin + '/portal' }).then(function (r) {
-      if (r.error) { msg.className = 'msg err'; msg.textContent = r.error.message; return; }
+      if (r.error) { msg.className = 'msg err'; msg.textContent = errAuth(r.error); return; }
       msg.className = 'msg ok';
       msg.textContent = 'Listo: te mandamos un correo a ' + mail + ' para elegir una contraseña nueva.';
-    });
+    }).catch(function (err) { msg.className = 'msg err'; msg.textContent = errAuth(err); });
   });
 
   // ── Nueva contraseña (viene del enlace del correo) ──
@@ -94,11 +108,11 @@
     btn.disabled = true; btn.textContent = 'Guardando…';
     sb.auth.updateUser({ password: p1 }).then(function (r) {
       btn.disabled = false; btn.textContent = 'Guardar y entrar';
-      if (r.error) { msg.className = 'msg err'; msg.textContent = r.error.message; return; }
+      if (r.error) { msg.className = 'msg err'; msg.textContent = errAuth(r.error); return; }
       RECOVERY = false;
       history.replaceState(null, '', location.pathname);
       route();
-    });
+    }).catch(function (err) { btn.disabled = false; btn.textContent = 'Guardar y entrar'; msg.className = 'msg err'; msg.textContent = errAuth(err); });
   });
 
   // ── Cambiar contraseña estando dentro ──
@@ -114,10 +128,10 @@
     btn.disabled = true; btn.textContent = 'Guardando…';
     sb.auth.updateUser({ password: p1 }).then(function (r) {
       btn.disabled = false; btn.textContent = 'Guardar';
-      if (r.error) { msg.className = 'msg err'; msg.textContent = r.error.message; return; }
+      if (r.error) { msg.className = 'msg err'; msg.textContent = errAuth(r.error); return; }
       msg.className = 'msg ok'; msg.textContent = 'Contraseña actualizada ✓';
       setTimeout(function () { $('#cpModal').classList.remove('on'); }, 1200);
-    });
+    }).catch(function (err) { btn.disabled = false; btn.textContent = 'Guardar'; msg.className = 'msg err'; msg.textContent = errAuth(err); });
   });
 
   // Supabase manda el enlace de recuperación con #access_token=…&type=recovery
