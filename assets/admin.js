@@ -295,9 +295,14 @@
     $('#pm_loc').value = p.location || ''; $('#pm_status').value = p.status || 'en_progreso';
     $('#pm_budget').value = p.budget_total || '';
     $('#pm_progress').value = (p.progress == null ? '' : p.progress);
+    $('#pm_fee_type').value = p.fee_type === 'fixed' ? 'fixed' : 'pct';
+    $('#pm_fee').value = Number(p.fee_value) ? p.fee_value : '';
+    feeLbl();
     $('#pModal').classList.add('on');
   }
   $('#pm_cancel').addEventListener('click', function () { $('#pModal').classList.remove('on'); });
+  function feeLbl() { $('#pm_fee_lbl').textContent = $('#pm_fee_type').value === 'fixed' ? 'Fee (MXN)' : 'Fee (%)'; }
+  $('#pm_fee_type').addEventListener('change', feeLbl);
   $('#pm_save').addEventListener('click', function () {
     if (!PM) return;
     var base = {
@@ -305,13 +310,27 @@
       location: $('#pm_loc').value.trim() || null, status: $('#pm_status').value,
       budget_total: $('#pm_budget').value ? Number($('#pm_budget').value) : null
     };
+    var feeV = $('#pm_fee').value === '' ? 0 : Math.max(0, Number($('#pm_fee').value) || 0);
+    var feeT = $('#pm_fee_type').value === 'fixed' ? 'fixed' : 'pct';
+    if (feeT === 'pct' && feeV > 100) { toast('El fee en % no puede pasar de 100.', 'err'); return; }
     var full = Object.assign({}, base, {
-      progress: $('#pm_progress').value === '' ? 0 : Math.max(0, Math.min(100, Number($('#pm_progress').value)))
+      progress: $('#pm_progress').value === '' ? 0 : Math.max(0, Math.min(100, Number($('#pm_progress').value))),
+      fee_type: feeT, fee_value: feeV
     });
     var save = function (payload, retry) {
       sb.from('projects').update(payload).eq('id', PM.id).then(function (r) {
-        // Si aún no existe la columna progress, guarda el resto sin perder los cambios.
-        if (r.error && retry && /progress/.test(r.error.message || '')) { save(base, false); return; }
+        // Si aún no existen las columnas nuevas, guarda el resto y avisa.
+        if (r.error && retry && /progress|fee_/.test(r.error.message || '')) {
+          var sinFee = /fee_/.test(r.error.message || '');
+          var p2 = Object.assign({}, payload); delete p2.fee_type; delete p2.fee_value;
+          if (!sinFee) delete p2.progress;
+          sb.from('projects').update(p2).eq('id', PM.id).then(function (r2) {
+            if (r2.error) { toast(human(r2.error), 'err'); return; }
+            $('#pModal').classList.remove('on'); loadProjects();
+            toast(sinFee ? 'Guardado, pero el fee no: falta correr portal-backend/schema-fee.sql en Supabase.' : 'Proyecto actualizado ✓', sinFee ? 'err' : 'ok');
+          });
+          return;
+        }
         if (r.error) { toast(human(r.error), 'err'); return; }
         $('#pModal').classList.remove('on'); toast('Proyecto actualizado ✓', 'ok'); loadProjects();
       });

@@ -116,3 +116,10 @@ begin
   update public.projects set budget_total = coalesce(budget_total, 2500000)
   where id = pid;
 end $seed$;
+
+-- 4) Fee de Tierra por obra ("Invertido" = costo de obra + fee)
+alter table public.projects add column if not exists fee_type text default 'pct';
+alter table public.projects add column if not exists fee_value numeric default 0;
+do $$ begin
+  alter table public.projects add constraint projects_fee_type_chk check (fee_type in ('pct','fixed'));
+exception when duplicate_object then null; end $$;
